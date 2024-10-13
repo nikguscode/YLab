@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class HabitStatisticsController {
-    public void handle(Scanner scanner, String email, Habit currentHabit) throws InterruptedException, InvalidFrequencyConversionException {
+    public void handle(Scanner scanner, Habit currentHabit) throws InterruptedException, InvalidFrequencyConversionException {
         while (true) {
             System.out.println("Укажите промежуток, за который необходимо посмотреть статистику");
             System.out.println("Возможны следующие варианты:");

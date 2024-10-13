@@ -2,7 +2,6 @@ package adapters.controller.habit;
 
 import core.entity.Habit;
 import core.exceptions.InvalidFrequencyConversionException;
-import infrastructure.dao.user.LocalUserDao;
 import core.entity.User;
 import adapters.out.HabitListOutput;
 
@@ -11,8 +10,7 @@ import java.util.Scanner;
 import java.util.function.Predicate;
 
 public class HabitListController {
-    public void handle(Scanner scanner, String email) throws InterruptedException, InvalidFrequencyConversionException {
-        User user = new LocalUserDao().get(email);
+    public void handle(Scanner scanner, User user) throws InterruptedException, InvalidFrequencyConversionException {
         Predicate<? super Habit> predicate = null;
         Comparator<? super Habit> comparator = null;
 
@@ -31,7 +29,7 @@ public class HabitListController {
                     predicate = new HabitFilterController().handle(scanner);
                     break;
                 default:
-                    new HabitSettingsController().handle(scanner, email, input);
+                    new HabitSettingsController().handle(scanner, user, input);
             }
         }
     }

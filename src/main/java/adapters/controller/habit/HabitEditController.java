@@ -3,7 +3,6 @@ package adapters.controller.habit;
 import adapters.console.Constants;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitInformationException;
-import infrastructure.dao.user.LocalUserDao;
 import core.entity.Habit;
 import core.entity.User;
 import core.enumiration.Frequency;
@@ -11,7 +10,7 @@ import core.enumiration.Frequency;
 import java.util.Scanner;
 
 public class HabitEditController {
-    public void handle(Scanner scanner, String email, Habit currentHabit) throws InvalidFrequencyConversionException, InvalidHabitInformationException {
+    public void handle(Scanner scanner, User user, Habit currentHabit) throws InvalidFrequencyConversionException, InvalidHabitInformationException {
         while (true) {
             System.out.println(Constants.HABIT_EDIT_MENU);
             String input = scanner.nextLine();
@@ -30,7 +29,6 @@ public class HabitEditController {
                     currentHabit.setFrequency(Frequency.convertFromString(scanner.nextLine()));
                     break;
                 case "4", "4.", "Удалить привычку", "4. Удалить привычку":
-                    User user = new LocalUserDao().get(email);
                     user.getHabits().remove(currentHabit.getId());
                     break;
                 case "0", "0.", "Вернуться назад", "0. Вернуться назад":

@@ -11,5 +11,5 @@ public interface Login {
      * @param loginDto dto, хранящий и переносящий пользовательский ввод
      * @return <b>true</b>: вход выполнен успешно, иначе <b>false</b>
      */
-    boolean login(LoginDto loginDto) throws InterruptedException;
+    boolean isSuccess(LoginDto loginDto) throws InterruptedException;
 }

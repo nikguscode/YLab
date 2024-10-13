@@ -1,18 +1,16 @@
 package usecase.habit;
 
-import adapters.in.HabitCreationInput;
 import core.entity.Habit;
+import core.entity.User;
 import core.enumiration.Frequency;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitInformationException;
-import infrastructure.dao.user.LocalUserDao;
 import infrastructure.dto.HabitDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Класс, используемый при создании новой привычки
@@ -20,25 +18,23 @@ import java.util.Scanner;
 public class HabitCreator {
     /**
      * Основной метод класса, используется для создания привычки. Конструирует привычку, используя {@link Habit.Builder},
-     * а также {@link HabitDto} для передачи пользовательского ввода
+     * а также {@link HabitDto} для получения пользовательского ввода
      *
-     * @param scanner передаёт текущий поток сканера
-     * @param email   передаёт почту пользователя, для того, чтобы получить экземпляр User и добавить для него привычку
+     * @param user сущность текушего пользователя
+     * @param habitDto dto, содержащий пользовательский ввод при создании привычки
      * @return созданную пользователем привычку
-     * @throws InterruptedException                стандартное исключение, возникающее из-за задержки вывода
      * @throws InvalidFrequencyConversionException возникает в случае неудачной конвертации {@link Frequency#convertFromString(String)
      *                                             convertFromString()}
      * @throws InvalidHabitInformationException    возникает в том случае, если пользователь ввёл некорректные данные при
      *                                             создании новой привычки или разработчик указал некорректные параметры
      *                                             при создании {@link Habit}
      */
-    public Habit create(Scanner scanner, String email) throws InterruptedException, InvalidFrequencyConversionException, InvalidHabitInformationException {
+    public Habit create(User user, HabitDto habitDto) throws InvalidFrequencyConversionException, InvalidHabitInformationException {
         Habit.Builder habit = Habit.builder();
-        HabitDto habitDto = new HabitCreationInput().input(scanner);
 
         setHabitCreationDateAndTime(habitDto.getDateAndTime(), habit);
         return habit
-                .userId(new LocalUserDao().get(email).getId())
+                .userId(user.getId())
                 .title(habitDto.getTitle())
                 .description(habitDto.getDescription())
                 .frequency(Frequency.convertFromString(habitDto.getFrequency()))

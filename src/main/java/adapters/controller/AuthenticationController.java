@@ -49,20 +49,20 @@ public class AuthenticationController {
                     ConsoleInput<LoginDto> loginInput = new LoginInput();
                     LoginDto loginDto = loginInput.input(scanner);
 
-                    if (login.login(loginDto)) {
+                    if (login.isSuccess(loginDto)) {
                         System.out.println("Пользователь авторизован...");
                         Thread.sleep(1000);
-                        mainController.handle(scanner, loginDto.getEmail(), userDao.get(loginDto.getEmail()));
+                        mainController.handle(scanner, userDao.get(loginDto.getEmail()));
                     }
                     break;
                 case "2", "2. Регистрация учётной записи", "Регистрация учётной записи", "2.":
                     ConsoleInput<RegistrationDto> registrationInput = new RegistrationInput();
                     RegistrationDto registrationDto = registrationInput.input(scanner);
 
-                    if (registration.register(registrationDto)) {
+                    if (registration.isSuccess(registrationDto)) {
                         System.out.println("Пользователь зарегистрирован...");
                         Thread.sleep(1000);
-                        mainController.handle(scanner, registrationDto.getEmail(), userDao.get(registrationDto.getEmail()));
+                        mainController.handle(scanner, userDao.get(registrationDto.getEmail()));
                     }
                     break;
                 default:

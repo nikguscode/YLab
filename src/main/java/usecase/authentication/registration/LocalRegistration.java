@@ -31,7 +31,7 @@ public class LocalRegistration implements Registration {
      * @throws InterruptedException            стандартное исключение, вызываемое из-за задержки вывода
      */
     @Override
-    public boolean register(RegistrationDto registrationDto) throws InvalidUserInformationException, InterruptedException {
+    public boolean isSuccess(RegistrationDto registrationDto) throws InvalidUserInformationException, InterruptedException {
         UserDao userDao = new LocalUserDao();
 
         if (validate(registrationDto, userDao)) {

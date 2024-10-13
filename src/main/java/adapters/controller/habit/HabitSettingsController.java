@@ -3,7 +3,7 @@ package adapters.controller.habit;
 import adapters.console.Constants;
 import core.HabitMarkService;
 import core.exceptions.InvalidFrequencyConversionException;
-import infrastructure.dao.user.LocalUserDao;
+import core.exceptions.InvalidHabitInformationException;
 import core.entity.Habit;
 import core.entity.User;
 
@@ -15,8 +15,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class HabitSettingsController {
-    public void handle(Scanner scanner, String email, String input) throws InterruptedException, InvalidFrequencyConversionException {
-        User user = new LocalUserDao().get(email);
+    public void handle(Scanner scanner, User user, String input) throws InterruptedException, InvalidFrequencyConversionException {
         Map<Long, Habit> habits = user.getHabits();
         long currentId;
 
@@ -68,13 +67,17 @@ public class HabitSettingsController {
                     history.add(LocalDateTime.now());
                     return;
                 case "2", "2.", "Редактировать", "2. Редактировать":
-                    new HabitEditController().handle(scanner, email, habits.get(currentId));
+                    try {
+                        new HabitEditController().handle(scanner, user, habits.get(currentId));
+                    } catch (InvalidHabitInformationException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case "3", "3.", "Посмотреть историю выполнения", "3. Посмотреть историю выполнения":
                     history.forEach(e -> System.out.println(e.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"))));
                     break;
                 case "4", "4.", "Сгенерировать статистику", "4. Сгенерировать статистику":
-                    new HabitStatisticsController().handle(scanner, email, currentHabit);
+                    new HabitStatisticsController().handle(scanner, currentHabit);
                     break;
                 case "5", "5.", "Подробная информация", "5. Подробная информация":
                     System.out.println("Идентификатор: " + currentHabit.getId());

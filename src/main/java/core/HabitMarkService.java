@@ -31,7 +31,7 @@ public class HabitMarkService {
                 if (difference.toMinutes() >= toMin(fromFrequencyToIntDays)) {
                     e.setCompleted(false);
                     unmarkedHabits++;
-                    notifyUser(e);
+                    notifyUser();
                 }
             } catch (InvalidFrequencyConversionException ex) {
                 throw new RuntimeException(ex);

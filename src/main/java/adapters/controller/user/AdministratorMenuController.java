@@ -29,10 +29,10 @@ public class AdministratorMenuController {
 
             switch (input) {
                 case "1", "1.", "Управление привычками пользователя", "1. Управление привычками пользователя":
-                    new HabitListController().handle(scanner, user.getEmail());
+                    new HabitListController().handle(scanner, user);
                     break;
                 case "2", "2.", "Редактировать информацию пользователя", "2. Редактировать информацию пользователя":
-                    new UserMenuController().handle(scanner, user);
+                    new UserMenuController(userDao).handle(scanner, user);
                     break;
                 case "3", "3.", "Заблокировать пользователя", "3. Заблокировать пользователя", "Разблокировать пользователя", "3. Разблокировать пользователя":
                     user.setRole(Role.BLOCKED);

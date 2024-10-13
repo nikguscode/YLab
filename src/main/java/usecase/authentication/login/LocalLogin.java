@@ -22,7 +22,7 @@ public class LocalLogin implements Login {
      * @return <b>true</b>: вход выполнен успешено, иначе <b>false</b>
      */
     @Override
-    public boolean login(LoginDto loginDto) throws InterruptedException {
+    public boolean isSuccess(LoginDto loginDto) throws InterruptedException {
         UserDao userDao = new LocalUserDao();
         User user = userDao.get(loginDto.getEmail());
 

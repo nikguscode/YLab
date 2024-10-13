@@ -31,7 +31,7 @@ public class MainController {
         this.userDao = userDao;
     }
 
-    public void handle(Scanner scanner, String email, User user) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException {
+    public void handle(Scanner scanner, User user) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException {
         while (true) {
             if (!UserAccessService.hasAccess(userDao, user)) {
                 return;
@@ -43,13 +43,13 @@ public class MainController {
             switch (input) {
                 case "1", "1.", "Управление привычками", "1. Управление привычками":
                     Thread.sleep(500);
-                    new HabitMenuController().handle(scanner, email);
+                    new HabitMenuController().handle(scanner, user);
                     break;
                 case "2", "2.", "Статистика пользователя", "2. Статистика пользователя":
                     break;
                 case "3", "3.", "Настройки учётной записи", "3. Настройки учётной записи":
                     Thread.sleep(500);
-                    new UserMenuController().handle(scanner, user);
+                    new UserMenuController(userDao).handle(scanner, user);
                     break;
                 case "4", "4.", "Панель администратора", "4. Панель администратора":
                     if (user.getRole() == Role.ADMINISTRATOR) {

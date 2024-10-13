@@ -31,7 +31,7 @@ public class LoginTest {
 
     @Test
     public void login_With_Correct_Data() throws InvalidUserInformationException, InterruptedException {
-        boolean result = login.login(
+        boolean result = login.isSuccess(
                 LoginDto.builder()
                 .email("correct@gmail.com")
                 .password("1")
@@ -46,7 +46,7 @@ public class LoginTest {
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
 
-        boolean result = login.login(
+        boolean result = login.isSuccess(
                 LoginDto.builder()
                         .email("notExistsEmail@gmail.com")
                         .password("1")
@@ -67,7 +67,7 @@ public class LoginTest {
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
 
-        boolean result = login.login(
+        boolean result = login.isSuccess(
                 LoginDto.builder()
                         .email("correct@gmail.com")
                         .password("incorrectPassword")
@@ -84,7 +84,7 @@ public class LoginTest {
 
     @Test
     public void login_With_Blank_Data() throws InterruptedException {
-        boolean result = login.login(
+        boolean result = login.isSuccess(
                 LoginDto.builder()
                         .email("")
                         .password("")
