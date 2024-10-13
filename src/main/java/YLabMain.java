@@ -1,6 +1,7 @@
 import adapters.controller.AuthenticationController;
 import adapters.controller.MainController;
 import core.exceptions.InvalidFrequencyConversionException;
+import core.exceptions.InvalidHabitInformationException;
 import core.exceptions.InvalidUserInformationException;
 import infrastructure.dao.user.LocalUserDao;
 import usecase.authentication.login.LocalLogin;
@@ -22,7 +23,8 @@ public class YLabMain {
             try {
                 authenticationController.handle(scanner);
             } catch (NoSuchElementException | IllegalStateException | InterruptedException |
-                     InvalidUserInformationException | InvalidFrequencyConversionException e) {
+                     InvalidUserInformationException | InvalidFrequencyConversionException |
+                     InvalidHabitInformationException e) {
             }
         }
     }

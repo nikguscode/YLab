@@ -1,6 +1,7 @@
 package adapters.controller.habit;
 
 import adapters.console.Constants;
+import core.exceptions.InvalidHabitInformationException;
 import usecase.HabitCreator;
 import core.entity.Habit;
 import core.entity.User;
@@ -10,7 +11,7 @@ import infrastructure.dao.user.LocalUserDao;
 import java.util.Scanner;
 
 public class HabitMenuController {
-    public void handle(Scanner scanner, String email) throws InterruptedException, InvalidFrequencyConversionException {
+    public void handle(Scanner scanner, String email) throws InterruptedException, InvalidFrequencyConversionException, InvalidHabitInformationException {
         while (true) {
             System.out.print(Constants.HABIT_MENU);
             String input = scanner.nextLine();

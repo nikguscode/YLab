@@ -7,6 +7,7 @@ import adapters.controller.user.UserMenuController;
 import core.entity.User;
 import core.enumiration.Role;
 import core.exceptions.InvalidFrequencyConversionException;
+import core.exceptions.InvalidHabitInformationException;
 import core.exceptions.InvalidUserInformationException;
 import infrastructure.dao.user.UserDao;
 import core.UserAccessService;
@@ -20,7 +21,7 @@ public class MainController {
         this.userDao = userDao;
     }
 
-    public void handle(Scanner scanner, String email) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException {
+    public void handle(Scanner scanner, String email) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException, InvalidHabitInformationException {
         while (true) {
             if (!UserAccessService.hasAccess(userDao, email)) {
                 return;

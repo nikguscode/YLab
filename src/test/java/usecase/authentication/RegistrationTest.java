@@ -1,4 +1,4 @@
-package authentication;
+package usecase.authentication;
 
 import core.entity.User;
 import core.exceptions.InvalidUserInformationException;
@@ -36,17 +36,16 @@ public class RegistrationTest {
 
     @Test
     public void register_With_Incorrect_Email() throws InvalidUserInformationException, InterruptedException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        System.setOut(printStream);
-
         RegistrationDto registrationDto = new RegistrationDto(
                 "incorrectgmail.com",
                 "user",
                 "1"
         );
-
         Assert.assertThrows(InvalidUserInformationException.class, () -> localRegistration.register(registrationDto));
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(outputStream);
+        System.setOut(printStream);
 
         String exceptedConsoleOutput = "Некорректный формат электронной почты!";
         String actualConsoleOutput = outputStream.toString().trim();

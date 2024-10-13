@@ -8,14 +8,15 @@ import java.util.Scanner;
 public class LoginInput implements ConsoleInput<LoginDto> {
     @Override
     public LoginDto input(Scanner scanner) {
+        LoginDto.Builder loginBuilder = LoginDto.builder();
         System.out.println(Constants.AUTHENTICATION_MENU);
 
         System.out.print("Введите почту: ");
-        String email = scanner.nextLine();
+        loginBuilder.email(scanner.nextLine());
 
         System.out.print("Введите пароль: ");
-        String password = scanner.nextLine();
+        loginBuilder.password(scanner.nextLine());
 
-        return new LoginDto(email, password);
+        return loginBuilder.build();
     }
 }

@@ -4,6 +4,7 @@ import adapters.console.Constants;
 import adapters.in.ConsoleInput;
 import adapters.in.LoginInput;
 import adapters.in.RegistrationInput;
+import core.exceptions.InvalidHabitInformationException;
 import infrastructure.dto.LoginDto;
 import infrastructure.dto.RegistrationDto;
 import core.exceptions.InvalidFrequencyConversionException;
@@ -26,7 +27,7 @@ public class AuthenticationController {
         this.registration = registration;
     }
 
-    public void handle(Scanner scanner) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException {
+    public void handle(Scanner scanner) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException, InvalidHabitInformationException {
         while (true) {
             System.out.print(Constants.START_MENU);
             String input = scanner.nextLine();

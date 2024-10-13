@@ -2,6 +2,9 @@ package core.enumiration;
 
 import core.exceptions.InvalidFrequencyConversionException;
 
+/**
+ * Класс, содержащий возможные частоты для привычки
+ */
 public enum Frequency {
     UNDEFINED("Неопределено"),
     EVERY_DAY("Ежедневно"),
@@ -17,10 +20,20 @@ public enum Frequency {
         this.frequency = frequency;
     }
 
+    /**
+     * Используется для вывода пользователю привычки в виде строки
+     * @return строкове представление привычки
+     */
     public String getValue() {
         return this.frequency;
     }
 
+    /**
+     * Метод, который используется для преобразования пользовательского ввода в {@link Frequency}
+     * @param userInput пользовательский ввод, содержащий частоту привычки
+     * @return {@link Frequency}
+     * @throws InvalidFrequencyConversionException возникает в случае неудачной конвертации
+     */
     public static Frequency convertFromString(String userInput) throws InvalidFrequencyConversionException{
         return switch (userInput) {
             case "1", "1.", "Ежедневно", "1. Ежедневно" -> EVERY_DAY;
