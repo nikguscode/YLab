@@ -20,7 +20,7 @@ public class HabitListOutput {
      * @param predicate условие фильтрации
      * @param comparator компаратор для сортировки
      */
-    public void outList(User user, Predicate<? super Habit> predicate, Comparator<? super  Habit> comparator) {
+    public void outputList(User user, Predicate<? super Habit> predicate, Comparator<? super  Habit> comparator) {
         System.out.println(Constants.HABIT_LIST);
         if (predicate == null && comparator == null) {
             outputWithoutChanges(user);

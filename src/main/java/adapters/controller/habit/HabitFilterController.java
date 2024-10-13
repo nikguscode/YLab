@@ -8,6 +8,9 @@ import core.entity.Habit;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+/**
+ * Контроллер, отвечающий за возврат {@link Predicate} для фильтрации. Не вызывает сервисы при своей работе, из-за простой логики
+ */
 public class HabitFilterController {
     public Predicate<? super Habit> handle(Scanner scanner) {
         while (true) {

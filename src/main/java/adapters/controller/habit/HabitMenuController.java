@@ -2,6 +2,7 @@ package adapters.controller.habit;
 
 import adapters.console.Constants;
 import adapters.in.HabitCreationInput;
+import core.HabitMarkService;
 import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
@@ -11,9 +12,13 @@ import usecase.habit.HabitCreator;
 
 import java.util.Scanner;
 
+/**
+ * Главный контроллер, отвечающий за вызов других контроллеров, относящихся к {@link Habit}
+ */
 public class HabitMenuController {
     public void handle(Scanner scanner, User user) throws InterruptedException, InvalidFrequencyConversionException {
         while (true) {
+            HabitMarkService.checkAllMarks(user);
             System.out.print(Constants.HABIT_MENU);
             String input = scanner.nextLine();
 
@@ -38,6 +43,12 @@ public class HabitMenuController {
         }
     }
 
+    /**
+     * Вспомогательный метод для добавления привычки в базу данных, предназначен для улучшения читаемости кода
+     * @param habit привычка, которую необходимо добавить
+     * @param user пользователь, к которому относится привычка
+     * @throws InterruptedException
+     */
     private void addHabitInDatabase(Habit habit, User user) throws InterruptedException {
         user.getHabits().put(habit.getId(), habit);
         System.out.println("Привычка добавлена...");

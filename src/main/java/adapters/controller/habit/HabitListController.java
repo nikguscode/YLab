@@ -4,18 +4,23 @@ import core.entity.Habit;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.entity.User;
 import adapters.out.HabitListOutput;
+import core.exceptions.InvalidHabitIdException;
 
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+/**
+ * <p>Контроллер, отвечающий за взаимодействие со списком привычек</p>
+ * <p>Вызывает следующий сервис при своей работе: {@link HabitListOutput}</p>
+ */
 public class HabitListController {
     public void handle(Scanner scanner, User user) throws InterruptedException, InvalidFrequencyConversionException {
         Predicate<? super Habit> predicate = null;
         Comparator<? super Habit> comparator = null;
 
         while (true) {
-            new HabitListOutput().outList(user, predicate, comparator);
+            new HabitListOutput().outputList(user, predicate, comparator);
             String input = scanner.nextLine();
 
             switch (input) {
@@ -29,7 +34,12 @@ public class HabitListController {
                     predicate = new HabitFilterController().handle(scanner);
                     break;
                 default:
-                    new HabitSettingsController().handle(scanner, user, input);
+                    try {
+                        new HabitSettingsController().handle(scanner, user, input);
+                    } catch (InvalidHabitIdException e) {
+                        System.out.println("Некорректный идентификатор привычки!");
+                        throw new RuntimeException(e);
+                    }
             }
         }
     }
