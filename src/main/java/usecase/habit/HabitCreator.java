@@ -25,7 +25,7 @@ public class HabitCreator {
      * @param scanner передаёт текущий поток сканера
      * @param email   передаёт почту пользователя, для того, чтобы получить экземпляр User и добавить для него привычку
      * @return созданную пользователем привычку
-     * @throws InterruptedException                стандартное исключение, вызываемое из-за задержки вывода
+     * @throws InterruptedException                стандартное исключение, возникающее из-за задержки вывода
      * @throws InvalidFrequencyConversionException возникает в случае неудачной конвертации {@link Frequency#convertFromString(String)
      *                                             convertFromString()}
      * @throws InvalidHabitInformationException    возникает в том случае, если пользователь ввёл некорректные данные при

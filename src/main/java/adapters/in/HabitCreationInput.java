@@ -2,11 +2,23 @@ package adapters.in;
 
 import adapters.console.Constants;
 import infrastructure.dto.HabitDto;
+import lombok.SneakyThrows;
 
 import java.util.Scanner;
 
-public class HabitCreationInput {
-    public HabitDto input(Scanner scanner) throws InterruptedException {
+/**
+ * Данный класс предназначен для заполнения {@link HabitDto} пользовательским вводом и последующей передачей в
+ * {@link usecase.habit.HabitCreator HabitCreator}
+ */
+public class HabitCreationInput implements ConsoleInput<HabitDto> {
+    /**
+     * Метод, используемый для обработки пользовательского ввода при создании новой привычки
+     * @param scanner экземпляр сканера
+     * @return DTO класс, содержащий пользовательский ввод
+     */
+    @SneakyThrows
+    @Override
+    public HabitDto input(Scanner scanner) {
         HabitDto.Builder habitDto = HabitDto.builder();
 
         System.out.print("Укажите название привычки: ");

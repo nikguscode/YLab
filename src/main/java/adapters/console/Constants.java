@@ -1,5 +1,8 @@
 package adapters.console;
 
+/**
+ * Константы, используемые в консоли, в качестве меню
+ */
 public class Constants {
     public static final String START_MENU = """
             ╔═══════════════════════════╗
