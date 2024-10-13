@@ -8,6 +8,9 @@ import core.entity.User;
 
 import java.util.Scanner;
 
+/**
+ * Контроллер, используемый для изменения информации об учётной записи
+ */
 public class UserMenuController {
     public void handle(Scanner scanner, User user) throws InterruptedException, InvalidUserInformationException {
         System.out.print(Constants.USER_SETTINGS);

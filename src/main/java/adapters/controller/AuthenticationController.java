@@ -14,6 +14,15 @@ import usecase.authentication.registration.Registration;
 
 import java.util.Scanner;
 
+/**
+ * <p>Контроллер, используемый при аутентификации пользователя</p>
+ * <p>Вызывает следующие сервисы при своей работе:
+ * <ul>
+ *     <li>{@link Login}</li>
+ *     <li>{@link Registration}</li>
+ *     <li>{@link UserDao}</li>
+ * </ul></p>
+ */
 public class AuthenticationController {
     private final MainController mainController;
     private final Login login;

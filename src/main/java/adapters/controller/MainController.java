@@ -14,6 +14,16 @@ import core.UserAccessService;
 
 import java.util.Scanner;
 
+/**
+ * <p>Главный контроллер приложения, вызывается сразу после аутентификации пользователя</p>
+ * <p>Вызывает следующие сервисы при своей работе:
+ * <ul>
+ *     <li>{@link UserAccessService}</li>
+ *     <li>{@link HabitMarkService}</li>
+ *     <li>{@link UserDao}</li>
+ * </ul>
+ * </p>
+ */
 public class MainController {
     private final UserDao userDao;
 
@@ -27,14 +37,9 @@ public class MainController {
                 return;
             }
             HabitMarkService.checkAllMarks(user);
+            chooseStrategyAccordingRole(user);
 
-            if (user.getRole() == Role.ADMINISTRATOR) {
-                System.out.print(Constants.ADMINISTRATOR_MENU);
-            } else if (user.getRole() == Role.USER) {
-                System.out.print(Constants.MAIN_MENU);
-            }
             String input = scanner.nextLine();
-
             switch (input) {
                 case "1", "1.", "Управление привычками", "1. Управление привычками":
                     Thread.sleep(500);
@@ -48,7 +53,7 @@ public class MainController {
                     break;
                 case "4", "4.", "Панель администратора", "4. Панель администратора":
                     if (user.getRole() == Role.ADMINISTRATOR) {
-                        new AdministratorMenuController().handle(scanner);
+                        new AdministratorMenuController(userDao).handle(scanner);
                     }
                     return;
                 case "0", "0.", "Выйти из учётной записи", "0. Выйти из учётной записи":
@@ -59,6 +64,14 @@ public class MainController {
                 default:
                     System.out.println("Указана некорректная опция!");
             }
+        }
+    }
+
+    private void chooseStrategyAccordingRole(User user) {
+        if (user.getRole() == Role.ADMINISTRATOR) {
+            System.out.print(Constants.ADMINISTRATOR_MENU);
+        } else if (user.getRole() == Role.USER) {
+            System.out.print(Constants.MAIN_MENU);
         }
     }
 }
