@@ -10,13 +10,18 @@ import infrastructure.dao.user.UserDao;
 public class UserAccessService {
     /**
      * Метод, определяющий, есть ли у пользователя доступ к приложению. В случае, если доступа нет, сообщает об этом
-     * контроллеру
+     * контроллеру. Проверяет, выполняются ли следующие требования:
+     * <ul>
+     *     <li>Пользователь пристствует в базе данных</li>
+     *     <li>Пользователь авторизован</li>
+     *     <li>Пользователь не заблокирован</li>
+     * </ul>
      * @param userDao интерфейс для CRUD операций к базе данных пользователя
-     * @param email электронная почта для определения пользователя
+     * @param user текущий пользователь
      * @return <b>true</b>: в случае, если доступ есть, иначе <b>false</b>
      */
-    public static boolean hasAccess(UserDao userDao, String email) {
-        User user = userDao.get(email);
+    public static boolean hasAccess(UserDao userDao, User user) {
+        String email = user.getEmail();
 
         if (userDao.get(email) == null) {
             return false;

@@ -15,12 +15,16 @@ public class HabitCreationInput {
         System.out.print("Укажите описание привычки: ");
         habitDto.description(scanner.nextLine());
 
-        System.out.println("# Укажите дату и время, относительно которых будет взят старт, в формате: hh:mm dd/mm/yyyy. " +
-                "\n# В случае, если ничего не указано, старт будет взят относительно текущей даты и времени!");
+        System.out.println("""
+        \n-----------------------------------------------------------------------------------------
+        Укажите дату и время, относительно которых будет взят старт, в формате: hh:mm dd/mm/yyyy.
+        В случае, если ничего не указано, старт будет взят относительно текущей даты и времени!
+        Обратите внимание, что дата старта привычки не может быть раньше, чем текущая дата!!!
+        -----------------------------------------------------------------------------------------""");
         System.out.print("Дата и время: ");
         habitDto.dateAndTime(scanner.nextLine());
 
-        System.out.println(Constants.FREQUENCY_LIST);
+        System.out.print(Constants.FREQUENCY_LIST);
         Thread.sleep(400);
         habitDto.frequency(scanner.nextLine());
 

@@ -8,15 +8,14 @@ import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitInformationException;
 import core.exceptions.InvalidUserInformationException;
 import infrastructure.dao.user.LocalUserDao;
-import infrastructure.dto.HabitDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import usecase.habit.HabitCreator;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;

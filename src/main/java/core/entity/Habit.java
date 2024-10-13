@@ -27,13 +27,14 @@ public class Habit {
     private LocalDateTime shiftedDateAndTime;
     private List<LocalDateTime> history;
     private Frequency frequency;
+    private int streak;
 
     private Habit(Builder builder) {
         this.id = listId++;
         this.userId = builder.userId;
         this.title = builder.title;
         this.description = builder.description;
-        this.isCompleted = false;
+        this.isCompleted = builder.isCompleted;
         this.creationDateAndTime = builder.creationDateAndTime;
         this.lastMarkDateAndTime = builder.lastMarkDateAndTime;
         this.shiftedDateAndTime = builder.shiftedDateAndTime;
@@ -43,6 +44,16 @@ public class Habit {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public void setTitle(String title) throws InvalidHabitInformationException {
+        validateTitle(title);
+        this.title = title;
+    }
+
+    public void setDescription(String description) throws InvalidHabitInformationException {
+        validateDescription(description);
+        this.description = description;
     }
 
     private static void validateTitle(String title) throws InvalidHabitInformationException {
@@ -63,6 +74,7 @@ public class Habit {
         private UUID userId;
         private String title;
         private String description;
+        private boolean isCompleted;
         private LocalDateTime creationDateAndTime;
         private LocalDateTime lastMarkDateAndTime;
         private LocalDateTime shiftedDateAndTime;
@@ -90,6 +102,11 @@ public class Habit {
             return this;
         }
 
+        public Builder isCompleted(boolean isCompleted) {
+            this.isCompleted = isCompleted;
+            return this;
+        }
+
         public Builder creationDateAndTime(LocalDateTime creationDateAndTime) throws InvalidHabitInformationException {
             if (creationDateAndTime == null) {
                 System.out.println("Ошибка даты и времени создания привычки, попробуйте ещё раз!");
@@ -101,11 +118,6 @@ public class Habit {
         }
 
         public Builder lastMarkDateAndTime(LocalDateTime lastMarkDateAndTime) throws InvalidHabitInformationException {
-            if (lastMarkDateAndTime == null) {
-                System.out.println("Ошибка даты и времени последней отметки, попробуйте ещё раз!");
-                throw new InvalidHabitInformationException();
-            }
-
             this.lastMarkDateAndTime = lastMarkDateAndTime;
             return this;
         }

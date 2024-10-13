@@ -3,6 +3,9 @@ package adapters.out;
 import adapters.console.Constants;
 import core.entity.User;
 
+/**
+ * Вспомогательный класс, испольузуемый для вывода информации о пользователе
+ */
 public class UserInformationOutput {
     public void output(User user) {
         System.out.println(Constants.USER_INFORMATION);

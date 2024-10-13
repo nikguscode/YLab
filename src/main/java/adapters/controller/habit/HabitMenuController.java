@@ -1,17 +1,17 @@
 package adapters.controller.habit;
 
 import adapters.console.Constants;
-import core.exceptions.InvalidHabitInformationException;
-import usecase.HabitCreator;
 import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
+import core.exceptions.InvalidHabitInformationException;
 import infrastructure.dao.user.LocalUserDao;
+import usecase.habit.HabitCreator;
 
 import java.util.Scanner;
 
 public class HabitMenuController {
-    public void handle(Scanner scanner, String email) throws InterruptedException, InvalidFrequencyConversionException, InvalidHabitInformationException {
+    public void handle(Scanner scanner, String email) throws InterruptedException, InvalidFrequencyConversionException {
         while (true) {
             System.out.print(Constants.HABIT_MENU);
             String input = scanner.nextLine();
@@ -21,7 +21,12 @@ public class HabitMenuController {
                     new HabitListController().handle(scanner, email);
                     break;
                 case "2", "2.", "Добавить привычку", "2. Добавить привычку":
-                    addHabitInDatabase(new HabitCreator().create(scanner, email), new LocalUserDao().get(email));
+                    try {
+                        addHabitInDatabase(new HabitCreator().create(scanner, email), new LocalUserDao().get(email));
+                    } catch (InvalidFrequencyConversionException e) {
+                        System.out.println("Некорректное значение частоты привычки!");
+                    } catch (InvalidHabitInformationException ignored) {
+                    }
                     break;
                 case "0", "0.", "Вернуться в главное меню", "0. Вернуться в главное меню":
                     return;

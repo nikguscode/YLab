@@ -2,16 +2,16 @@ package adapters.controller.habit;
 
 import adapters.console.Constants;
 import core.exceptions.InvalidFrequencyConversionException;
+import core.exceptions.InvalidHabitInformationException;
 import infrastructure.dao.user.LocalUserDao;
 import core.entity.Habit;
 import core.entity.User;
 import core.enumiration.Frequency;
 
-import java.util.Map;
 import java.util.Scanner;
 
 public class HabitEditController {
-    public void handle(Scanner scanner, String email, Habit currentHabit) throws InvalidFrequencyConversionException {
+    public void handle(Scanner scanner, String email, Habit currentHabit) throws InvalidFrequencyConversionException, InvalidHabitInformationException {
         while (true) {
             System.out.println(Constants.HABIT_EDIT_MENU);
             String input = scanner.nextLine();

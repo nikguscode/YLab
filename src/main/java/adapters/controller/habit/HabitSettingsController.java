@@ -1,6 +1,7 @@
 package adapters.controller.habit;
 
 import adapters.console.Constants;
+import core.HabitMarkService;
 import core.exceptions.InvalidFrequencyConversionException;
 import infrastructure.dao.user.LocalUserDao;
 import core.entity.Habit;
@@ -62,6 +63,7 @@ public class HabitSettingsController {
                     currentHabit.setShiftedDateAndTime(
                             LocalDateTime.of(LocalDate.now(), currentHabit.getCreationDateAndTime().toLocalTime())
                     );
+                    HabitMarkService.unmarkedHabits--;
                     System.out.println("Привычка отмечена как выполненная");
                     history.add(LocalDateTime.now());
                     return;

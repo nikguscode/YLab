@@ -3,7 +3,7 @@ package core.enumiration;
 import core.exceptions.InvalidFrequencyConversionException;
 
 /**
- * Класс, содержащий возможные частоты для привычки
+ * Класс, содержащий частоты для привычки
  */
 public enum Frequency {
     UNDEFINED("Неопределено"),
@@ -32,7 +32,7 @@ public enum Frequency {
      * Метод, который используется для преобразования пользовательского ввода в {@link Frequency}
      * @param userInput пользовательский ввод, содержащий частоту привычки
      * @return {@link Frequency}
-     * @throws InvalidFrequencyConversionException возникает в случае неудачной конвертации
+     * @throws InvalidFrequencyConversionException возникает в случае неудачного преобразования
      */
     public static Frequency convertFromString(String userInput) throws InvalidFrequencyConversionException{
         return switch (userInput) {
@@ -46,6 +46,12 @@ public enum Frequency {
         };
     }
 
+    /**
+     * Метод, который используется для преобразования {@link Frequency} в эквивалент в виде целого числа
+     * @param frequency частота, которую необходимо преобразовать
+     * @return количество дней, эквивалентных частоте {@link Frequency}
+     * @throws InvalidFrequencyConversionException возникает в случае неудачного преобразования
+     */
     public static int convertToInteger(Frequency frequency) throws InvalidFrequencyConversionException {
         return switch (frequency) {
             case EVERY_DAY -> 1;

@@ -1,5 +1,8 @@
 package core.enumiration;
 
+/**
+ * Класс, содержащий роли для пользователя
+ */
 public enum Role {
     UNDEFINED("неопредёленный"),
     BLOCKED("заблокированный"),
@@ -12,6 +15,10 @@ public enum Role {
         this.role = role;
     }
 
+    /**
+     * Используется для вывода роли в виде строки
+     * @return строкове представление роли
+     */
     public String getValue() {
         return this.role;
     }

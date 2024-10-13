@@ -4,7 +4,7 @@ import adapters.console.Constants;
 import adapters.in.ConsoleInput;
 import adapters.in.LoginInput;
 import adapters.in.RegistrationInput;
-import core.exceptions.InvalidHabitInformationException;
+import infrastructure.dao.user.UserDao;
 import infrastructure.dto.LoginDto;
 import infrastructure.dto.RegistrationDto;
 import core.exceptions.InvalidFrequencyConversionException;
@@ -18,16 +18,19 @@ public class AuthenticationController {
     private final MainController mainController;
     private final Login login;
     private final Registration registration;
+    private final UserDao userDao;
 
     public AuthenticationController(MainController mainController,
                                     Login login,
-                                    Registration registration) {
+                                    Registration registration,
+                                    UserDao userDao) {
         this.mainController = mainController;
         this.login = login;
         this.registration = registration;
+        this.userDao = userDao;
     }
 
-    public void handle(Scanner scanner) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException, InvalidHabitInformationException {
+    public void handle(Scanner scanner) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException {
         while (true) {
             System.out.print(Constants.START_MENU);
             String input = scanner.nextLine();
@@ -38,9 +41,9 @@ public class AuthenticationController {
                     LoginDto loginDto = loginInput.input(scanner);
 
                     if (login.login(loginDto)) {
-                        System.out.println("Пользователь авторизован");
+                        System.out.println("Пользователь авторизован...");
                         Thread.sleep(1000);
-                        mainController.handle(scanner, loginDto.getEmail());
+                        mainController.handle(scanner, loginDto.getEmail(), userDao.get(loginDto.getEmail()));
                     }
                     break;
                 case "2", "2. Регистрация учётной записи", "Регистрация учётной записи", "2.":
@@ -48,9 +51,9 @@ public class AuthenticationController {
                     RegistrationDto registrationDto = registrationInput.input(scanner);
 
                     if (registration.register(registrationDto)) {
-                        System.out.println("Пользователь зарегистрирован");
+                        System.out.println("Пользователь зарегистрирован...");
                         Thread.sleep(1000);
-                        mainController.handle(scanner, registrationDto.getEmail());
+                        mainController.handle(scanner, registrationDto.getEmail(), userDao.get(registrationDto.getEmail()));
                     }
                     break;
                 default:

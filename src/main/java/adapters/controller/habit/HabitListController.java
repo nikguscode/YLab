@@ -4,7 +4,7 @@ import core.entity.Habit;
 import core.exceptions.InvalidFrequencyConversionException;
 import infrastructure.dao.user.LocalUserDao;
 import core.entity.User;
-import adapters.out.HabitListOut;
+import adapters.out.HabitListOutput;
 
 import java.util.Comparator;
 import java.util.Scanner;
@@ -17,7 +17,7 @@ public class HabitListController {
         Comparator<? super Habit> comparator = null;
 
         while (true) {
-            new HabitListOut().outList(user, predicate, comparator);
+            new HabitListOutput().outList(user, predicate, comparator);
             String input = scanner.nextLine();
 
             switch (input) {

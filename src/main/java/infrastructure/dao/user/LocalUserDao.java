@@ -3,6 +3,9 @@ package infrastructure.dao.user;
 import static infrastructure.UserDatabase.*;
 import core.entity.User;
 
+/**
+ * Реализация обращения к локальной базе данных
+ */
 public class LocalUserDao implements UserDao {
     @Override
     public void add(User user) {
