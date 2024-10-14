@@ -55,7 +55,7 @@ public class MainController {
                     if (user.getRole() == Role.ADMINISTRATOR) {
                         new AdministratorMenuController(userDao).handle(scanner);
                     }
-                    return;
+                    break;
                 case "0", "0.", "Выйти из учётной записи", "0. Выйти из учётной записи":
                     System.out.println("Выход из учётной записи...");
                     user.setAuthorized(false);

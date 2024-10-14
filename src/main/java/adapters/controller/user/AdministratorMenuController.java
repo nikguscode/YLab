@@ -25,6 +25,9 @@ public class AdministratorMenuController {
     public void handle(Scanner scanner) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException {
         while (true) {
             User user = chooseUserAccount(scanner);
+            if (user == null) {
+                return;
+            }
             String input = printMenuForInteractingWithUserAccount(scanner, user);
 
             switch (input) {
@@ -35,7 +38,11 @@ public class AdministratorMenuController {
                     new UserMenuController(userDao).handle(scanner, user);
                     break;
                 case "3", "3.", "Заблокировать пользователя", "3. Заблокировать пользователя", "Разблокировать пользователя", "3. Разблокировать пользователя":
-                    user.setRole(Role.BLOCKED);
+                    if (user.getRole() != Role.BLOCKED) {
+                        user.setRole(Role.BLOCKED);
+                    } else {
+                        user.setRole(Role.ADMINISTRATOR);
+                    }
                     break;
                 case "4", "4.", "Удалить аккаунт", "4. Удалить аккаунт":
                     userDao.delete(user);
@@ -58,7 +65,15 @@ public class AdministratorMenuController {
         System.out.println("0. Вернуться назад");
         System.out.print("Укажите почту пользователя, чтобы внести изменения: ");
         String input = scanner.nextLine();
-        return userDao.get(input);
+
+        switch (input) {
+            case "0", "0. ", "Вернуться назад", "0. Вернуться назад" -> {
+                return null;
+            }
+            default -> {
+                return userDao.get(input);
+            }
+        }
     }
 
     /**
@@ -70,7 +85,7 @@ public class AdministratorMenuController {
     private String printMenuForInteractingWithUserAccount(Scanner scanner, User user) {
         System.out.println("1. Управление привычками пользователя");
         System.out.println("2. Редактировать информацию пользователя");
-        System.out.println(user.getRole() == Role.USER ? "3. Заблокировать пользователя" : "3. Разблокировать пользователя");
+        System.out.println(user.getRole() != Role.BLOCKED ? "3. Заблокировать пользователя" : "3. Разблокировать пользователя");
         System.out.println("4. Удалить аккаунт пользователя");
         System.out.println("0. Вернуться назад");
         System.out.print("Выберите опцию: ");
