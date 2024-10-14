@@ -21,7 +21,7 @@ public class HabitStreakService {
      */
     public int getCurrentStreak(Habit habit) throws InvalidFrequencyConversionException {
         List<LocalDateTime> history = habit.getHistory();
-        long maxInterval = calculateMaximumIntervalInMinutes(habit.getFrequency());
+        long maxInterval = calculateMaximumIntervalInMinutes();
 
         if (history.isEmpty()) {
             return 0;
@@ -35,11 +35,10 @@ public class HabitStreakService {
     }
 
     /**
-     * Проверяет, была ли пропущена последняя отметка. Отметка считается пропущенной, если превышает частоту более чем
-     * в 2 раза. Пример: последняя отметка была 08:00 10/10/2024, частота: ежедневно => следующая отметка должна быть
-     * в 08:00 11/10/2024, при этом у пользователя есть время до 7:59 12/10/24, пока не настанет время ещё одной отметки
+     * Проверяет, была ли пропущена последняя отметка. Отметка считается пропущенной, если с момента последней отметки прошло
+     * более 24 часов (суток).
      * @param lastMarkedDate дата последней отметки
-     * @param maxInterval максимально допустимый интервал, при привышении которого сбивается серия отметок
+     * @param maxInterval максимально допустимый интервал, при превышении которого сбивается серия отметок
      * @return <b>true</b>: если отметка пропущена, иначе <b>false</b>
      */
     private boolean isMissedLastMark(LocalDateTime lastMarkedDate, long maxInterval) {
@@ -50,7 +49,7 @@ public class HabitStreakService {
      * Вычисляет серию отметок, используя {@link Habit#getHistory() history}, итерируется с конца списка до тех пор, пока
      * серия не собьётся
      * @param history список, который содержит историю отметок привычки
-     * @param maxInterval максимально допустимый интервал, при привышении которого сбивается серия отметок
+     * @param maxInterval максимально допустимый интервал, при превышении которого сбивается серия отметок
      * @return число отметок
      */
     private int calculateStreak(List<LocalDateTime> history, long maxInterval) {
@@ -71,13 +70,10 @@ public class HabitStreakService {
     }
 
     /**
-     * Вспомогательный метод, для перевода дней в минуты. Используется для повышения читаемости кода
-     * @param frequency частота привычки
-     * @return переведенный интервал в минутах
-     * @throws InvalidFrequencyConversionException возникает в случае неудачной конвертации {@link Frequency#convertToInteger(Frequency)
-     * convertToInteger()}
+     * Вспомогательный метод для возвращения фиксированного интервала в 24 часа (сутки) в минутах.
+     * @return интервал в минутах (24 часа = 1440 минут)
      */
-    private long calculateMaximumIntervalInMinutes(Frequency frequency) throws InvalidFrequencyConversionException {
-        return 2 * 1440L * Frequency.convertToInteger(frequency);
+    private long calculateMaximumIntervalInMinutes() {
+        return 1440L;
     }
 }
