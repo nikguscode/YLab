@@ -62,7 +62,7 @@ public class HabitSettingsController {
                 case "0", "0.", "Вернуться назад", "0. Вернуться назад":
                     return;
                 default:
-                    System.out.println("Указана неверная опция");
+                    System.out.println("Указана некорректная опция!");
             }
         }
     }
