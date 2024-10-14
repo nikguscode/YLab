@@ -9,6 +9,7 @@ import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitInformationException;
 import infrastructure.dto.HabitDto;
 import usecase.habit.HabitCreator;
+import usecase.habit.MarkDateShifter;
 
 import java.util.Scanner;
 
@@ -29,7 +30,11 @@ public class HabitMenuController {
                 case "2", "2.", "Добавить привычку", "2. Добавить привычку":
                     try {
                         HabitDto habitDto = new HabitCreationInput().input(scanner);
-                        addHabitInDatabase(new HabitCreator().create(user, habitDto), user);
+                        Habit habit = addHabitInDatabase(new HabitCreator().create(user, habitDto), user);
+
+                        if (habit.getShiftedDateAndTime() == null) {
+                            new MarkDateShifter().shiftMarkDate(habit);
+                        }
                     } catch (InvalidFrequencyConversionException e) {
                         System.out.println("Некорректное значение частоты привычки!");
                     } catch (InvalidHabitInformationException ignored) {
@@ -49,9 +54,10 @@ public class HabitMenuController {
      * @param user пользователь, к которому относится привычка
      * @throws InterruptedException
      */
-    private void addHabitInDatabase(Habit habit, User user) throws InterruptedException {
+    private Habit addHabitInDatabase(Habit habit, User user) throws InterruptedException {
         user.getHabits().put(habit.getId(), habit);
         System.out.println("Привычка добавлена...");
         Thread.sleep(500);
+        return habit;
     }
 }

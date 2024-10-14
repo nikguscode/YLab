@@ -81,7 +81,6 @@ public class HabitCreator {
         LocalDateTime now = LocalDateTime.now();
         habitBuilder.creationDateAndTime(now)
                 .lastMarkDateAndTime(now)
-                .shiftedDateAndTime(now)
                 .isCompleted(true)
                 .history(new ArrayList<>(List.of(now)));
     }

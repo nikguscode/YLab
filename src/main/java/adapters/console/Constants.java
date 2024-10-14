@@ -108,6 +108,16 @@ public class Constants {
             ║  Selected Habit Settings  ║
             ╚═══════════════════════════╝\s""";
 
+    public static final String HABIT_SETTINGS_MENU = """
+            1. Отметить выполнение
+            2. Редактировать
+            3. Посмотреть историю выполнения
+            4. Сгенерировать статистику
+            5. Подробная информация
+            0. Вернуться назад
+            --------------------------------
+            Выберите опцию: \s""";
+
     public static final String HABIT_EDIT_MENU = """
             ╔═══════════════════════════╗
             ║        Habit Edit         ║

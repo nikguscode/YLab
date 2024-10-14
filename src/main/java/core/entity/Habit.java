@@ -123,11 +123,6 @@ public class Habit {
         }
 
         public Builder shiftedDateAndTime(LocalDateTime shiftedDateAndTime) throws InvalidHabitInformationException {
-            if (shiftedDateAndTime == null) {
-                System.out.println("Ошибка даты и времени смещения, попробуйте ещё раз!");
-                throw new InvalidHabitInformationException();
-            }
-
             this.shiftedDateAndTime = shiftedDateAndTime;
             return this;
         }
