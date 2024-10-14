@@ -3,11 +3,11 @@ package adapters.controller.habit;
 import adapters.console.Constants;
 import core.HabitMarkService;
 import core.LocalDateTimeFormatter;
+import core.entity.Habit;
+import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitIdException;
 import core.exceptions.InvalidHabitInformationException;
-import core.entity.Habit;
-import core.entity.User;
 import usecase.habit.HabitStreakService;
 import usecase.habit.MarkDateShifter;
 
@@ -18,13 +18,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
+/**
+ * Контроллер, отвечающий за взаимодействие с конкретной привычкой, выбранной из {@link HabitListController}
+ */
 public class HabitSettingsController {
     public void handle(Scanner scanner, User user, String input) throws InterruptedException, InvalidFrequencyConversionException, InvalidHabitIdException {
         HabitMarkService.checkAllMarks(user);
         Habit habit = getSelectedHabit(input, user.getHabits());
 
         while (true) {
-            String currentInput = printHabitMenu(scanner, input, habit);
+            String currentInput = printHabitMenu(scanner, habit);
             List<LocalDateTime> history = habit.getHistory();
 
             switch (currentInput) {
@@ -66,18 +69,38 @@ public class HabitSettingsController {
         }
     }
 
+    /**
+     * Получаем, выбранную привычку из базы данных
+     *
+     * @param input  идентификатор привычки, используется в {@link HabitSettingsController#getHabitIdFromUserInput(String, Map)
+     *               getHabitIdFromUserInput()} для безопасного перевода идентификатора из строки в число
+     * @param habits база данных, содержащая привычки, в следующий версиях будет заменена на DAO интерфейс
+     * @return привычку, найденную в базе данных по идентификатору
+     * @throws InvalidHabitIdException возникает в том случае, если пользователь указал некорректный идентификатор в
+     *                                 {@link HabitListController}
+     */
     private Habit getSelectedHabit(String input, Map<Long, Habit> habits) throws InvalidHabitIdException {
         long habitId = getHabitIdFromUserInput(input, habits);
         return habits.get(habitId);
     }
 
-    private String printHabitMenu(Scanner scanner, String input, Habit habit) throws InvalidFrequencyConversionException {
+    /**
+     * Метод, отвечающий за вывод информации о выбранной привычки и меню для взаимодействия с ней, также считывает
+     * пользовательский ввод
+     *
+     * @param scanner экземпляр сканер
+     * @param habit   привычка, которую необходимо вывести
+     * @return вывод для консоли
+     * @throws InvalidFrequencyConversionException возникает при некорректном преобразовании {@link core.enumiration.Frequency
+     *                                             Frequency} в другой тип данных
+     */
+    private String printHabitMenu(Scanner scanner, Habit habit) throws InvalidFrequencyConversionException {
         System.out.println(Constants.SELECTED_HABIT_SETTINGS);
 
         new HabitStreakService().getCurrentStreak(habit);
         System.out.printf(
                 "Идентификатор: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s\n",
-                input,
+                habit.getId(),
                 habit.getTitle(),
                 habit.isCompleted() ? "Выполнена" : "Не выполнена",
                 habit.getFrequency().getValue(),
@@ -88,6 +111,16 @@ public class HabitSettingsController {
         return scanner.nextLine();
     }
 
+    /**
+     * Метод, отвечающий за отметку привычки. Перед отметкой, проверяет, чтобы привычка не была уже выполненной.
+     * В случае, если отметка совершена, сдвигает дату следующей отметки {@link MarkDateShifter#shiftMarkDate(Habit)
+     * shiftMarkDate()}, передаёт в главный сервис {@link HabitMarkService}, что на одну невыполненную привычку стало меньше,
+     * а затем добавляет текущую дату в историю отметок.
+     * @param habit привычка для которой необходимо совершить отметку
+     * @param history история отметок для указанной привычки
+     * @throws InvalidFrequencyConversionException возникает при некорректном преобразовании {@link core.enumiration.Frequency
+     * Frequency в другой тип данных}
+     */
     private void markHabit(Habit habit, List<LocalDateTime> history) throws InvalidFrequencyConversionException {
         if (habit.isCompleted()) {
             System.out.println("Ошибка, привычка уже выполнена, ожидайте её сброса!");
@@ -101,6 +134,12 @@ public class HabitSettingsController {
         history.add(LocalDateTime.now());
     }
 
+    /**
+     * Метод, который отвечает за вывод подробной информации о привычке
+     * @param habit привычка для котрой необходимо вывести информацию
+     * @param scanner экземпляр сканера
+     * @return вывод для консоли
+     */
     private String printHabitInformation(Habit habit, Scanner scanner) {
         System.out.println("-----------------------------------");
         System.out.println("# | Идентификатор: " + habit.getId());
@@ -120,6 +159,14 @@ public class HabitSettingsController {
         return scanner.nextLine();
     }
 
+    /**
+     * Метод, отвечающий за обработку и преборазование пользовательского ввода в идентификатор привычки
+     * @param input пользоватеский ввод
+     * @param habits база данных привычек, в следующей версии будет заменена на DAO Интерфейс
+     * @return идентификатор в числовом представлении
+     * @throws InvalidHabitIdException возникает в том случае, если пользователь указал некорректный идентификатор в
+     * {@link HabitListController}
+     */
     private long getHabitIdFromUserInput(String input, Map<Long, Habit> habits) throws InvalidHabitIdException {
         long currentId;
 

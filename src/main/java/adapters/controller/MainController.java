@@ -67,6 +67,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Выбирает вывод в коносль, в зависимости от роли пользователя
+     * @param user сущность пользователя с которым происходит взаимодействие
+     */
     private void chooseStrategyAccordingRole(User user) {
         if (user.getRole() == Role.ADMINISTRATOR) {
             System.out.print(Constants.ADMINISTRATOR_MENU);
