@@ -1,5 +1,6 @@
 package adapters.controller.habit;
 
+import adapters.console.Constants;
 import core.entity.Habit;
 import core.enumiration.Frequency;
 import core.exceptions.InvalidFrequencyConversionException;
@@ -14,17 +15,7 @@ import java.util.Scanner;
 public class HabitStatisticsController {
     public void handle(Scanner scanner, Habit currentHabit) throws InterruptedException, InvalidFrequencyConversionException {
         while (true) {
-            System.out.println("Укажите промежуток, за который необходимо посмотреть статистику");
-            System.out.println("Возможны следующие варианты:");
-            System.out.println("Статистика за конкретный день, вернёт информацию в виде: выполнена/не выполнена/не требует выполнения");
-            System.out.println("Ввод в формате: hh:mm dd/mm/yyyy");
-            Thread.sleep(500);
-            System.out.println("Статиска за определённую неделю: от 1 до 52");
-            System.out.println("Ввод в формате: неделя=52");
-            Thread.sleep(500);
-            System.out.println("Статистика за определённый месяц: от 1 до 12");
-            System.out.println("Ввод в формате: месяц=3");
-            System.out.print("Укажите опцию: ");
+            System.out.print(Constants.HABIT_STATISTICS_MENU);
             String input = scanner.nextLine();
             List<LocalDateTime> history = currentHabit.getHistory();
 
