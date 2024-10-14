@@ -1,8 +1,6 @@
 package core;
 
 import core.entity.User;
-import core.enumiration.Frequency;
-import core.exceptions.InvalidFrequencyConversionException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,22 +17,17 @@ public class HabitMarkService {
 
     /**
      * Основной метод класса, необходим для проверки состояния привычки. Если интервал между датой, когда должна быть
-     * сделана отметка и текущей датой превысит частоту повторения привычки, статус привычки будет изменён на не выполнена
+     * сделана отметка и текущей датой превысит сутки, статус привычки будет изменён на не выполнена
      *
      * @param user пользователь у которого необходимо проверить статус привычек
      */
     public static void checkAllMarks(User user) {
         user.getHabits().values().forEach(e -> {
             Duration difference = Duration.between(e.getShiftedDateAndTime(), LocalDateTime.now());
-            try {
-                int fromFrequencyToIntDays = Frequency.convertToInteger(e.getFrequency());
-                if (difference.toMinutes() >= toMin(fromFrequencyToIntDays)) {
-                    e.setCompleted(false);
-                    unmarkedHabits++;
-                    notifyUser();
-                }
-            } catch (InvalidFrequencyConversionException ex) {
-                throw new RuntimeException(ex);
+            if (difference.toMinutes() >= 1440L) {
+                e.setCompleted(false);
+                unmarkedHabits++;
+                notifyUser();
             }
         });
     }
@@ -46,14 +39,5 @@ public class HabitMarkService {
         if (unmarkedHabits > 0) {
             System.out.printf("[!!!] Количество неотмеченных привычек: %s\n", unmarkedHabits);
         }
-    }
-
-    /**
-     * Вспомогательный метод для перевода частоты привычки из дней в минуты
-     * @param frequencyDays {@link Frequency} представленный в виде эквивалентного количества дней
-     * @return количество минут
-     */
-    private static long toMin(long frequencyDays) {
-        return frequencyDays * 1440L;
     }
 }
