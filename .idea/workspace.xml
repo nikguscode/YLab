@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c35c5740-b78e-4985-9eb7-cfcd885f642e" name="Changes" comment="bugfix, у пользователя есть frequency + 1 день на отметку, чтобы стрик не сбился">
-      <change afterPath="$PROJECT_DIR$/src/main/java/core/entity/User.java" afterDir="false" />
+    <list default="true" id="c35c5740-b78e-4985-9eb7-cfcd885f642e" name="Changes" comment="исправления PR">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +18,8 @@
         <option value="Enum" />
         <option value="module-info" />
         <option value="Interface" />
-        <option value="package-info" />
         <option value="Class" />
+        <option value="package-info" />
       </list>
     </option>
   </component>
@@ -207,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728933316642</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="исправления PR">
+      <option name="closed" value="true" />
+      <created>1728936609272</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1728936609272</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -218,6 +226,7 @@
     <MESSAGE value="bugfix, у пользователя есть сутки на отметку, чтобы серия не сбилась" />
     <MESSAGE value="bugfix, у пользователя есть сутки на отметку, иначе привычка становится не выполненной" />
     <MESSAGE value="bugfix, у пользователя есть frequency + 1 день на отметку, чтобы стрик не сбился" />
-    <option name="LAST_COMMIT_MESSAGE" value="bugfix, у пользователя есть frequency + 1 день на отметку, чтобы стрик не сбился" />
+    <MESSAGE value="исправления PR" />
+    <option name="LAST_COMMIT_MESSAGE" value="исправления PR" />
   </component>
 </project>
