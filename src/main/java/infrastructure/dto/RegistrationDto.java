@@ -1,14 +1,12 @@
 package infrastructure.dto;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Setter
 @Getter
 @ToString
 @EqualsAndHashCode
+@Builder
 public class RegistrationDto {
     private String email;
     private String username;
