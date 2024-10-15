@@ -1,4 +1,4 @@
-[Ссылка на Pull Request](https://github.com/nikguscode/HomeWorkJava/pull/1)
+[Ссылка на Pull Request, ДЗ#1](https://github.com/nikguscode/YLab/pull/1))
 
 Запуск кода:
 1) mvn compile
