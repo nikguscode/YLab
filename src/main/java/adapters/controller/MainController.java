@@ -9,8 +9,10 @@ import core.entity.User;
 import core.enumiration.Role;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidUserInformationException;
+import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.user.UserDao;
 import core.UserAccessService;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Scanner;
 
@@ -24,31 +26,36 @@ import java.util.Scanner;
  * </ul>
  * </p>
  */
+@RequiredArgsConstructor
 public class MainController {
     private final UserDao userDao;
+    private final HabitDao habitDao;
 
-    public MainController(UserDao userDao) {
-        this.userDao = userDao;
-    }
-
-    public void handle(Scanner scanner, User user) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException {
+    /**
+     * Метод, отвечающий за выбор контроллера
+     * @param scanner экземпляр сканера
+     * @param user сущность пользователя, которая взаимодействует с приложением
+     * @throws InvalidUserInformationException исключение, выбрасываемое при некорректной информации сущности пользователя
+     * @throws InvalidFrequencyConversionException исключение, выбрасываемое при некорректной конвертации {@link core.enumiration.Frequency
+     * Frequency}
+     */
+    public void handle(Scanner scanner, User user) throws InvalidUserInformationException, InvalidFrequencyConversionException {
         while (true) {
             if (!UserAccessService.hasAccess(userDao, user)) {
                 return;
             }
+
             HabitMarkService.checkAllMarks(user);
             chooseStrategyAccordingRole(user);
 
             String input = scanner.nextLine();
             switch (input) {
                 case "1", "1.", "Управление привычками", "1. Управление привычками":
-                    Thread.sleep(500);
-                    new HabitMenuController().handle(scanner, user);
+                    new HabitMenuController(habitDao).handle(scanner, user);
                     break;
                 case "2", "2.", "Статистика пользователя", "2. Статистика пользователя":
                     break;
                 case "3", "3.", "Настройки учётной записи", "3. Настройки учётной записи":
-                    Thread.sleep(500);
                     new UserMenuController(userDao).handle(scanner, user);
                     break;
                 case "4", "4.", "Панель администратора", "4. Панель администратора":
@@ -59,7 +66,7 @@ public class MainController {
                 case "0", "0.", "Выйти из учётной записи", "0. Выйти из учётной записи":
                     System.out.println("Выход из учётной записи...");
                     user.setAuthorized(false);
-                    Thread.sleep(1500);
+                    userDao.edit(user);
                     return;
                 default:
                     System.out.println("Указана некорректная опция!");

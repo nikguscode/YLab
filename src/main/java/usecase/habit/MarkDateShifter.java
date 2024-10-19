@@ -2,7 +2,6 @@
 package usecase.habit;
 
 import core.entity.Habit;
-import core.enumiration.Frequency;
 import core.exceptions.InvalidFrequencyConversionException;
 
 import java.time.LocalDate;
@@ -20,21 +19,21 @@ public class MarkDateShifter {
      * @throws InvalidFrequencyConversionException если произошла ошибка при конвертации частоты
      */
     public void shiftMarkDate(Habit habit) throws InvalidFrequencyConversionException {
-        int frequencyInDaysInt = Frequency.convertToInteger(habit.getFrequency());
+        int frequencyInDaysInt = habit.getFrequency().getIntegerValue();
 
-        if (habit.getShiftedDateAndTime() == null) {
-            habit.setShiftedDateAndTime(LocalDateTime.of(
+        if (habit.getNextMarkDateAndTime() == null) {
+            habit.setNextMarkDateAndTime(LocalDateTime.of(
                     LocalDate.now().plusDays(frequencyInDaysInt),
                     habit.getCreationDateAndTime().toLocalTime()
             ));
         } else {
-            LocalDate nextMarkDate = habit.getShiftedDateAndTime().toLocalDate();
+            LocalDate nextMarkDate = habit.getNextMarkDateAndTime().toLocalDate();
 
             while (LocalDate.now().isAfter(nextMarkDate)) {
                 nextMarkDate = nextMarkDate.plusDays(frequencyInDaysInt);
             }
 
-            habit.setShiftedDateAndTime(LocalDateTime.of(nextMarkDate, habit.getCreationDateAndTime().toLocalTime()));
+            habit.setNextMarkDateAndTime(LocalDateTime.of(nextMarkDate, habit.getCreationDateAndTime().toLocalTime()));
         }
     }
 }

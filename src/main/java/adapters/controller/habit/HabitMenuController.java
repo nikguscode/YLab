@@ -7,7 +7,9 @@ import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitInformationException;
+import infrastructure.dao.habit.HabitDao;
 import infrastructure.dto.HabitDto;
+import lombok.RequiredArgsConstructor;
 import usecase.habit.HabitCreator;
 import usecase.habit.MarkDateShifter;
 
@@ -16,8 +18,11 @@ import java.util.Scanner;
 /**
  * Главный контроллер, отвечающий за вызов других контроллеров, относящихся к {@link Habit}
  */
+@RequiredArgsConstructor
 public class HabitMenuController {
-    public void handle(Scanner scanner, User user) throws InterruptedException, InvalidFrequencyConversionException {
+    private final HabitDao habitDao;
+
+    public void handle(Scanner scanner, User user) throws InvalidFrequencyConversionException {
         while (true) {
             HabitMarkService.checkAllMarks(user);
             System.out.print(Constants.HABIT_MENU);
@@ -30,11 +35,14 @@ public class HabitMenuController {
                 case "2", "2.", "Добавить привычку", "2. Добавить привычку":
                     try {
                         HabitDto habitDto = new HabitCreationInput().input(scanner);
-                        Habit habit = addHabitInDatabase(new HabitCreator().create(user, habitDto), user);
+                        Habit habit = new HabitCreator().create(user, habitDto);
 
-                        if (habit.getShiftedDateAndTime() == null) {
+                        if (habit.getNextMarkDateAndTime() == null) {
                             new MarkDateShifter().shiftMarkDate(habit);
                         }
+
+                        habitDao.add(habit);
+                        System.out.println("Добавление привычки...");
                     } catch (InvalidFrequencyConversionException e) {
                         System.out.println("Некорректное значение частоты привычки!");
                     } catch (InvalidHabitInformationException ignored) {
@@ -52,12 +60,12 @@ public class HabitMenuController {
      * Вспомогательный метод для добавления привычки в базу данных, предназначен для улучшения читаемости кода
      * @param habit привычка, которую необходимо добавить
      * @param user пользователь, к которому относится привычка
-     * @throws InterruptedException
      */
-    private Habit addHabitInDatabase(Habit habit, User user) throws InterruptedException {
-        user.getHabits().put(habit.getId(), habit);
+    private Habit addHabitInDatabase(Habit habit, User user) {
+        long mapOfHabitsSize = user.getHabits().size();
+        user.getHabits().put(mapOfHabitsSize + 1, habit);
+        habit.setListId(mapOfHabitsSize + 1);
         System.out.println("Привычка добавлена...");
-        Thread.sleep(500);
         return habit;
     }
 }

@@ -78,6 +78,6 @@ public class HabitStreakService {
      * convertToInteger()}
      */
     private long calculateMaximumIntervalInMinutes(Frequency frequency) throws InvalidFrequencyConversionException {
-        return 1440L * (Frequency.convertToInteger(frequency) + 1);
+        return 1440L * (frequency.getIntegerValue() + 1);
     }
 }

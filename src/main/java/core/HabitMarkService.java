@@ -21,7 +21,7 @@ public class HabitMarkService {
         int unmarkedHabits = 0;
 
         for (Habit habit : user.getHabits().values()) {
-            Duration difference = Duration.between(habit.getShiftedDateAndTime(), LocalDateTime.now());
+            Duration difference = Duration.between(habit.getNextMarkDateAndTime(), LocalDateTime.now());
             if (difference.toMinutes() >= 1440L) {
                 habit.setCompleted(false);
                 unmarkedHabits++;

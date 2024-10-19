@@ -2,7 +2,6 @@ package core;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 /**
  * Класс, предназначенный для конвертации LocalDateTime в String и последующем форматировании
  */

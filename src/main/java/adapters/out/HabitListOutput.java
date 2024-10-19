@@ -64,6 +64,7 @@ public class HabitListOutput {
      * @param comparator компаратор, определяющий, каким образом будут отсортированы привычки
      */
     private void sort(User user, Comparator<? super Habit> comparator) {
+
         user.getHabits().values().stream()
                 .sorted(comparator)
                 .forEach(e -> {
@@ -73,28 +74,29 @@ public class HabitListOutput {
     }
 
     /**
-     * Метод, определяющий серию выполнения привычки (streak), используя {@link HabitStreakService}
+     * Метод, определяющий серию выполнения привычки (streak), используя {@link HabitStreakService}. Метод необходим
+     * только для улучшения читаемости кода
      * @param habit привычка для которой нужно оперелить серию
      */
     private void checkHabitStreak(Habit habit) {
         try {
             habit.setStreak(new HabitStreakService().getCurrentStreak(habit));
-        } catch (InvalidFrequencyConversionException ex) {
-            throw new RuntimeException(ex);
+        } catch (InvalidFrequencyConversionException e) {
+            throw new RuntimeException(e);
         }
     }
 
     /**
-     * Выводит отформатированную привычку
+     * Выводит отформатированную привычку. Метод необходим только для улучшения читаемости кода
      * @param habit привычка которую нужно вывести
      */
     private void printHabitInformation(Habit habit) {
         String currentHabit = String.format(
-                "Идентификатор: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s",
-                habit.getId(),
+                "ID в списке: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s",
+                habit.getListId(),
                 habit.getTitle(),
                 habit.isCompleted() ? "Выполнена" : "Не выполнена",
-                habit.getFrequency().getValue(),
+                habit.getFrequency().getStringValue(),
                 habit.getStreak()
         );
         System.out.println(currentHabit);

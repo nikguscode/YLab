@@ -2,10 +2,10 @@ package usecase.authentication.login;
 
 import static usecase.authentication.Constants.*;
 
+import infrastructure.dao.user.JdbcUserDao;
 import infrastructure.dto.LoginDto;
 import core.entity.User;
 import core.enumiration.Role;
-import infrastructure.dao.user.LocalUserDao;
 import infrastructure.dao.user.UserDao;
 
 import java.time.LocalDateTime;
@@ -22,13 +22,14 @@ public class LocalLogin implements Login {
      * @return <b>true</b>: вход выполнен успешено, иначе <b>false</b>
      */
     @Override
-    public boolean isSuccess(LoginDto loginDto) throws InterruptedException {
-        UserDao userDao = new LocalUserDao();
+    public boolean isSuccess(LoginDto loginDto) {
+        UserDao userDao = new JdbcUserDao();
         User user = userDao.get(loginDto.getEmail());
 
         if (validate(user, loginDto)) {
             user.setAuthorized(true);
             user.setAuthorizationDate(LocalDateTime.now());
+            userDao.edit(user);
             return true;
         } else {
             return false;
@@ -46,16 +47,14 @@ public class LocalLogin implements Login {
      * @param loginDto dto, переносящий пользовательский ввод
      * @return <b>true</b>: если все проверки пройдены, иначе <b>false</b>
      */
-    private boolean validate(User user, LoginDto loginDto) throws InterruptedException {
+    private boolean validate(User user, LoginDto loginDto) {
         if (user == null) {
             System.out.println(LOGIN_USER_NOT_FOUND);
-            Thread.sleep(500);
             return false;
         }
 
         if (user.getRole() == Role.BLOCKED) {
             System.out.println(LOGIN_USER_BLOCKED);
-            Thread.sleep(500);
             return false;
         }
 
@@ -64,7 +63,6 @@ public class LocalLogin implements Login {
 
         if (!correctPassword.equals(currentPassword)) {
             System.out.println(LOGIN_INCORRECT_DATA);
-            Thread.sleep(500);
             return false;
         }
 

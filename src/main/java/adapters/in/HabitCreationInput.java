@@ -19,7 +19,7 @@ public class HabitCreationInput implements ConsoleInput<HabitDto> {
     @SneakyThrows
     @Override
     public HabitDto input(Scanner scanner) {
-        HabitDto.Builder habitDto = HabitDto.builder();
+        HabitDto.HabitDtoBuilder habitDto = HabitDto.builder();
 
         System.out.print("Укажите название привычки: ");
         habitDto.title(scanner.nextLine());
@@ -37,7 +37,6 @@ public class HabitCreationInput implements ConsoleInput<HabitDto> {
         habitDto.dateAndTime(scanner.nextLine());
 
         System.out.print(Constants.FREQUENCY_LIST);
-        Thread.sleep(400);
         habitDto.frequency(scanner.nextLine());
 
         return habitDto.build();

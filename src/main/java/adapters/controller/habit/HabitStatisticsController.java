@@ -2,7 +2,6 @@ package adapters.controller.habit;
 
 import adapters.console.Constants;
 import core.entity.Habit;
-import core.enumiration.Frequency;
 import core.exceptions.InvalidFrequencyConversionException;
 
 import java.time.Duration;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class HabitStatisticsController {
-    public void handle(Scanner scanner, Habit currentHabit) throws InterruptedException, InvalidFrequencyConversionException {
+    public void handle(Scanner scanner, Habit currentHabit) throws InvalidFrequencyConversionException {
         while (true) {
             System.out.print(Constants.HABIT_STATISTICS_MENU);
             String input = scanner.nextLine();
@@ -33,7 +32,7 @@ public class HabitStatisticsController {
 
                 Duration duration = Duration.between(currentHabit.getCreationDateAndTime(), inputDate);
                 long intDuration = duration.toDays();
-                int intFrequency = Frequency.convertToInteger(currentHabit.getFrequency());
+                int intFrequency = currentHabit.getFrequency().getIntegerValue();
                 if (Year.of(inputDate.getYear()).isLeap()) {
                     intDuration--;
                 }

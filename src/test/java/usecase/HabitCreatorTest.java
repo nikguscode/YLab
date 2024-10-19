@@ -1,69 +1,74 @@
-//package usecase;
-//
-//
-//import core.entity.Habit;
-//import core.entity.User;
-//import core.enumiration.Frequency;
-//import core.exceptions.InvalidFrequencyConversionException;
-//import core.exceptions.InvalidHabitInformationException;
-//import core.exceptions.InvalidUserInformationException;
-//import infrastructure.dao.user.LocalUserDao;
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;
-//import org.mockito.junit.MockitoJUnitRunner;
-//import usecase.habit.HabitCreator;
-//
-//import java.time.LocalDateTime;
-//import java.util.Scanner;
-//import java.util.UUID;
-//
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertNotNull;
-//import static org.mockito.Mockito.mock;
-//import static org.mockito.Mockito.when;
-//
-//@RunWith(MockitoJUnitRunner.class)
-//public class HabitCreatorTest {
-//    @InjectMocks
-//    private HabitCreator habitCreator;
-//
-//    @Mock
-//    private Scanner scanner;
-//
-//    @Mock
-//    private LocalUserDao localUserDao;
-//
-//    @Before
-//    public void setUp() throws InvalidUserInformationException {
-//        MockitoAnnotations.openMocks(this);
-//    }
-//
-//    @Test
-//    public void create_Correct_Habit() throws InvalidFrequencyConversionException, InterruptedException, InvalidHabitInformationException {
-//        // Подготовка данных, которые будут возвращаться при вызове scanner.nextLine()
-//        when(scanner.nextLine())
-//                .thenReturn("Заголовок", "Описание", "08:00 10/10/2024", "1");
-//
-//        // Создание и настройка мокируемого пользователя
-//        User mockUser = mock(User.class);
-//        UUID mockUserId = UUID.randomUUID();
-//        when(mockUser.getId()).thenReturn(mockUserId);
-//
-//        // Мокирование LocalUserDao
-//        when(localUserDao.get("test@gmail.com")).thenReturn(mockUser);
-//
-//        // Создание привычки
-//        Habit habit = habitCreator.create(scanner, "test@gmail.com");
-//
-//        // Проверка результатов
-//        assertNotNull(habit);
-//        assertEquals(Frequency.EVERY_DAY, habit.getFrequency());
-//        assertEquals(LocalDateTime.of(2024, 10, 10, 8, 0), habit.getCreationDateAndTime());
-//        assertEquals(mockUserId, habit.getUserId()); // Проверка, что ID пользователя установлен правильно
-//    }
-//
-//}
+package usecase;
+
+import core.entity.User;
+import core.exceptions.InvalidFrequencyConversionException;
+import core.exceptions.InvalidHabitInformationException;
+import core.exceptions.InvalidUserInformationException;
+import infrastructure.dto.HabitDto;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import usecase.habit.HabitCreator;
+
+public class HabitCreatorTest {
+    public final HabitCreator habitCreator = new HabitCreator();
+    public final User user = User.builder()
+            .email("test@gmail.com")
+            .username("1")
+            .password("1")
+            .build();
+
+    public HabitCreatorTest() throws InvalidUserInformationException {
+    }
+
+    @Test
+    @DisplayName("Create Correct Habit")
+    public void create_Correct_Habit() throws InvalidFrequencyConversionException, InvalidHabitInformationException {
+        HabitDto habitDto = HabitDto.builder()
+                .title("test1")
+                .description("test2")
+                .dateAndTime("")
+                .frequency("1. Ежедневно")
+                .build();
+        habitCreator.create(user, habitDto);
+    }
+
+    @Test
+    @DisplayName("Create Habit With Incorrect DateTime")
+    public void create_Habit_With_Incorrect_DateTime() {
+        HabitDto habitDto = HabitDto.builder()
+                .title("test1")
+                .description("test2")
+                .dateAndTime("31/12/2024")
+                .frequency("1. Ежедневно")
+                .build();
+        Assertions.assertThatThrownBy(() -> habitCreator.create(user, habitDto))
+                .isInstanceOf(InvalidHabitInformationException.class);
+    }
+
+    @Test
+    @DisplayName("Create Habit With Incorrect Frequency")
+    public void create_Habit_With_Incorrect_Frequency() {
+        HabitDto habitDto = HabitDto.builder()
+                .title("test1")
+                .description("test2")
+                .dateAndTime("08:00 31/12/2024")
+                .frequency("")
+                .build();
+        Assertions.assertThatThrownBy(() -> habitCreator.create(user, habitDto))
+                .isInstanceOf(InvalidFrequencyConversionException.class);
+    }
+
+    @Test
+    @DisplayName("Create Habit With Incorrect Title and Description")
+    public void create_Habit_With_Incorrect_Title_And_Description() {
+        HabitDto habitDto = HabitDto.builder()
+                .title("")
+                .description("")
+                .dateAndTime("08:00 31/12/2024")
+                .frequency("1. Ежедневно")
+                .build();
+        Assertions.assertThatThrownBy(() -> habitCreator.create(user, habitDto))
+                .isInstanceOf(InvalidHabitInformationException.class);
+    }
+}

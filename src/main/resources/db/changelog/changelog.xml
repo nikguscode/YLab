@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        logicalFilePath="db/changelog.xml">
+        <include file="001-create-entity-schema.xml" relativeToChangelogFile="true"/>
+        <include file="002-create-role-enum-type.xml" relativeToChangelogFile="true"/>
+        <include file="003-create-frequency-enum-type.xml" relativeToChangelogFile="true"/>
+        <include file="004-create-user-table.xml" relativeToChangelogFile="true"/>
+        <include file="005-insert-start-values-in-user-table.xml" relativeToChangelogFile="true"/>
+        <include file="006-create-habit-table.xml" relativeToChangelogFile="true"/>
+        <include file="007-create-habit-mark-history-table.xml" relativeToChangelogFile="true"/>
+        <include file="008-insert-start-values-in-habit-table.xml" relativeToChangelogFile="true"/>
+        <include file="009-insert-start-values-in-habit-mark-history-table.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

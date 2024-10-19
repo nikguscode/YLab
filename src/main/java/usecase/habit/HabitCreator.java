@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class HabitCreator {
     /**
-     * Основной метод класса, используется для создания привычки. Конструирует привычку, используя {@link Habit.Builder},
+     * Основной метод класса, используется для создания привычки. Конструирует привычку, используя {@link Habit.HabitBuilder},
      * а также {@link HabitDto} для получения пользовательского ввода
      *
      * @param user сущность текушего пользователя
@@ -30,7 +30,7 @@ public class HabitCreator {
      *                                             при создании {@link Habit}
      */
     public Habit create(User user, HabitDto habitDto) throws InvalidFrequencyConversionException, InvalidHabitInformationException {
-        Habit.Builder habit = Habit.builder();
+        Habit.HabitBuilder habit = Habit.builder();
 
         setHabitCreationDateAndTime(habitDto.getDateAndTime(), habit);
         return habit
@@ -48,7 +48,7 @@ public class HabitCreator {
      * @throws InvalidHabitInformationException возникает в том случае, если пользователь ввёл некорректные данные при
      * создании новой привычки или разработчик указал некорректные параметры при создании {@link Habit}
      */
-    private void setHabitCreationDateAndTime(String input, Habit.Builder habitBuilder) throws InvalidHabitInformationException {
+    private void setHabitCreationDateAndTime(String input, Habit.HabitBuilder habitBuilder) throws InvalidHabitInformationException {
         if (input.isEmpty()) {
             setDefaultDateAndTime(habitBuilder);
             return;
@@ -77,7 +77,7 @@ public class HabitCreator {
      * @throws InvalidHabitInformationException возникает в том случае, если пользователь ввёл некорректные данные при
      * создании новой привычки или разработчик указал некорректные параметры при создании {@link Habit}
      */
-    private void setDefaultDateAndTime(Habit.Builder habitBuilder) throws InvalidHabitInformationException {
+    private void setDefaultDateAndTime(Habit.HabitBuilder habitBuilder) throws InvalidHabitInformationException {
         LocalDateTime now = LocalDateTime.now();
         habitBuilder.creationDateAndTime(now)
                 .lastMarkDateAndTime(now)
@@ -92,9 +92,9 @@ public class HabitCreator {
      * @throws InvalidHabitInformationException возникает в том случае, если пользователь ввёл некорректные данные при
      * создании новой привычки или разработчик указал некорректные параметры при создании {@link Habit}
      */
-    private void setCustomDateAndTime(Habit.Builder habitBuilder, LocalDateTime startDateTime) throws InvalidHabitInformationException {
+    private void setCustomDateAndTime(Habit.HabitBuilder habitBuilder, LocalDateTime startDateTime) throws InvalidHabitInformationException {
         habitBuilder.creationDateAndTime(LocalDateTime.now())
-                .shiftedDateAndTime(startDateTime)
+                .nextMarkDateAndTime(startDateTime)
                 .isCompleted(false)
                 .history(new ArrayList<>());
     }

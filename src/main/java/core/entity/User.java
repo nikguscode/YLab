@@ -2,21 +2,19 @@ package core.entity;
 
 import core.enumiration.Role;
 import core.exceptions.InvalidUserInformationException;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
+@Builder
 public class User {
-    private UUID id;
+    private long id;
     private String email;
     private String username;
     private String password;
@@ -25,18 +23,6 @@ public class User {
     private Map<Long, Habit> habits;
     private LocalDateTime registrationDate;
     private LocalDateTime authorizationDate;
-
-    private User(Builder builder) {
-        this.id = UUID.randomUUID();
-        this.email = builder.email;
-        this.username = builder.username;
-        this.password = builder.password;
-        this.role = builder.role;
-        this.isAuthorized = builder.isAuthorized;
-        this.habits = builder.habits;
-        this.registrationDate = builder.registrationDate;
-        this.authorizationDate = builder.authorizationDate;
-    }
 
     public void setEmail(String email) throws InvalidUserInformationException {
         validateEmail(email);
@@ -74,65 +60,35 @@ public class User {
         }
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
+    public static class UserBuilder {
         private String email;
         private String username;
         private String password;
-        private Role role;
-        private boolean isAuthorized;
-        private Map<Long, Habit> habits;
-        private LocalDateTime registrationDate;
-        private LocalDateTime authorizationDate;
 
-        public Builder email(String email) throws InvalidUserInformationException {
+        public UserBuilder email(String email) throws InvalidUserInformationException {
             validateEmail(email);
             this.email = email;
             return this;
         }
 
-        public Builder username(String username) throws InvalidUserInformationException {
+        public UserBuilder username(String username) throws InvalidUserInformationException {
             validateUsername(username);
             this.username = username;
             return this;
         }
 
-        public Builder password(String password) throws InvalidUserInformationException {
+        public UserBuilder password(String password) throws InvalidUserInformationException {
             validatePassword(password);
             this.password = password;
             return this;
         }
 
-        public Builder role(Role role) {
-            this.role = role;
-            return this;
-        }
-
-        public Builder isAuthorized(boolean isAuthorized) {
-            this.isAuthorized = isAuthorized;
-            return this;
-        }
-
-        public Builder habits(Map<Long, Habit> habits) {
-            this.habits = habits;
-            return this;
-        }
-
-        public Builder registrationDate(LocalDateTime registrationDate) {
-            this.registrationDate = registrationDate;
-            return this;
-        }
-
-        public Builder authorizationDate(LocalDateTime authorizationDate) {
-            this.authorizationDate = authorizationDate;
-            return this;
-        }
-
         public User build() {
-            return new User(this);
+            if (habits == null) {
+                this.habits = new HashMap<>();
+            }
+
+            return new User(id, email, username, password, role, isAuthorized, habits, registrationDate, authorizationDate);
         }
     }
 }

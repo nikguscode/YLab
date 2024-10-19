@@ -22,7 +22,7 @@ import java.util.Scanner;
  * Контроллер, отвечающий за взаимодействие с конкретной привычкой, выбранной из {@link HabitListController}
  */
 public class HabitSettingsController {
-    public void handle(Scanner scanner, User user, String input) throws InterruptedException, InvalidFrequencyConversionException, InvalidHabitIdException {
+    public void handle(Scanner scanner, User user, String input) throws InvalidFrequencyConversionException, InvalidHabitIdException {
         HabitMarkService.checkAllMarks(user);
         Habit habit = getSelectedHabit(input, user.getHabits());
 
@@ -45,7 +45,6 @@ public class HabitSettingsController {
                     System.out.println("История выполнения привычки:");
                     history.forEach(e -> System.out.println(e.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"))));
                     System.out.println("----------------------------");
-                    Thread.sleep(800);
                     break;
                 case "4", "4.", "Сгенерировать статистику", "4. Сгенерировать статистику":
                     new HabitStatisticsController().handle(scanner, habit);
@@ -103,7 +102,7 @@ public class HabitSettingsController {
                 habit.getId(),
                 habit.getTitle(),
                 habit.isCompleted() ? "Выполнена" : "Не выполнена",
-                habit.getFrequency().getValue(),
+                habit.getFrequency().getStringValue(),
                 habit.getStreak()
         );
 
@@ -129,7 +128,6 @@ public class HabitSettingsController {
 
         habit.setCompleted(true);
         new MarkDateShifter().shiftMarkDate(habit);
-        HabitMarkService.unmarkedHabits--;
         System.out.println("Привычка отмечена как выполненная");
         history.add(LocalDateTime.now());
     }
@@ -151,8 +149,8 @@ public class HabitSettingsController {
                 Optional.ofNullable(habit.getLastMarkDateAndTime())
                         .map(LocalDateTimeFormatter::format)
                         .orElse("отметок ещё не было"));
-        System.out.println("# | Дата ближайшей отметки: " + LocalDateTimeFormatter.format(habit.getShiftedDateAndTime()));
-        System.out.println("# | Частота: " + habit.getFrequency().getValue());
+        System.out.println("# | Дата ближайшей отметки: " + LocalDateTimeFormatter.format(habit.getNextMarkDateAndTime()));
+        System.out.println("# | Частота: " + habit.getFrequency().getStringValue());
         System.out.println("0. Вернуться назад");
         System.out.println("-----------------------------------");
         System.out.print("Выберите опцию: ");

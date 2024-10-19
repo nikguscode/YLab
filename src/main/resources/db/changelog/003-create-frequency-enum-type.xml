@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        logicalFilePath="db/changelog.xml">
+    <changeSet id="003-create-frequency-enum-type" author="nikguscode">
+        <sql>
+            CREATE TYPE entity.habit_frequency AS ENUM(
+                'UNDEFINED', 'EVERY_DAY', 'EVERY_WEEK', 'EVERY_MONTH',
+                'EVERY_THREE_MONTH', 'EVERY_SIX_MONTH', 'EVERY_YEAR'
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

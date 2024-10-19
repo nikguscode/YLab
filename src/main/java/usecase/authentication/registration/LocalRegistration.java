@@ -3,7 +3,7 @@ package usecase.authentication.registration;
 import core.entity.User;
 import core.enumiration.Role;
 import core.exceptions.InvalidUserInformationException;
-import infrastructure.dao.user.LocalUserDao;
+import infrastructure.dao.user.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 import infrastructure.dto.RegistrationDto;
 
@@ -28,11 +28,10 @@ public class LocalRegistration implements Registration {
      *                                             <li>{@link User#validateUsername(String) validateUsername()}</li>
      *                                             <li>{@link User#validatePassword(String) validatePassword()}</li>
      *                                         </ul>
-     * @throws InterruptedException            стандартное исключение, вызываемое из-за задержки вывода
      */
     @Override
-    public boolean isSuccess(RegistrationDto registrationDto) throws InvalidUserInformationException, InterruptedException {
-        UserDao userDao = new LocalUserDao();
+    public boolean isSuccess(RegistrationDto registrationDto) throws InvalidUserInformationException {
+        UserDao userDao = new JdbcUserDao();
 
         if (validate(registrationDto, userDao)) {
             userDao.add(
@@ -60,13 +59,11 @@ public class LocalRegistration implements Registration {
      * @param registrationDto dto, хранящий и переносящий пользовательский ввод
      * @param userDao интерфейс для CRUD запросов к базе данных
      * @return <b>true</b>: если все проверки пройдены, иначе <b>false</b>
-     * @throws InterruptedException стандартное исключение, вызываемое из-за задержки вывода
      */
-    private boolean validate(RegistrationDto registrationDto, UserDao userDao) throws InterruptedException {
+    private boolean validate(RegistrationDto registrationDto, UserDao userDao) {
         String currentEmail = registrationDto.getEmail();
         if (userDao.get(currentEmail) != null) {
             System.out.println(REGISTRATION_EMAIL_ALREADY_EXISTS);
-            Thread.sleep(500);
             return false;
         }
 

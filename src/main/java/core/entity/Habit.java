@@ -2,49 +2,29 @@ package core.entity;
 
 import core.enumiration.Frequency;
 import core.exceptions.InvalidHabitInformationException;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
+@Builder
 public class Habit {
-    public static long listId = 1;
     private long id;
-    private UUID userId;
+    private long userId;
+    private long listId;
     private String title;
     private String description;
     private boolean isCompleted;
     private LocalDateTime creationDateAndTime;
     private LocalDateTime lastMarkDateAndTime;
-    private LocalDateTime shiftedDateAndTime;
+    private LocalDateTime nextMarkDateAndTime;
     private List<LocalDateTime> history;
     private Frequency frequency;
     private int streak;
-
-    private Habit(Builder builder) {
-        this.id = listId++;
-        this.userId = builder.userId;
-        this.title = builder.title;
-        this.description = builder.description;
-        this.isCompleted = builder.isCompleted;
-        this.creationDateAndTime = builder.creationDateAndTime;
-        this.lastMarkDateAndTime = builder.lastMarkDateAndTime;
-        this.shiftedDateAndTime = builder.shiftedDateAndTime;
-        this.history = builder.history;
-        this.frequency = builder.frequency;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
 
     public void setTitle(String title) throws InvalidHabitInformationException {
         validateTitle(title);
@@ -70,19 +50,14 @@ public class Habit {
         }
     }
 
-    public static class Builder {
-        private UUID userId;
+    public static class HabitBuilder {
+        private long userId;
         private String title;
         private String description;
-        private boolean isCompleted;
         private LocalDateTime creationDateAndTime;
-        private LocalDateTime lastMarkDateAndTime;
-        private LocalDateTime shiftedDateAndTime;
-        private List<LocalDateTime> history;
-        private Frequency frequency;
 
-        public Builder userId(UUID userId) throws InvalidHabitInformationException {
-            if (userId == null) {
+        public HabitBuilder userId(long userId) throws InvalidHabitInformationException {
+            if (userId == 0) {
                 throw new InvalidHabitInformationException("userId - обязательное поле при создании привычки");
             }
 
@@ -90,24 +65,19 @@ public class Habit {
             return this;
         }
 
-        public Builder title(String title) throws InvalidHabitInformationException {
+        public HabitBuilder title(String title) throws InvalidHabitInformationException {
             validateTitle(title);
             this.title = title;
             return this;
         }
 
-        public Builder description(String description) throws InvalidHabitInformationException {
+        public HabitBuilder description(String description) throws InvalidHabitInformationException {
             validateDescription(description);
             this.description = description;
             return this;
         }
 
-        public Builder isCompleted(boolean isCompleted) {
-            this.isCompleted = isCompleted;
-            return this;
-        }
-
-        public Builder creationDateAndTime(LocalDateTime creationDateAndTime) throws InvalidHabitInformationException {
+        public HabitBuilder creationDateAndTime(LocalDateTime creationDateAndTime) throws InvalidHabitInformationException {
             if (creationDateAndTime == null) {
                 System.out.println("Ошибка даты и времени создания привычки, попробуйте ещё раз!");
                 throw new InvalidHabitInformationException();
@@ -117,28 +87,9 @@ public class Habit {
             return this;
         }
 
-        public Builder lastMarkDateAndTime(LocalDateTime lastMarkDateAndTime) throws InvalidHabitInformationException {
-            this.lastMarkDateAndTime = lastMarkDateAndTime;
-            return this;
-        }
-
-        public Builder shiftedDateAndTime(LocalDateTime shiftedDateAndTime) throws InvalidHabitInformationException {
-            this.shiftedDateAndTime = shiftedDateAndTime;
-            return this;
-        }
-
-        public Builder history(List<LocalDateTime> history) {
-            this.history = history;
-            return this;
-        }
-
-        public Builder frequency(Frequency frequency) {
-            this.frequency = frequency;
-            return this;
-        }
-
         public Habit build() {
-            return new Habit(this);
+            return new Habit(id, userId, listId, title, description, isCompleted, creationDateAndTime, lastMarkDateAndTime,
+                    nextMarkDateAndTime, history, frequency, streak);
         }
     }
 }

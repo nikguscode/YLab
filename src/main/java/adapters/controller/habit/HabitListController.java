@@ -16,7 +16,7 @@ import java.util.function.Predicate;
  * <p>Вызывает следующий сервис при своей работе: {@link HabitListOutput}</p>
  */
 public class HabitListController {
-    public void handle(Scanner scanner, User user) throws InterruptedException, InvalidFrequencyConversionException {
+    public void handle(Scanner scanner, User user) throws InvalidFrequencyConversionException {
         Predicate<? super Habit> predicate = null;
         Comparator<? super Habit> comparator = null;
 
@@ -27,7 +27,6 @@ public class HabitListController {
 
             switch (input) {
                 case "#0", "#0.", "Вернуться назад", "#0. Вернуться назад":
-                    Thread.sleep(500);
                     return;
                 case "#1", "#1.", "Сортировка", "#1. Сортировка":
                     comparator = new HabitSortController().handle(scanner);
@@ -40,7 +39,6 @@ public class HabitListController {
                         new HabitSettingsController().handle(scanner, user, input);
                     } catch (InvalidHabitIdException e) {
                         System.out.println("Некорректный идентификатор привычки!");
-                        throw new RuntimeException(e);
                     }
             }
         }
