@@ -25,6 +25,12 @@ public class LiquibaseMigration {
         this.PASSWORD = configLoader.getProperties("datasource.password");
     }
 
+    public LiquibaseMigration(String url, String username, String password) {
+        this.URL = url;
+        this.USERNAME = username;
+        this.PASSWORD = password;
+    }
+
     public void migrateDatabase(){
         try {
             Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
