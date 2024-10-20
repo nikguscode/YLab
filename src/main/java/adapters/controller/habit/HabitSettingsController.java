@@ -8,6 +8,9 @@ import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitIdException;
 import core.exceptions.InvalidHabitInformationException;
+import infrastructure.dao.habit.HabitDao;
+import infrastructure.dao.habit.JdbcHabitDao;
+import lombok.RequiredArgsConstructor;
 import usecase.habit.HabitStreakService;
 import usecase.habit.MarkDateShifter;
 
@@ -21,7 +24,10 @@ import java.util.Scanner;
 /**
  * Контроллер, отвечающий за взаимодействие с конкретной привычкой, выбранной из {@link HabitListController}
  */
+@RequiredArgsConstructor
 public class HabitSettingsController {
+    private final HabitDao habitDao;
+
     public void handle(Scanner scanner, User user, String input) throws InvalidFrequencyConversionException, InvalidHabitIdException {
         HabitMarkService.checkAllMarks(user);
         Habit habit = getSelectedHabit(input, user.getHabits());
@@ -36,10 +42,16 @@ public class HabitSettingsController {
                     return;
                 case "2", "2.", "Редактировать", "2. Редактировать":
                     try {
-                        new HabitEditController().handle(scanner, user, habit);
+                        new HabitEditController(habitDao).handle(scanner, user, habit);
                     } catch (InvalidHabitInformationException e) {
                         throw new RuntimeException(e);
                     }
+
+                    user.setHabits(habitDao.getAll(user));
+                    if (getSelectedHabit(input, user.getHabits()) == null) {
+                        return;
+                    }
+
                     break;
                 case "3", "3.", "Посмотреть историю выполнения", "3. Посмотреть историю выполнения":
                     System.out.println("История выполнения привычки:");
@@ -130,6 +142,7 @@ public class HabitSettingsController {
         new MarkDateShifter().shiftMarkDate(habit);
         System.out.println("Привычка отмечена как выполненная");
         history.add(LocalDateTime.now());
+        new JdbcHabitDao().edit(habit);
     }
 
     /**

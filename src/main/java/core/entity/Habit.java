@@ -15,7 +15,6 @@ import java.util.List;
 public class Habit {
     private long id;
     private long userId;
-    private long listId;
     private String title;
     private String description;
     private boolean isCompleted;
@@ -88,7 +87,7 @@ public class Habit {
         }
 
         public Habit build() {
-            return new Habit(id, userId, listId, title, description, isCompleted, creationDateAndTime, lastMarkDateAndTime,
+            return new Habit(id, userId, title, description, isCompleted, creationDateAndTime, lastMarkDateAndTime,
                     nextMarkDateAndTime, history, frequency, streak);
         }
     }

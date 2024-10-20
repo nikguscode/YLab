@@ -1,6 +1,6 @@
 package infrastructure.configuration;
 
-import core.ConfigLoader;
+import core.ConfigLoaderService;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -19,7 +19,7 @@ public class LiquibaseMigration {
     private final String PASSWORD;
 
     public LiquibaseMigration() {
-        ConfigLoader configLoader = ConfigLoader.getInstance();
+        ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
         this.URL = configLoader.getProperties("datasource.url");
         this.USERNAME = configLoader.getProperties("datasource.username");
         this.PASSWORD = configLoader.getProperties("datasource.password");

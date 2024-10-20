@@ -7,6 +7,7 @@ import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitInformationException;
+import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
 import infrastructure.dto.HabitDto;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class HabitMenuController {
 
             switch (input) {
                 case "1", "1.", "Список привычек", "1. Список привычек":
-                    new HabitListController().handle(scanner, user);
+                    new HabitListController(habitDao).handle(scanner, user);
                     break;
                 case "2", "2.", "Добавить привычку", "2. Добавить привычку":
                     try {
@@ -41,7 +42,9 @@ public class HabitMenuController {
                             new MarkDateShifter().shiftMarkDate(habit);
                         }
 
-                        habitDao.add(habit);
+                        long habitId = habitDao.add(habit);
+                        user.setHabits(habitDao.getAll(user));
+                        new JdbcHabitMarkHistoryDao().add(habitId);
                         System.out.println("Добавление привычки...");
                     } catch (InvalidFrequencyConversionException e) {
                         System.out.println("Некорректное значение частоты привычки!");
@@ -54,18 +57,5 @@ public class HabitMenuController {
                     System.out.println("Указана некорректная опция!");
             }
         }
-    }
-
-    /**
-     * Вспомогательный метод для добавления привычки в базу данных, предназначен для улучшения читаемости кода
-     * @param habit привычка, которую необходимо добавить
-     * @param user пользователь, к которому относится привычка
-     */
-    private Habit addHabitInDatabase(Habit habit, User user) {
-        long mapOfHabitsSize = user.getHabits().size();
-        user.getHabits().put(mapOfHabitsSize + 1, habit);
-        habit.setListId(mapOfHabitsSize + 1);
-        System.out.println("Привычка добавлена...");
-        return habit;
     }
 }

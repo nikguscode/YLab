@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ConfigLoader {
-    private static ConfigLoader instance;
+public class ConfigLoaderService {
+    private static ConfigLoaderService instance;
     private final Properties configuration;
 
-    private ConfigLoader(String configFilePath) {
+    private ConfigLoaderService(String configFilePath) {
         Properties properties = new Properties();
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(configFilePath);
 
@@ -26,9 +26,9 @@ public class ConfigLoader {
         this.configuration = properties;
     }
 
-    public synchronized static ConfigLoader getInstance() {
+    public synchronized static ConfigLoaderService getInstance() {
         if (instance == null) {
-            instance = new ConfigLoader("db/application.properties");
+            instance = new ConfigLoaderService("db/application.properties");
         }
         return instance;
     }

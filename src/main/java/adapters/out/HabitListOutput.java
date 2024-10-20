@@ -64,7 +64,6 @@ public class HabitListOutput {
      * @param comparator компаратор, определяющий, каким образом будут отсортированы привычки
      */
     private void sort(User user, Comparator<? super Habit> comparator) {
-
         user.getHabits().values().stream()
                 .sorted(comparator)
                 .forEach(e -> {
@@ -92,8 +91,8 @@ public class HabitListOutput {
      */
     private void printHabitInformation(Habit habit) {
         String currentHabit = String.format(
-                "ID в списке: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s",
-                habit.getListId(),
+                "ID: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s",
+                habit.getId(),
                 habit.getTitle(),
                 habit.isCompleted() ? "Выполнена" : "Не выполнена",
                 habit.getFrequency().getStringValue(),

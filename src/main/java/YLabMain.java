@@ -28,7 +28,8 @@ public class YLabMain {
             try {
                 authenticationController.handle(scanner);
             } catch (NoSuchElementException | IllegalStateException | InvalidUserInformationException
-                     | InvalidFrequencyConversionException ignored) {
+                     | InvalidFrequencyConversionException e) {
+                e.printStackTrace();
             }
         }
     }

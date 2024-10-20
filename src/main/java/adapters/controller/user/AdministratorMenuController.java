@@ -4,9 +4,9 @@ import adapters.controller.habit.HabitListController;
 import core.LocalDateTimeFormatter;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidUserInformationException;
-import infrastructure.UserDatabase;
 import core.entity.User;
 import core.enumiration.Role;
+import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +19,7 @@ import java.util.Scanner;
 @RequiredArgsConstructor
 public class AdministratorMenuController {
     private final UserDao userDao;
+    private final HabitDao habitDao;
 
     public void handle(Scanner scanner) throws InvalidUserInformationException, InvalidFrequencyConversionException {
         while (true) {
@@ -30,7 +31,7 @@ public class AdministratorMenuController {
 
             switch (input) {
                 case "1", "1.", "Управление привычками пользователя", "1. Управление привычками пользователя":
-                    new HabitListController().handle(scanner, user);
+                    new HabitListController(habitDao).handle(scanner, user);
                     break;
                 case "2", "2.", "Редактировать информацию пользователя", "2. Редактировать информацию пользователя":
                     new UserMenuController(userDao).handle(scanner, user);
@@ -95,7 +96,7 @@ public class AdministratorMenuController {
      * Метод, который выводит все учётные записи
      */
     private void printListOfUsers() {
-        userDao.get().values().forEach(e -> System.out.printf(
+        userDao.getAll().values().forEach(e -> System.out.printf(
                 "Почта: %s | Количество привычек: %s | Дата регистрации: %s | Дата последней авторизации: %s\n",
                 e.getEmail(),
                 e.getHabits().values().size(),

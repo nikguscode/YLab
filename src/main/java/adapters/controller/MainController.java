@@ -60,7 +60,7 @@ public class MainController {
                     break;
                 case "4", "4.", "Панель администратора", "4. Панель администратора":
                     if (user.getRole() == Role.ADMINISTRATOR) {
-                        new AdministratorMenuController(userDao).handle(scanner);
+                        new AdministratorMenuController(userDao, habitDao).handle(scanner);
                     }
                     break;
                 case "0", "0.", "Выйти из учётной записи", "0. Выйти из учётной записи":

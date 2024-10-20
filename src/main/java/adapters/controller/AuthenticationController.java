@@ -46,8 +46,9 @@ public class AuthenticationController {
 
                     if (login.isSuccess(loginDto)) {
                         System.out.println("Пользователь авторизован...");
-
-                        mainController.handle(scanner, userDao.get(loginDto.getEmail()));
+                        User user = userDao.get(loginDto.getEmail());
+                        user.setHabits(habitDao.getAll(user));
+                        mainController.handle(scanner, user);
                     }
                     break;
                 case "2", "2. Регистрация учётной записи", "Регистрация учётной записи", "2.":

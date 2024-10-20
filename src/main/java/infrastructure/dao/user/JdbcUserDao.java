@@ -1,10 +1,11 @@
 package infrastructure.dao.user;
 
-import core.ConfigLoader;
+import core.ConfigLoaderService;
 import core.entity.User;
 import core.enumiration.Role;
 import core.exceptions.InvalidUserInformationException;
 import infrastructure.DatabaseUtils;
+import infrastructure.dao.habit.JdbcHabitDao;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class JdbcUserDao implements UserDao {
     private final String PASSWORD;
 
     public JdbcUserDao() {
-        ConfigLoader configLoader = ConfigLoader.getInstance();
+        ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
         this.DRIVER = configLoader.getProperties("datasource.driver");
         this.URL = configLoader.getProperties("datasource.url");
         this.USERNAME = configLoader.getProperties("datasource.username");
@@ -47,7 +48,7 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
-    public Map<String, User> get() {
+    public Map<String, User> getAll() {
         String sqlQuery = "SELECT * FROM entity.user";
 
         try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);

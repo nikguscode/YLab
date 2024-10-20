@@ -6,6 +6,8 @@ import core.exceptions.InvalidFrequencyConversionException;
 import core.entity.User;
 import adapters.out.HabitListOutput;
 import core.exceptions.InvalidHabitIdException;
+import infrastructure.dao.habit.HabitDao;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Comparator;
 import java.util.Scanner;
@@ -15,13 +17,17 @@ import java.util.function.Predicate;
  * <p>Контроллер, отвечающий за взаимодействие со списком привычек</p>
  * <p>Вызывает следующий сервис при своей работе: {@link HabitListOutput}</p>
  */
+@RequiredArgsConstructor
 public class HabitListController {
+    private final HabitDao habitDao;
+
     public void handle(Scanner scanner, User user) throws InvalidFrequencyConversionException {
         Predicate<? super Habit> predicate = null;
         Comparator<? super Habit> comparator = null;
 
         while (true) {
             HabitMarkService.checkAllMarks(user);
+            user.setHabits(habitDao.getAll(user));
             new HabitListOutput().outputList(user, predicate, comparator);
             String input = scanner.nextLine();
 
@@ -36,7 +42,7 @@ public class HabitListController {
                     break;
                 default:
                     try {
-                        new HabitSettingsController().handle(scanner, user, input);
+                        new HabitSettingsController(habitDao).handle(scanner, user, input);
                     } catch (InvalidHabitIdException e) {
                         System.out.println("Некорректный идентификатор привычки!");
                     }
