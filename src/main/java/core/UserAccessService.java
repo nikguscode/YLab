@@ -21,6 +21,10 @@ public class UserAccessService {
      * @return <b>true</b>: в случае, если доступ есть, иначе <b>false</b>
      */
     public static boolean hasAccess(UserDao userDao, User user) {
+        if (user == null) {
+            return false;
+        }
+
         String email = user.getEmail();
 
         if (userDao.get(email) == null) {
@@ -31,7 +35,7 @@ public class UserAccessService {
             return false;
         }
 
-        if (user.getRole() == Role.BLOCKED) {
+        if (user.getRole() == Role.BLOCKED || user.getRole() == Role.UNDEFINED) {
             return false;
         }
 
