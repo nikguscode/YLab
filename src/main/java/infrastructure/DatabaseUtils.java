@@ -1,13 +1,21 @@
 package infrastructure;
 
+import lombok.RequiredArgsConstructor;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public class DatabaseUtils {
-    public static Connection createConnection(String driver, String url, String username, String password) throws ClassNotFoundException, SQLException {
+    private final String driver;
+    private final String url;
+    private final String username;
+    private final String password;
+
+    public Connection createConnection() throws ClassNotFoundException, SQLException {
         Class.forName(driver);
 
         if ((username == null) || (password == null) || (username.trim().isEmpty()) || (password.trim().isEmpty())) {
@@ -17,7 +25,7 @@ public class DatabaseUtils {
         }
     }
 
-    public static void close(Connection connection) {
+    public void close(Connection connection) {
         try {
             if (connection != null) {
                 connection.close();
@@ -27,7 +35,7 @@ public class DatabaseUtils {
         }
     }
 
-    public static void close(Statement statement) {
+    public void close(Statement statement) {
         try {
             if (statement != null) {
                 statement.close();
@@ -37,7 +45,7 @@ public class DatabaseUtils {
         }
     }
 
-    public static void close(ResultSet resultSet) {
+    public void close(ResultSet resultSet) {
         try {
             if (resultSet != null) {
                 resultSet.close();
@@ -47,7 +55,7 @@ public class DatabaseUtils {
         }
     }
 
-    public static void rollback(Connection connection) {
+    public void rollback(Connection connection) {
         try {
             if (connection != null) {
                 connection.rollback();
@@ -57,7 +65,7 @@ public class DatabaseUtils {
         }
     }
 
-    public static List<Map<String, Object>> map(ResultSet resultSet) throws SQLException {
+    public List<Map<String, Object>> map(ResultSet resultSet) throws SQLException {
         List<Map<String, Object>> results = new ArrayList<>();
 
         try {
