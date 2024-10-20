@@ -6,7 +6,7 @@ import core.entity.User;
 import java.util.Map;
 
 /**
- * Класс, для CRUD запросов к базе данных, связанных с сущностью {@link Habit}
+ * Интерфейс, для CRUD запросов к базе данных, связанных с сущностью {@link Habit}
  */
 public interface HabitDao {
     /**
@@ -23,10 +23,10 @@ public interface HabitDao {
 
     /**
      * Метод для получения сущности привычки из базы данных
-     * @param id при помощи которого будет выполнен поиск привычки
+     * @param habitId при помощи которого будет выполнен поиск привычки
      * @return сущность привычки
      */
-    Habit get(long id);
+    Habit get(long habitId);
 
     /**
      * Метод для изменения привычки в базе данных

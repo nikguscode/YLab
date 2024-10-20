@@ -14,11 +14,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * JDBC реализация взаимодействия с базой данных, содержащая только CRUD операции
+ */
 @RequiredArgsConstructor
 public class JdbcHabitDao implements HabitDao {
+    /**
+     * Экземпляр вспомогательного класса для взаимодействия с базой данных
+     */
     private final DatabaseUtils databaseUtils;
+
+    /**
+     * Экземпляр DAO интерфейса для получения истории отметок привычки
+     */
     private final JdbcHabitMarkHistoryDao jdbcHabitMarkHistoryDao;
 
+    /**
+     * Метод для добавления привычки в базу данных
+     * @param habit сущность привычки, которую нужно добавить в базу данных
+     */
     @Override
     public long add(Habit habit) {
         String sqlQuery = "INSERT INTO entity.habit" +
@@ -50,6 +64,10 @@ public class JdbcHabitDao implements HabitDao {
         return 0;
     }
 
+    /**
+     * Метод для получения всех сущностей привычки из базы данных
+     * @return список привычек, где ключом является идентификатор привычки
+     */
     @Override
     public Map<Long, Habit> getAll(User user) {
         String sqlQuery = "SELECT * FROM entity.habit WHERE user_id = ?";
@@ -89,6 +107,11 @@ public class JdbcHabitDao implements HabitDao {
         return null;
     }
 
+    /**
+     * Метод для получения сущности привычки из базы данных
+     * @param habitId при помощи которого будет выполнен поиск привычки
+     * @return сущность привычки
+     */
     @Override
     public Habit get(long habitId) {
         String sqlQuery = "SELECT * FROM entity.habit WHERE id=?";
@@ -119,6 +142,10 @@ public class JdbcHabitDao implements HabitDao {
         return null;
     }
 
+    /**
+     * Метод для изменения привычки в базе данных
+     * @param habit отредактированная сущность привычки, которую нужно обновить в базе данных
+     */
     @Override
     public void edit(Habit habit) {
         String sqlQuery = "UPDATE entity.habit " +
@@ -150,6 +177,10 @@ public class JdbcHabitDao implements HabitDao {
         }
     }
 
+    /**
+     * Метод для удаления привычки из базы данных
+     * @param habit сущность привычки, которую необходимо удалить
+     */
     @Override
     public void delete(Habit habit) {
         String sqlQuery = "DELETE FROM entity.habit WHERE id = ?";

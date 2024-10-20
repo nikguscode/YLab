@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class LocalDateTimeFormatter {
     /**
-     * Метод для конвертации и форматирования
+     * Конвертирует и форматирует дату
      * @param dateTime дата и время, которые необходимо конвертировать и форматировать
      * @return дату и время в виде форматированной строки
      */

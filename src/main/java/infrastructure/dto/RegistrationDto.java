@@ -2,6 +2,9 @@ package infrastructure.dto;
 
 import lombok.*;
 
+/**
+ * Хранит пользовательский ввод при регистрации учётной записи
+ */
 @Setter
 @Getter
 @ToString

@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class HabitCreator {
     /**
-     * Основной метод класса, используется для создания привычки. Конструирует привычку, используя {@link Habit.HabitBuilder},
+     * Используется для создания привычки. Конструирует привычку, используя {@link Habit.HabitBuilder},
      * а также {@link HabitDto} для получения пользовательского ввода
      *
      * @param user сущность текушего пользователя
@@ -42,8 +42,10 @@ public class HabitCreator {
     }
 
     /**
-     * Метод, отвечающий за установку даты и времени привычки
-     * @param input дата, которую вводить пользователь
+     * Устанавливает дату и время привычки, при помощи {@link HabitCreator#setDefaultDateAndTime(Habit.HabitBuilder)
+     * setDefaultDateAndTime()}, {@link HabitCreator#setCustomDateAndTime(Habit.HabitBuilder, LocalDateTime) setCustomDateAndTime},
+     * {@link HabitCreator#isStartDateBeforeNow(LocalDateTime) isStartDateBeforeNow()}
+     * @param input дата, которую вводит пользователь
      * @param habitBuilder билдер привычки для создания {@link Habit}
      * @throws InvalidHabitInformationException возникает в том случае, если пользователь ввёл некорректные данные при
      * создании новой привычки или разработчик указал некорректные параметры при создании {@link Habit}

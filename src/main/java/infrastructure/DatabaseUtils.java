@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Вспомогательный класс для взаимодействия с базой данных
+ */
 @RequiredArgsConstructor
 public class DatabaseUtils {
     private final String driver;
@@ -15,6 +18,12 @@ public class DatabaseUtils {
     private final String username;
     private final String password;
 
+    /**
+     * Открывает соединение с базой данных
+     * @return экземпляр {@link Connection}
+     * @throws ClassNotFoundException класс-драйвер базы данных не найден
+     * @throws SQLException
+     */
     public Connection createConnection() throws ClassNotFoundException, SQLException {
         Class.forName(driver);
 
@@ -25,6 +34,10 @@ public class DatabaseUtils {
         }
     }
 
+    /**
+     * Используется для закрытия соединения
+     * @param connection текущее соединение
+     */
     public void close(Connection connection) {
         try {
             if (connection != null) {
@@ -35,6 +48,10 @@ public class DatabaseUtils {
         }
     }
 
+    /**
+     * Используется для закрытия ресурсов шаблона
+     * @param statement текущий шаблон
+     */
     public void close(Statement statement) {
         try {
             if (statement != null) {
@@ -45,6 +62,10 @@ public class DatabaseUtils {
         }
     }
 
+    /**
+     * Используется для закрытия ресурсов {@link ResultSet}
+     * @param resultSet текущий {@link ResultSet}
+     */
     public void close(ResultSet resultSet) {
         try {
             if (resultSet != null) {
@@ -55,6 +76,10 @@ public class DatabaseUtils {
         }
     }
 
+    /**
+     * Используется для отмены транзакции
+     * @param connection текущее соединение
+     */
     public void rollback(Connection connection) {
         try {
             if (connection != null) {
@@ -65,6 +90,12 @@ public class DatabaseUtils {
         }
     }
 
+    /**
+     * Используется для получения строк из базы данных в виде списка
+     * @param resultSet результат запроса к базе данных
+     * @return строки из базы данных в виде списка
+     * @throws SQLException
+     */
     public List<Map<String, Object>> map(ResultSet resultSet) throws SQLException {
         List<Map<String, Object>> results = new ArrayList<>();
 

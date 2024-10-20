@@ -11,10 +11,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * JDBC реализация взаимодействия с базой данных, содержащая только CRUD операции
+ */
 @RequiredArgsConstructor
 public class JdbcUserDao implements UserDao {
+    /**
+     * Экземпляр вспомогательного класса для взаимодействия с базой данных
+     */
     private final DatabaseUtils databaseUtils;
 
+    /**
+     * Метод для добавления пользователя в базу данных
+     * @param user сущность пользователя, которого нужно добавить в базу данных
+     */
     @Override
     public void add(User user) {
         String sqlQuery = "INSERT INTO entity.user" +
@@ -37,6 +47,11 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
+    /**
+     * Метод для получения всех сущностей пользователя из базы данных
+     * @return карту пользователей, где ключом является электронная почта пользователя
+     */
+    @Override
     public Map<String, User> getAll() {
         String sqlQuery = "SELECT * FROM entity.user";
 
@@ -69,6 +84,12 @@ public class JdbcUserDao implements UserDao {
         return null;
     }
 
+    /**
+     * Метод для получения сущности пользователя из базы данных
+     * @param email почта при помощи которой будет выполнен поиск пользователя
+     * @return сущность пользователя
+     */
+    @Override
     public User get(String email) {
         String sqlQuery = "SELECT * FROM entity.user WHERE email=?";
 
@@ -96,6 +117,11 @@ public class JdbcUserDao implements UserDao {
         return null;
     }
 
+    /**
+     * Метод для изменения пользователя в базе данных
+     * @param user отредактированная сущность пользователя, которую нужно обновить в базе данных
+     */
+    @Override
     public void edit(User user) {
         String sqlQuery = "UPDATE entity.user " +
                 "SET email=?, " +
@@ -122,6 +148,11 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
+    /**
+     * Метод для удаления пользователя из базы данных
+     * @param user сущность пользователя, которую необходимо удалить
+     */
+    @Override
     public void delete(User user) {
         String sqlQuery = "DELETE FROM entity.user WHERE email = ?";
 

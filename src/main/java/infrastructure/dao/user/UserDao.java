@@ -5,7 +5,7 @@ import core.entity.User;
 import java.util.Map;
 
 /**
- * Класс, для CRUD запросов к базе данных, связанных с сущностью {@link User}
+ * Интерфейс, для CRUD запросов к базе данных, связанных с сущностью {@link User}
  */
 public interface UserDao {
     /**

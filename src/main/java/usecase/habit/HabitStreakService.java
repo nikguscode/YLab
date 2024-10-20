@@ -18,7 +18,7 @@ public class HabitStreakService {
     private final HabitMarkHistoryDao habitMarkHistoryDao;
 
     /**
-     * Основной метод, который определяет серию отметок
+     * Определяет серию отметок
      * @param habit привычка для которой нужно определить серию отметок
      * @return текущую серию отметок
      * @throws InvalidFrequencyConversionException  возникает в случае неудачной конвертации
@@ -75,7 +75,7 @@ public class HabitStreakService {
     }
 
     /**
-     * Вспомогательный метод, для перевода дней в минуты. Используется для повышения читаемости кода
+     * Перевод дней в минуты, используется для повышения читаемости кода
      * @param frequency частота привычки
      * @return переведенный интервал в минутах
      */

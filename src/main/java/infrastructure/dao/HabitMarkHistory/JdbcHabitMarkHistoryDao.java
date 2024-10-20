@@ -13,10 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * JDBC реализация взаимодействия с базой данных, содержащая только CRUD операции
+ */
 @RequiredArgsConstructor
 public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
+    /**
+     * Экземпляр вспомогательного класса для взаимодействия с базой данных
+     */
     private final DatabaseUtils databaseUtils;
 
+    /**
+     * Добавляет отметку через идентификатор привычки
+     * @param habitId идентификатор привычки
+     */
+    @Override
     public void add(long habitId) {
         String sqlQuery = "INSERT INTO entity.habit_mark_history" +
                 "(habit_id, mark_date) " +
@@ -33,6 +44,11 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
         }
     }
 
+    /**
+     * Добавляет отметку через сущность привычки
+     * @param habit привычка, для которой ставится отметка
+     */
+    @Override
     public void add(Habit habit) {
         String sqlQuery = "INSERT INTO entity.habit_mark_history" +
                 "(habit_id, mark_date) " +
@@ -49,6 +65,12 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
         }
     }
 
+    /**
+     * Получает все даты отметок для привычки
+     * @param habitId идентификатор привычки для которой необходимо получить даты
+     * @return список, содержащий даты отметок
+     */
+    @Override
     public List<LocalDateTime> getAll(long habitId) {
         String sqlQuery = "SELECT * FROM entity.habit_mark_history WHERE habit_id = ?";
 
@@ -70,6 +92,12 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
         return null;
     }
 
+    /**
+     * Получает все даты отметок для привычки
+     * @param habit привычка для которой необходимо получить даты
+     * @return список, содержащий даты отметок
+     */
+    @Override
     public List<LocalDateTime> getAll(Habit habit) {
         String sqlQuery = "SELECT * FROM entity.habit_mark_history WHERE id = ?";
 
@@ -91,6 +119,11 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
         return null;
     }
 
+    /**
+     * Очищает историю отметок для указанной привычки
+     * @param habit привычка, для которой выполняется очистка
+     */
+    @Override
     public void clear(Habit habit) {
         String sqlQuery = "DELETE FROM entity.habit_mark_history WHERE id = ?";
 
