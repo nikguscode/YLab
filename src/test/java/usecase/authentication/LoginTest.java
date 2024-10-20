@@ -63,8 +63,10 @@ public class LoginTest {
 
     @AfterEach
     public void afterEach() {
-        userDao.delete(user);
-        user = null;
+        if (user != null) {
+            userDao.delete(user);
+            user = null;
+        }
     }
 
     @Test
