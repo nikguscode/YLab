@@ -12,6 +12,7 @@
 7) Lombok
 
 Запуск кода:
-1) mvn compile
-2) mvn package
-3) java -jar target\YLabProject-1.0-SNAPSHOT.jar
+1) docker-compose -f src/main/resources/db/docker-compose.yml up -d 
+2) mvn compile
+3) mvn package
+4) java -jar target\YLabProject-1.0-SNAPSHOT.jar
