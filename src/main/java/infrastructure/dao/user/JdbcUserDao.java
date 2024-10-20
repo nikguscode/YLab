@@ -1,30 +1,19 @@
 package infrastructure.dao.user;
 
-import core.ConfigLoaderService;
 import core.entity.User;
 import core.enumiration.Role;
 import core.exceptions.InvalidUserInformationException;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.habit.JdbcHabitDao;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public class JdbcUserDao implements UserDao {
-    private final String DRIVER;
-    private final String URL;
-    private final String USERNAME;
-    private final String PASSWORD;
-
-    public JdbcUserDao() {
-        ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
-        this.DRIVER = configLoader.getProperties("datasource.driver");
-        this.URL = configLoader.getProperties("datasource.url");
-        this.USERNAME = configLoader.getProperties("datasource.username");
-        this.PASSWORD = configLoader.getProperties("datasource.password");
-    }
+    private final DatabaseUtils databaseUtils;
 
     @Override
     public void add(User user) {
@@ -32,7 +21,7 @@ public class JdbcUserDao implements UserDao {
                 "(email, username, password, role, is_authorized, registration_date, authorization_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getUsername());
@@ -51,9 +40,9 @@ public class JdbcUserDao implements UserDao {
     public Map<String, User> getAll() {
         String sqlQuery = "SELECT * FROM entity.user";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-            List<Map<String, Object>> rows = DatabaseUtils.map(preparedStatement.executeQuery());
+            List<Map<String, Object>> rows = databaseUtils.map(preparedStatement.executeQuery());
             Map<String, User> mapOfUsers = new HashMap<>();
 
             for (Map<String, Object> currentRow : rows) {
@@ -83,7 +72,7 @@ public class JdbcUserDao implements UserDao {
     public User get(String email) {
         String sqlQuery = "SELECT * FROM entity.user WHERE email=?";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setString(1, email);
             ResultSet rs = preparedStatement.executeQuery();
@@ -117,7 +106,7 @@ public class JdbcUserDao implements UserDao {
                 "authorization_date=? " +
                 "WHERE id=?";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getUsername());
@@ -136,7 +125,7 @@ public class JdbcUserDao implements UserDao {
     public void delete(User user) {
         String sqlQuery = "DELETE FROM entity.user WHERE email = ?";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setString(1, user.getEmail());
 

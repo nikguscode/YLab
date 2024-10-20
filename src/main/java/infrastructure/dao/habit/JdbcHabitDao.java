@@ -1,12 +1,12 @@
 package infrastructure.dao.habit;
 
-import core.ConfigLoaderService;
 import core.entity.Habit;
 import core.entity.User;
 import core.enumiration.Frequency;
 import core.exceptions.InvalidHabitInformationException;
 import infrastructure.DatabaseUtils;
 import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -14,19 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class JdbcHabitDao implements HabitDao {
-    private final String DRIVER;
-    private final String URL;
-    private final String USERNAME;
-    private final String PASSWORD;
-
-    public JdbcHabitDao() {
-        ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
-        this.DRIVER = configLoader.getProperties("datasource.driver");
-        this.URL = configLoader.getProperties("datasource.url");
-        this.USERNAME = configLoader.getProperties("datasource.username");
-        this.PASSWORD = configLoader.getProperties("datasource.password");
-    }
+    private final DatabaseUtils databaseUtils;
+    private final JdbcHabitMarkHistoryDao jdbcHabitMarkHistoryDao;
 
     @Override
     public long add(Habit habit) {
@@ -34,7 +25,7 @@ public class JdbcHabitDao implements HabitDao {
                 "(user_id, title, description, is_completed, creation_date_and_time, last_mark_date_and_time, next_mark_date_and_time, frequency) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, habit.getUserId());
             preparedStatement.setString(2, habit.getTitle());
@@ -63,10 +54,10 @@ public class JdbcHabitDao implements HabitDao {
     public Map<Long, Habit> getAll(User user) {
         String sqlQuery = "SELECT * FROM entity.habit WHERE user_id = ?";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setLong(1, user.getId());
-            List<Map<String, Object>> rows = DatabaseUtils.map(preparedStatement.executeQuery());
+            List<Map<String, Object>> rows = databaseUtils.map(preparedStatement.executeQuery());
             Map<Long, Habit> mapOfHabits = new HashMap<>();
 
             for (Map<String, Object> currentRow : rows) {
@@ -84,7 +75,7 @@ public class JdbcHabitDao implements HabitDao {
                                         .orElse(null)
                                 )
                                 .nextMarkDateAndTime(((Timestamp) currentRow.get("next_mark_date_and_time")).toLocalDateTime())
-                                .history(new JdbcHabitMarkHistoryDao().getAll((long) currentRow.get("id")))
+                                .history(jdbcHabitMarkHistoryDao.getAll((long) currentRow.get("id")))
                                 .frequency(Frequency.valueOf(((String) currentRow.get("frequency")).toUpperCase()))
                                 .build()
                 );
@@ -102,7 +93,7 @@ public class JdbcHabitDao implements HabitDao {
     public Habit get(long habitId) {
         String sqlQuery = "SELECT * FROM entity.habit WHERE id=?";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setLong(1, habitId);
             ResultSet rs = preparedStatement.executeQuery();
@@ -117,7 +108,7 @@ public class JdbcHabitDao implements HabitDao {
                         .creationDateAndTime(rs.getTimestamp("creation_date_and_time").toLocalDateTime())
                         .lastMarkDateAndTime(rs.getTimestamp("last_mark_date_and_time").toLocalDateTime())
                         .nextMarkDateAndTime(rs.getTimestamp("next_mark_date_and_time").toLocalDateTime())
-                        .history(new JdbcHabitMarkHistoryDao().getAll(habitId))
+                        .history(jdbcHabitMarkHistoryDao.getAll(habitId))
                         .frequency(Frequency.valueOf(rs.getString("frequency").toUpperCase()))
                         .build();
             }
@@ -141,7 +132,7 @@ public class JdbcHabitDao implements HabitDao {
                 "frequency=? " +
                 "WHERE id=?";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setLong(1, habit.getUserId());
             preparedStatement.setString(2, habit.getTitle());
@@ -163,7 +154,7 @@ public class JdbcHabitDao implements HabitDao {
     public void delete(Habit habit) {
         String sqlQuery = "DELETE FROM entity.habit WHERE id = ?";
 
-        try (Connection connection = DatabaseUtils.createConnection(DRIVER, URL, USERNAME, PASSWORD);
+        try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setLong(1, habit.getId());
 
