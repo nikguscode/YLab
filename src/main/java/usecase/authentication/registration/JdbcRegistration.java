@@ -3,9 +3,9 @@ package usecase.authentication.registration;
 import core.entity.User;
 import core.enumiration.Role;
 import core.exceptions.InvalidUserInformationException;
-import infrastructure.dao.user.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 import infrastructure.dto.RegistrationDto;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -15,7 +15,10 @@ import static usecase.authentication.Constants.REGISTRATION_EMAIL_ALREADY_EXISTS
 /**
  * Класс, реализующий локальную регистрацию пользователя, без использования базы данных
  */
-public class LocalRegistration implements Registration {
+@RequiredArgsConstructor
+public class JdbcRegistration implements Registration {
+    private final UserDao userDao;
+
     /**
      * Содержит реализацию создания учётной записи, где в качестве учётной записи выступает сущность {@link User}
      *
@@ -31,8 +34,6 @@ public class LocalRegistration implements Registration {
      */
     @Override
     public boolean isSuccess(RegistrationDto registrationDto) throws InvalidUserInformationException {
-        UserDao userDao = new JdbcUserDao();
-
         if (validate(registrationDto, userDao)) {
             userDao.add(
                     User.builder()

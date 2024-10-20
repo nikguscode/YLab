@@ -6,6 +6,7 @@ import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidUserInformationException;
 import core.entity.User;
 import core.enumiration.Role;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Scanner;
 public class AdministratorMenuController {
     private final UserDao userDao;
     private final HabitDao habitDao;
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
 
     public void handle(Scanner scanner) throws InvalidUserInformationException, InvalidFrequencyConversionException {
         while (true) {
@@ -31,7 +33,7 @@ public class AdministratorMenuController {
 
             switch (input) {
                 case "1", "1.", "Управление привычками пользователя", "1. Управление привычками пользователя":
-                    new HabitListController(habitDao).handle(scanner, user);
+                    new HabitListController(habitDao, habitMarkHistoryDao).handle(scanner, user);
                     break;
                 case "2", "2.", "Редактировать информацию пользователя", "2. Редактировать информацию пользователя":
                     new UserMenuController(userDao).handle(scanner, user);

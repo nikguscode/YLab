@@ -3,7 +3,8 @@ package usecase.habit;
 import core.entity.Habit;
 import core.enumiration.Frequency;
 import core.exceptions.InvalidFrequencyConversionException;
-import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -12,7 +13,10 @@ import java.util.List;
 /**
  * Класс, который используется для вычисления серии отметок выбранной привычки
  */
+@RequiredArgsConstructor
 public class HabitStreakService {
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
+
     /**
      * Основной метод, который определяет серию отметок
      * @param habit привычка для которой нужно определить серию отметок
@@ -20,7 +24,7 @@ public class HabitStreakService {
      * @throws InvalidFrequencyConversionException  возникает в случае неудачной конвертации
      */
     public int getCurrentStreak(Habit habit) throws InvalidFrequencyConversionException {
-        List<LocalDateTime> history = new JdbcHabitMarkHistoryDao().getAll(habit);
+        List<LocalDateTime> history = habitMarkHistoryDao.getAll(habit);
         long maxInterval = calculateMaximumIntervalInMinutes(habit.getFrequency());
 
         if (history.isEmpty()) {

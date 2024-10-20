@@ -2,28 +2,28 @@ package usecase.authentication.login;
 
 import static usecase.authentication.Constants.*;
 
-import infrastructure.dao.user.JdbcUserDao;
 import infrastructure.dto.LoginDto;
 import core.entity.User;
 import core.enumiration.Role;
 import infrastructure.dao.user.UserDao;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 /**
  * Класс, реализующий локальный вход пользователя, без использования базы данных
  */
-public class LocalLogin implements Login {
+@RequiredArgsConstructor
+public class JdbcLogin implements Login {
+    private final UserDao userDao;
 
     /**
-     * Содержит реализацию входа в учётную запись через проверку данных из {@link infrastructure.UserDatabase#database
-     * database}, где в качестве ключа используется почта пользователя
-     * @param loginDto dto, хранящий и переносящий пользовательский ввод
-     * @return <b>true</b>: вход выполнен успешено, иначе <b>false</b>
+     * Проверяет учетные данные пользователя в базе данных
+     * @param loginDto DTO с данными для входа
+     * @return <b>true</b> если данные верны, иначе <b>false</b>
      */
     @Override
     public boolean isSuccess(LoginDto loginDto) {
-        UserDao userDao = new JdbcUserDao();
         User user = userDao.get(loginDto.getEmail());
 
         if (validate(user, loginDto)) {

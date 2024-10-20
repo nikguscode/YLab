@@ -7,7 +7,7 @@ import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitInformationException;
-import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
 import infrastructure.dto.HabitDto;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ import java.util.Scanner;
 @RequiredArgsConstructor
 public class HabitMenuController {
     private final HabitDao habitDao;
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
 
     public void handle(Scanner scanner, User user) throws InvalidFrequencyConversionException {
         while (true) {
@@ -31,7 +32,7 @@ public class HabitMenuController {
 
             switch (input) {
                 case "1", "1.", "Список привычек", "1. Список привычек":
-                    new HabitListController(habitDao).handle(scanner, user);
+                    new HabitListController(habitDao, habitMarkHistoryDao).handle(scanner, user);
                     break;
                 case "2", "2.", "Добавить привычку", "2. Добавить привычку":
                     try {
@@ -44,7 +45,7 @@ public class HabitMenuController {
 
                         long habitId = habitDao.add(habit);
                         user.setHabits(habitDao.getAll(user));
-                        new JdbcHabitMarkHistoryDao().add(habitId);
+                        habitMarkHistoryDao.add(habitId);
                         System.out.println("Добавление привычки...");
                     } catch (InvalidFrequencyConversionException e) {
                         System.out.println("Некорректное значение частоты привычки!");

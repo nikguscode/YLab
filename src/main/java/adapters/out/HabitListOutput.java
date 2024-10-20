@@ -1,6 +1,8 @@
 package adapters.out;
 
 import adapters.console.Constants;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import lombok.RequiredArgsConstructor;
 import usecase.habit.HabitStreakService;
 import core.entity.Habit;
 import core.entity.User;
@@ -13,7 +15,10 @@ import java.util.function.Predicate;
  * Данный класс предназначен для вывода всех привычек, в зависимости от наличия/отсутствия {@link Predicate} и {@link Comparator}
  * выбирается стратегия для вывода привычек
  */
+@RequiredArgsConstructor
 public class HabitListOutput {
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
+
     /**
      * Основной метод для вывода привычек, осуществляет выбор стратегии для вывода
      * @param user пользователь для которого необходимо вывести привычки
@@ -79,7 +84,7 @@ public class HabitListOutput {
      */
     private void checkHabitStreak(Habit habit) {
         try {
-            habit.setStreak(new HabitStreakService().getCurrentStreak(habit));
+            habit.setStreak(new HabitStreakService(habitMarkHistoryDao).getCurrentStreak(habit));
         } catch (InvalidFrequencyConversionException e) {
             throw new RuntimeException(e);
         }

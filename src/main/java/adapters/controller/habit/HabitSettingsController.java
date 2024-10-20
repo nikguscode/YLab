@@ -8,8 +8,8 @@ import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitIdException;
 import core.exceptions.InvalidHabitInformationException;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
-import infrastructure.dao.habit.JdbcHabitDao;
 import lombok.RequiredArgsConstructor;
 import usecase.habit.HabitStreakService;
 import usecase.habit.MarkDateShifter;
@@ -27,6 +27,7 @@ import java.util.Scanner;
 @RequiredArgsConstructor
 public class HabitSettingsController {
     private final HabitDao habitDao;
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
 
     public void handle(Scanner scanner, User user, String input) throws InvalidFrequencyConversionException, InvalidHabitIdException {
         HabitMarkService.checkAllMarks(user);
@@ -108,7 +109,7 @@ public class HabitSettingsController {
     private String printHabitMenu(Scanner scanner, Habit habit) throws InvalidFrequencyConversionException {
         System.out.println(Constants.SELECTED_HABIT_SETTINGS);
 
-        new HabitStreakService().getCurrentStreak(habit);
+        new HabitStreakService(habitMarkHistoryDao).getCurrentStreak(habit);
         System.out.printf(
                 "Идентификатор: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s\n",
                 habit.getId(),
@@ -142,7 +143,7 @@ public class HabitSettingsController {
         new MarkDateShifter().shiftMarkDate(habit);
         System.out.println("Привычка отмечена как выполненная");
         history.add(LocalDateTime.now());
-        new JdbcHabitDao().edit(habit);
+        habitDao.edit(habit);
     }
 
     /**

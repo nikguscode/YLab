@@ -9,6 +9,7 @@ import core.entity.User;
 import core.enumiration.Role;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidUserInformationException;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.user.UserDao;
 import core.UserAccessService;
@@ -30,6 +31,7 @@ import java.util.Scanner;
 public class MainController {
     private final UserDao userDao;
     private final HabitDao habitDao;
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
 
     /**
      * Метод, отвечающий за выбор контроллера
@@ -51,7 +53,7 @@ public class MainController {
             String input = scanner.nextLine();
             switch (input) {
                 case "1", "1.", "Управление привычками", "1. Управление привычками":
-                    new HabitMenuController(habitDao).handle(scanner, user);
+                    new HabitMenuController(habitDao, habitMarkHistoryDao).handle(scanner, user);
                     break;
                 case "2", "2.", "Статистика пользователя", "2. Статистика пользователя":
                     break;
@@ -60,7 +62,7 @@ public class MainController {
                     break;
                 case "4", "4.", "Панель администратора", "4. Панель администратора":
                     if (user.getRole() == Role.ADMINISTRATOR) {
-                        new AdministratorMenuController(userDao, habitDao).handle(scanner);
+                        new AdministratorMenuController(userDao, habitDao, habitMarkHistoryDao).handle(scanner);
                     }
                     break;
                 case "0", "0.", "Выйти из учётной записи", "0. Выйти из учётной записи":
