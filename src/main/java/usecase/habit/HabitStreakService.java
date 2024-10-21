@@ -64,7 +64,7 @@ public class HabitStreakService {
             LocalDateTime dateTime1 = history.get(i);
             LocalDateTime dateTime2 = history.get(i-1);
 
-            if (Duration.between(dateTime1, dateTime2).toMinutes() >= maxInterval) {
+            if (Duration.between(dateTime2, dateTime1).toMinutes() >= maxInterval) {
                 return streakCounter;
             }
 
