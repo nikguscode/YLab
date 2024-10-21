@@ -3,6 +3,8 @@ package usecase.habit;
 import core.entity.Habit;
 import core.enumiration.Frequency;
 import core.exceptions.InvalidFrequencyConversionException;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -11,16 +13,18 @@ import java.util.List;
 /**
  * Класс, который используется для вычисления серии отметок выбранной привычки
  */
+@RequiredArgsConstructor
 public class HabitStreakService {
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
+
     /**
-     * Основной метод, который определяет серию отметок
+     * Определяет серию отметок
      * @param habit привычка для которой нужно определить серию отметок
      * @return текущую серию отметок
-     * @throws InvalidFrequencyConversionException  возникает в случае неудачной конвертации {@link Frequency#convertToInteger(Frequency)
-     * convertToInteger()}
+     * @throws InvalidFrequencyConversionException  возникает в случае неудачной конвертации
      */
     public int getCurrentStreak(Habit habit) throws InvalidFrequencyConversionException {
-        List<LocalDateTime> history = habit.getHistory();
+        List<LocalDateTime> history = habitMarkHistoryDao.getAll(habit);
         long maxInterval = calculateMaximumIntervalInMinutes(habit.getFrequency());
 
         if (history.isEmpty()) {
@@ -60,7 +64,7 @@ public class HabitStreakService {
             LocalDateTime dateTime1 = history.get(i);
             LocalDateTime dateTime2 = history.get(i-1);
 
-            if (Duration.between(dateTime1, dateTime2).toMinutes() >= maxInterval) {
+            if (Duration.between(dateTime2, dateTime1).toMinutes() >= maxInterval) {
                 return streakCounter;
             }
 
@@ -71,13 +75,11 @@ public class HabitStreakService {
     }
 
     /**
-     * Вспомогательный метод, для перевода дней в минуты. Используется для повышения читаемости кода
+     * Перевод дней в минуты, используется для повышения читаемости кода
      * @param frequency частота привычки
      * @return переведенный интервал в минутах
-     * @throws InvalidFrequencyConversionException возникает в случае неудачной конвертации {@link Frequency#convertToInteger(Frequency)
-     * convertToInteger()}
      */
-    private long calculateMaximumIntervalInMinutes(Frequency frequency) throws InvalidFrequencyConversionException {
-        return 1440L * (Frequency.convertToInteger(frequency) + 1);
+    private long calculateMaximumIntervalInMinutes(Frequency frequency) {
+        return 1440L * (frequency.getIntegerValue() + 1);
     }
 }

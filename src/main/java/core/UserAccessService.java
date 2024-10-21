@@ -9,9 +9,10 @@ import infrastructure.dao.user.UserDao;
  */
 public class UserAccessService {
     /**
-     * Метод, определяющий, есть ли у пользователя доступ к приложению. В случае, если доступа нет, сообщает об этом
+     * Определяет есть ли у пользователя доступ к приложению. В случае, если доступа нет, сообщает об этом
      * контроллеру. Проверяет, выполняются ли следующие требования:
      * <ul>
+     *     <li>Сущность пользователя существует</li>
      *     <li>Пользователь пристствует в базе данных</li>
      *     <li>Пользователь авторизован</li>
      *     <li>Пользователь не заблокирован</li>
@@ -21,6 +22,10 @@ public class UserAccessService {
      * @return <b>true</b>: в случае, если доступ есть, иначе <b>false</b>
      */
     public static boolean hasAccess(UserDao userDao, User user) {
+        if (user == null) {
+            return false;
+        }
+
         String email = user.getEmail();
 
         if (userDao.get(email) == null) {
@@ -31,7 +36,7 @@ public class UserAccessService {
             return false;
         }
 
-        if (user.getRole() == Role.BLOCKED) {
+        if (user.getRole() == Role.BLOCKED || user.getRole() == Role.UNDEFINED) {
             return false;
         }
 

@@ -18,7 +18,7 @@ public class LoginInput implements ConsoleInput<LoginDto> {
      */
     @Override
     public LoginDto input(Scanner scanner) {
-        LoginDto.Builder loginBuilder = LoginDto.builder();
+        LoginDto.LoginDtoBuilder loginBuilder = LoginDto.builder();
         System.out.println(Constants.AUTHENTICATION_MENU);
 
         System.out.print("Введите почту: ");

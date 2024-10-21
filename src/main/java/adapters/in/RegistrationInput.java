@@ -28,8 +28,12 @@ public class RegistrationInput implements ConsoleInput<RegistrationDto> {
         String password = scanner.nextLine();
 
         System.out.print("Введите Ваше имя: ");
-        String firstName = scanner.nextLine();
+        String username = scanner.nextLine();
 
-        return new RegistrationDto(email, firstName, password);
+        return RegistrationDto.builder()
+                .email(email)
+                .password(password)
+                .username(username)
+                .build();
     }
 }

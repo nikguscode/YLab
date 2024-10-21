@@ -8,6 +8,9 @@ import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitIdException;
 import core.exceptions.InvalidHabitInformationException;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import infrastructure.dao.habit.HabitDao;
+import lombok.RequiredArgsConstructor;
 import usecase.habit.HabitStreakService;
 import usecase.habit.MarkDateShifter;
 
@@ -21,8 +24,12 @@ import java.util.Scanner;
 /**
  * Контроллер, отвечающий за взаимодействие с конкретной привычкой, выбранной из {@link HabitListController}
  */
+@RequiredArgsConstructor
 public class HabitSettingsController {
-    public void handle(Scanner scanner, User user, String input) throws InterruptedException, InvalidFrequencyConversionException, InvalidHabitIdException {
+    private final HabitDao habitDao;
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
+
+    public void handle(Scanner scanner, User user, String input) throws InvalidFrequencyConversionException, InvalidHabitIdException {
         HabitMarkService.checkAllMarks(user);
         Habit habit = getSelectedHabit(input, user.getHabits());
 
@@ -36,16 +43,21 @@ public class HabitSettingsController {
                     return;
                 case "2", "2.", "Редактировать", "2. Редактировать":
                     try {
-                        new HabitEditController().handle(scanner, user, habit);
+                        new HabitEditController(habitDao).handle(scanner, user, habit);
                     } catch (InvalidHabitInformationException e) {
                         throw new RuntimeException(e);
                     }
+
+                    user.setHabits(habitDao.getAll(user));
+                    if (getSelectedHabit(input, user.getHabits()) == null) {
+                        return;
+                    }
+
                     break;
                 case "3", "3.", "Посмотреть историю выполнения", "3. Посмотреть историю выполнения":
                     System.out.println("История выполнения привычки:");
                     history.forEach(e -> System.out.println(e.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"))));
                     System.out.println("----------------------------");
-                    Thread.sleep(800);
                     break;
                 case "4", "4.", "Сгенерировать статистику", "4. Сгенерировать статистику":
                     new HabitStatisticsController().handle(scanner, habit);
@@ -97,13 +109,13 @@ public class HabitSettingsController {
     private String printHabitMenu(Scanner scanner, Habit habit) throws InvalidFrequencyConversionException {
         System.out.println(Constants.SELECTED_HABIT_SETTINGS);
 
-        new HabitStreakService().getCurrentStreak(habit);
+        new HabitStreakService(habitMarkHistoryDao).getCurrentStreak(habit);
         System.out.printf(
                 "Идентификатор: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s\n",
                 habit.getId(),
                 habit.getTitle(),
                 habit.isCompleted() ? "Выполнена" : "Не выполнена",
-                habit.getFrequency().getValue(),
+                habit.getFrequency().getStringValue(),
                 habit.getStreak()
         );
 
@@ -129,9 +141,9 @@ public class HabitSettingsController {
 
         habit.setCompleted(true);
         new MarkDateShifter().shiftMarkDate(habit);
-        HabitMarkService.unmarkedHabits--;
         System.out.println("Привычка отмечена как выполненная");
         history.add(LocalDateTime.now());
+        habitDao.edit(habit);
     }
 
     /**
@@ -151,8 +163,8 @@ public class HabitSettingsController {
                 Optional.ofNullable(habit.getLastMarkDateAndTime())
                         .map(LocalDateTimeFormatter::format)
                         .orElse("отметок ещё не было"));
-        System.out.println("# | Дата ближайшей отметки: " + LocalDateTimeFormatter.format(habit.getShiftedDateAndTime()));
-        System.out.println("# | Частота: " + habit.getFrequency().getValue());
+        System.out.println("# | Дата ближайшей отметки: " + LocalDateTimeFormatter.format(habit.getNextMarkDateAndTime()));
+        System.out.println("# | Частота: " + habit.getFrequency().getStringValue());
         System.out.println("0. Вернуться назад");
         System.out.println("-----------------------------------");
         System.out.print("Выберите опцию: ");
