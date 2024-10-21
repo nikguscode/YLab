@@ -124,23 +124,26 @@ public class HabitStreakServiceTest {
         Assertions.assertThat(currentStreak).isEqualTo(4);
     }
 
-    // в таком случае серия должна быть = 1, т.к при создании привычка без даты и времени считается выполненной
-    @Test
-    @DisplayName("Habit Created Without Date And Time")
-    public void test_Habit_Created_Without_Date_And_Time() {
-
-    }
-
+    // в истории отметок есть серия, но эта серия была сбита последней отметкой
     @Test
     @DisplayName("Streak Exists In History But Knocked Down At Last Mark")
-    public void test_Streak_Exists_In_History_But_Knocked_Down_At_Last_Mark() {
+    public void test_Streak_Exists_In_History_But_Knocked_Down_At_Last_Mark() throws InvalidFrequencyConversionException {
+        long habitId = this.habit.getId();
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime previousDate1 = currentDate.minusDays(3);
+        LocalDateTime previousDate2 = currentDate.minusDays(4);
+        LocalDateTime previousDate3 = currentDate.minusDays(5);
+        // данная отметка НЕ должна быть включена в серию
 
-    }
+        System.out.println("Дата и время на которой должна сбиться серия: " + currentDate);
+        System.out.println("Дата и время с которой должна начаться серия:" + previousDate1);
 
-    // стрик не существует в истории отметок, но привычка была отмечена во время теста => теперь серия должна быть = 1
-    @Test
-    @DisplayName("Streak Not Exists In History But Habit Marked Now")
-    public void streak_Not_Exists_In_History_But_Habit_Marked_Now() {
+        habitMarkHistoryDao.add(habit, previousDate3);
+        habitMarkHistoryDao.add(habit, previousDate2);
+        habitMarkHistoryDao.add(habit, previousDate1);
+        habitMarkHistoryDao.add(habit, currentDate);
 
+        int currentStreak = new HabitStreakService(habitMarkHistoryDao).getCurrentStreak(habit);
+        Assertions.assertThat(currentStreak).isEqualTo(1);
     }
 }

@@ -46,7 +46,10 @@ public class HabitMenuController {
 
                         long habitId = habitDao.add(habit);
                         user.setHabits(habitDao.getAll(user));
-                        habitMarkHistoryDao.add(habitId, LocalDateTime.now());
+
+                        if (habit.isCompleted()) {
+                            habitMarkHistoryDao.add(habitId, LocalDateTime.now());
+                        }
                         System.out.println("Добавление привычки...");
                     } catch (InvalidFrequencyConversionException e) {
                         System.out.println("Некорректное значение частоты привычки!");

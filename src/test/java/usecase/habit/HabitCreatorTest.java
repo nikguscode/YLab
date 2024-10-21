@@ -10,7 +10,6 @@ import infrastructure.dto.HabitDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
-import usecase.habit.HabitCreator;
 
 public class HabitCreatorTest {
     public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
@@ -53,6 +52,7 @@ public class HabitCreatorTest {
     @AfterEach
     public void afterEach() {
         if (user != null) {
+            user = null;
         }
     }
 

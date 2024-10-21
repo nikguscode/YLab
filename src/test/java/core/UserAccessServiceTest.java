@@ -49,10 +49,6 @@ public class UserAccessServiceTest {
         this.userDao = new JdbcUserDao(databaseUtils);
     }
 
-    @AfterEach
-    public void afterEach() {
-    }
-
     @Test
     @DisplayName("UNDEFINED")
     public void test_Undefined() throws InvalidUserInformationException {
