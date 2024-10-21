@@ -51,7 +51,7 @@ public class HabitCreator {
      * создании новой привычки или разработчик указал некорректные параметры при создании {@link Habit}
      */
     private void setHabitCreationDateAndTime(String input, Habit.HabitBuilder habitBuilder) throws InvalidHabitInformationException {
-        if (input.isEmpty()) {
+        if (input == null || input.isEmpty()) {
             setDefaultDateAndTime(habitBuilder);
             return;
         }

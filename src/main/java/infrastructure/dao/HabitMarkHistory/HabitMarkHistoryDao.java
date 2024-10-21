@@ -13,13 +13,13 @@ public interface HabitMarkHistoryDao {
      * Добавляет отметку через идентификатор привычки
      * @param habitId идентификатор привычки
      */
-    void add(long habitId);
+    void add(long habitId, LocalDateTime dateTime);
 
     /**
      * Добавляет отметку через сущность привычки
      * @param habit привычка, для которой ставится отметка
      */
-    void add(Habit habit);
+    void add(Habit habit, LocalDateTime dateTime);
 
     /**
      * Получает все даты отметок для привычки

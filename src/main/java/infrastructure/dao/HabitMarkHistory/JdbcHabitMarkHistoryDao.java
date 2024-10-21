@@ -28,7 +28,7 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
      * @param habitId идентификатор привычки
      */
     @Override
-    public void add(long habitId) {
+    public void add(long habitId, LocalDateTime dateTime) {
         String sqlQuery = "INSERT INTO entity.habit_mark_history" +
                 "(habit_id, mark_date) " +
                 "VALUES (?, ?)";
@@ -36,7 +36,9 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
         try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setLong(1, habitId);
-            preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setTimestamp(2, dateTime != null
+                    ? Timestamp.valueOf(dateTime)
+                    : Timestamp.valueOf(LocalDateTime.now()));
 
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
@@ -49,7 +51,7 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
      * @param habit привычка, для которой ставится отметка
      */
     @Override
-    public void add(Habit habit) {
+    public void add(Habit habit, LocalDateTime dateTime) {
         String sqlQuery = "INSERT INTO entity.habit_mark_history" +
                 "(habit_id, mark_date) " +
                 "VALUES (?, ?)";
@@ -57,7 +59,9 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
         try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setLong(1, habit.getId());
-            preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setTimestamp(2, dateTime != null
+                    ? Timestamp.valueOf(dateTime)
+                    : Timestamp.valueOf(LocalDateTime.now()));
 
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
@@ -99,7 +103,7 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
      */
     @Override
     public List<LocalDateTime> getAll(Habit habit) {
-        String sqlQuery = "SELECT * FROM entity.habit_mark_history WHERE id = ?";
+        String sqlQuery = "SELECT * FROM entity.habit_mark_history WHERE habit_id = ?";
 
         try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
@@ -125,7 +129,7 @@ public class JdbcHabitMarkHistoryDao implements HabitMarkHistoryDao {
      */
     @Override
     public void clear(Habit habit) {
-        String sqlQuery = "DELETE FROM entity.habit_mark_history WHERE id = ?";
+        String sqlQuery = "DELETE FROM entity.habit_mark_history WHERE habit_id = ?";
 
         try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {

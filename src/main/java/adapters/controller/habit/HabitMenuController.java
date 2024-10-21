@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import usecase.habit.HabitCreator;
 import usecase.habit.MarkDateShifter;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 /**
@@ -45,7 +46,7 @@ public class HabitMenuController {
 
                         long habitId = habitDao.add(habit);
                         user.setHabits(habitDao.getAll(user));
-                        habitMarkHistoryDao.add(habitId);
+                        habitMarkHistoryDao.add(habitId, LocalDateTime.now());
                         System.out.println("Добавление привычки...");
                     } catch (InvalidFrequencyConversionException e) {
                         System.out.println("Некорректное значение частоты привычки!");

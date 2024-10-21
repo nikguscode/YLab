@@ -1,4 +1,4 @@
-package usecase;
+package usecase.habit;
 
 import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;

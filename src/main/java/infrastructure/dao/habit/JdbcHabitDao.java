@@ -5,7 +5,7 @@ import core.entity.User;
 import core.enumiration.Frequency;
 import core.exceptions.InvalidHabitInformationException;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.*;
@@ -27,7 +27,7 @@ public class JdbcHabitDao implements HabitDao {
     /**
      * Экземпляр DAO интерфейса для получения истории отметок привычки
      */
-    private final JdbcHabitMarkHistoryDao jdbcHabitMarkHistoryDao;
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
 
     /**
      * Метод для добавления привычки в базу данных
@@ -93,7 +93,7 @@ public class JdbcHabitDao implements HabitDao {
                                         .orElse(null)
                                 )
                                 .nextMarkDateAndTime(((Timestamp) currentRow.get("next_mark_date_and_time")).toLocalDateTime())
-                                .history(jdbcHabitMarkHistoryDao.getAll((long) currentRow.get("id")))
+                                .history(habitMarkHistoryDao.getAll((long) currentRow.get("id")))
                                 .frequency(Frequency.valueOf(((String) currentRow.get("frequency")).toUpperCase()))
                                 .build()
                 );
@@ -131,7 +131,7 @@ public class JdbcHabitDao implements HabitDao {
                         .creationDateAndTime(rs.getTimestamp("creation_date_and_time").toLocalDateTime())
                         .lastMarkDateAndTime(rs.getTimestamp("last_mark_date_and_time").toLocalDateTime())
                         .nextMarkDateAndTime(rs.getTimestamp("next_mark_date_and_time").toLocalDateTime())
-                        .history(jdbcHabitMarkHistoryDao.getAll(habitId))
+                        .history(habitMarkHistoryDao.getAll(habitId))
                         .frequency(Frequency.valueOf(rs.getString("frequency").toUpperCase()))
                         .build();
             }
