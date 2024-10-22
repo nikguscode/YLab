@@ -1,6 +1,8 @@
 package adapters.out;
 
 import adapters.console.Constants;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import lombok.RequiredArgsConstructor;
 import usecase.habit.HabitStreakService;
 import core.entity.Habit;
 import core.entity.User;
@@ -13,7 +15,10 @@ import java.util.function.Predicate;
  * Данный класс предназначен для вывода всех привычек, в зависимости от наличия/отсутствия {@link Predicate} и {@link Comparator}
  * выбирается стратегия для вывода привычек
  */
+@RequiredArgsConstructor
 public class HabitListOutput {
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
+
     /**
      * Основной метод для вывода привычек, осуществляет выбор стратегии для вывода
      * @param user пользователь для которого необходимо вывести привычки
@@ -73,28 +78,29 @@ public class HabitListOutput {
     }
 
     /**
-     * Метод, определяющий серию выполнения привычки (streak), используя {@link HabitStreakService}
+     * Метод, определяющий серию выполнения привычки (streak), используя {@link HabitStreakService}. Метод необходим
+     * только для улучшения читаемости кода
      * @param habit привычка для которой нужно оперелить серию
      */
     private void checkHabitStreak(Habit habit) {
         try {
-            habit.setStreak(new HabitStreakService().getCurrentStreak(habit));
-        } catch (InvalidFrequencyConversionException ex) {
-            throw new RuntimeException(ex);
+            habit.setStreak(new HabitStreakService(habitMarkHistoryDao).getCurrentStreak(habit));
+        } catch (InvalidFrequencyConversionException e) {
+            throw new RuntimeException(e);
         }
     }
 
     /**
-     * Выводит отформатированную привычку
+     * Выводит отформатированную привычку. Метод необходим только для улучшения читаемости кода
      * @param habit привычка которую нужно вывести
      */
     private void printHabitInformation(Habit habit) {
         String currentHabit = String.format(
-                "Идентификатор: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s",
+                "ID: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s",
                 habit.getId(),
                 habit.getTitle(),
                 habit.isCompleted() ? "Выполнена" : "Не выполнена",
-                habit.getFrequency().getValue(),
+                habit.getFrequency().getStringValue(),
                 habit.getStreak()
         );
         System.out.println(currentHabit);

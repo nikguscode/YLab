@@ -1,12 +1,10 @@
 package adapters.controller.habit;
 
 import adapters.console.Constants;
-import core.HabitMarkService;
 import core.entity.Habit;
 
 import java.util.Comparator;
 import java.util.Scanner;
-import java.util.function.Predicate;
 
 /**
  * Контроллер, отвечающий за возврат {@link Comparator} для сортировки. Не вызывает сервисы при своей работе, из-за простой логики

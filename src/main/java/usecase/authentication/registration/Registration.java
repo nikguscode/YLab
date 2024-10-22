@@ -12,5 +12,5 @@ public interface Registration {
      * @param registrationDto dto, хранящий и переносящий пользовательский ввод
      * @return <b>true</b>: успешная регистрация, иначе <b>false</b>
      */
-    boolean isSuccess(RegistrationDto registrationDto) throws InvalidUserInformationException, InterruptedException;
+    boolean isSuccess(RegistrationDto registrationDto) throws InvalidUserInformationException;
 }

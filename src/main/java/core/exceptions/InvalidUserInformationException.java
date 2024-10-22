@@ -4,7 +4,7 @@ package core.exceptions;
  * Исключение, которое выбрасывается в том случае, если {@link core.entity.User User} инициализирует некорректные данные
  * или происходит изменение полей на некорректные значения
  */
-public class InvalidUserInformationException extends Throwable {
+public class InvalidUserInformationException extends Exception {
     public InvalidUserInformationException() {
         super();
     }

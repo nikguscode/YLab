@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        logicalFilePath="db/changelog.xml">
+    <changeSet id="005-insert-start-values-in-user-table" author="nikguscode">
+        <insert tableName="user" schemaName="entity">
+            <column name="email" value="admin@gmail.com"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="root"/>
+            <column name="role" value="ADMINISTRATOR"/>
+            <column name="is_authorized" value="false"/>
+            <column name="registration_date" value="2024-10-15 12:00:00"/>
+            <column name="authorization_date" value="2024-10-15 12:00:00"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
