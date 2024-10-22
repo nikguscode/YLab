@@ -1,6 +1,6 @@
 package adapters.controller.habit;
 
-import core.HabitMarkService;
+import core.ExpiredHabitMarkService;
 import core.entity.Habit;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.entity.User;
@@ -28,7 +28,7 @@ public class HabitListController {
         Comparator<? super Habit> comparator = null;
 
         while (true) {
-            HabitMarkService.checkAllMarks(user);
+            ExpiredHabitMarkService.checkAllMarks(user);
             user.setHabits(habitDao.getAll(user));
             new HabitListOutput(habitMarkHistoryDao).outputList(user, predicate, comparator);
             String input = scanner.nextLine();

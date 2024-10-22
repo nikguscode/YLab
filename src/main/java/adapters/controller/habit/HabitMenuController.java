@@ -2,7 +2,7 @@ package adapters.controller.habit;
 
 import adapters.console.Constants;
 import adapters.in.HabitCreationInput;
-import core.HabitMarkService;
+import core.ExpiredHabitMarkService;
 import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
@@ -27,7 +27,7 @@ public class HabitMenuController {
 
     public void handle(Scanner scanner, User user) throws InvalidFrequencyConversionException {
         while (true) {
-            HabitMarkService.checkAllMarks(user);
+            ExpiredHabitMarkService.checkAllMarks(user);
             System.out.print(Constants.HABIT_MENU);
             String input = scanner.nextLine();
 

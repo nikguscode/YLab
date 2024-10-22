@@ -2,7 +2,7 @@ package adapters.controller.user;
 
 import adapters.console.Constants;
 import adapters.out.UserInformationOutput;
-import core.HabitMarkService;
+import core.ExpiredHabitMarkService;
 import core.exceptions.InvalidUserInformationException;
 import core.entity.User;
 import infrastructure.dao.user.UserDao;
@@ -20,7 +20,7 @@ public class UserMenuController {
 
     public void handle(Scanner scanner, User user) throws InvalidUserInformationException {
         while (true) {
-            HabitMarkService.checkAllMarks(user);
+            ExpiredHabitMarkService.checkAllMarks(user);
             System.out.print(Constants.USER_SETTINGS);
             String input = scanner.nextLine();
 

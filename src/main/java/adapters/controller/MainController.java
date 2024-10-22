@@ -4,7 +4,7 @@ import adapters.console.Constants;
 import adapters.controller.habit.HabitMenuController;
 import adapters.controller.user.AdministratorMenuController;
 import adapters.controller.user.UserMenuController;
-import core.HabitMarkService;
+import core.ExpiredHabitMarkService;
 import core.entity.User;
 import core.enumiration.Role;
 import core.exceptions.InvalidFrequencyConversionException;
@@ -22,7 +22,7 @@ import java.util.Scanner;
  * <p>Вызывает следующие сервисы при своей работе:
  * <ul>
  *     <li>{@link UserAccessService}</li>
- *     <li>{@link HabitMarkService}</li>
+ *     <li>{@link ExpiredHabitMarkService}</li>
  *     <li>{@link UserDao}</li>
  * </ul>
  * </p>
@@ -47,7 +47,7 @@ public class MainController {
                 return;
             }
 
-            HabitMarkService.checkAllMarks(user);
+            ExpiredHabitMarkService.checkAllMarks(user);
             chooseStrategyAccordingRole(user);
 
             String input = scanner.nextLine();

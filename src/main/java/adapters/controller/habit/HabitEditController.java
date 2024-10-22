@@ -1,7 +1,7 @@
 package adapters.controller.habit;
 
 import adapters.console.Constants;
-import core.HabitMarkService;
+import core.ExpiredHabitMarkService;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitInformationException;
 import core.entity.Habit;
@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  * <p>Контроллер, отвечающий за редактирование привычки</p>
- * <p>Вызывает следующий сервис при своей работе: {@link HabitMarkService}
+ * <p>Вызывает следующий сервис при своей работе: {@link ExpiredHabitMarkService}
  */
 @RequiredArgsConstructor
 public class HabitEditController {
@@ -22,7 +22,7 @@ public class HabitEditController {
 
     public void handle(Scanner scanner, User user, Habit currentHabit) throws InvalidFrequencyConversionException, InvalidHabitInformationException {
         while (true) {
-            HabitMarkService.checkAllMarks(user);
+            ExpiredHabitMarkService.checkAllMarks(user);
             System.out.print(Constants.HABIT_EDIT_MENU);
             String input = scanner.nextLine();
 
