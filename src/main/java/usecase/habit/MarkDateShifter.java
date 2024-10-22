@@ -20,20 +20,9 @@ public class MarkDateShifter {
      */
     public void shiftMarkDate(Habit habit) throws InvalidFrequencyConversionException {
         int frequencyInDaysInt = habit.getFrequency().getIntegerValue();
-
-        if (habit.getNextMarkDateAndTime() == null) {
-            habit.setNextMarkDateAndTime(LocalDateTime.of(
-                    LocalDate.now().plusDays(frequencyInDaysInt),
-                    habit.getCreationDateAndTime().toLocalTime()
-            ));
-        } else {
-            LocalDate nextMarkDate = habit.getNextMarkDateAndTime().toLocalDate();
-
-            while (LocalDate.now().isAfter(nextMarkDate)) {
-                nextMarkDate = nextMarkDate.plusDays(frequencyInDaysInt);
-            }
-
-            habit.setNextMarkDateAndTime(LocalDateTime.of(nextMarkDate, habit.getCreationDateAndTime().toLocalTime()));
-        }
+        habit.setNextMarkDateAndTime(LocalDateTime.of(
+                LocalDate.now().plusDays(frequencyInDaysInt),
+                habit.getCreationDateAndTime().toLocalTime()
+        ));
     }
 }
