@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HabitMarkServiceTest {
+public class ExpiredHabitMarkServiceTest {
     private final User user = User.builder()
             .habits(new HashMap<>())
             .build();
@@ -33,6 +33,6 @@ public class HabitMarkServiceTest {
                 ))
                 .build();
         habitMap.put(1L, habit);
-        HabitMarkService.checkAllMarks(user);
+        ExpiredHabitMarkService.checkAllMarks(user);
     }
 }
