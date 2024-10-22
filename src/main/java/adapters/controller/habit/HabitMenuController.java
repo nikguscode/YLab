@@ -50,10 +50,12 @@ public class HabitMenuController {
                         if (habit.isCompleted()) {
                             habitMarkHistoryDao.add(habitId, LocalDateTime.now());
                         }
+
                         System.out.println("Добавление привычки...");
                     } catch (InvalidFrequencyConversionException e) {
                         System.out.println("Некорректное значение частоты привычки!");
-                    } catch (InvalidHabitInformationException ignored) {
+                    } catch (InvalidHabitInformationException e) {
+                        e.printStackTrace();
                     }
                     break;
                 case "0", "0.", "Вернуться в главное меню", "0. Вернуться в главное меню":
