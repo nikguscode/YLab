@@ -43,6 +43,10 @@ public class ExpiredHabitMarkService {
         }
     }
 
+    /**
+     * Изменяет состояние привычки на невыполненную
+     * @param habit привычка для которой необходимо изменить состояние
+     */
     private static void editUser(Habit habit) {
         ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
         DatabaseUtils databaseUtils = new DatabaseUtils(
