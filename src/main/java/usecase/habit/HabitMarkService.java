@@ -28,7 +28,8 @@ public class HabitMarkService {
             return;
         }
 
-        if (habit.getNextMarkDateAndTime().isAfter(LocalDateTime.now())) {
+        if (habit.getNextMarkDateAndTime() != null &&
+                habit.getNextMarkDateAndTime().isAfter(LocalDateTime.now())) {
             System.out.println("Ошибка, время отметки ещё не настало!");
             return;
         }
