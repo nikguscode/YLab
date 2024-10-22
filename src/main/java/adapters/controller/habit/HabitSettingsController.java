@@ -1,7 +1,7 @@
 package adapters.controller.habit;
 
 import adapters.console.Constants;
-import core.HabitMarkService;
+import core.ExpiredHabitMarkService;
 import core.LocalDateTimeFormatter;
 import core.entity.Habit;
 import core.entity.User;
@@ -11,8 +11,8 @@ import core.exceptions.InvalidHabitInformationException;
 import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
 import lombok.RequiredArgsConstructor;
+import usecase.habit.HabitMarkService;
 import usecase.habit.HabitStreakService;
-import usecase.habit.MarkDateShifter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,7 +30,7 @@ public class HabitSettingsController {
     private final HabitMarkHistoryDao habitMarkHistoryDao;
 
     public void handle(Scanner scanner, User user, String input) throws InvalidFrequencyConversionException, InvalidHabitIdException {
-        HabitMarkService.checkAllMarks(user);
+        ExpiredHabitMarkService.checkAllMarks(user);
         Habit habit = getSelectedHabit(input, user.getHabits());
 
         while (true) {
@@ -39,7 +39,7 @@ public class HabitSettingsController {
 
             switch (currentInput) {
                 case "1", "1.", "Отметить выполнение", "1. Отметить выполнение":
-                    markHabit(habit, history);
+                    new HabitMarkService(habitDao, habitMarkHistoryDao).mark(habit);
                     return;
                 case "2", "2.", "Редактировать", "2. Редактировать":
                     try {
@@ -52,7 +52,6 @@ public class HabitSettingsController {
                     if (getSelectedHabit(input, user.getHabits()) == null) {
                         return;
                     }
-
                     break;
                 case "3", "3.", "Посмотреть историю выполнения", "3. Посмотреть историю выполнения":
                     System.out.println("История выполнения привычки:");
@@ -121,29 +120,6 @@ public class HabitSettingsController {
 
         System.out.print(Constants.HABIT_SETTINGS_MENU);
         return scanner.nextLine();
-    }
-
-    /**
-     * Метод, отвечающий за отметку привычки. Перед отметкой, проверяет, чтобы привычка не была уже выполненной.
-     * В случае, если отметка совершена, сдвигает дату следующей отметки {@link MarkDateShifter#shiftMarkDate(Habit)
-     * shiftMarkDate()}, передаёт в главный сервис {@link HabitMarkService}, что на одну невыполненную привычку стало меньше,
-     * а затем добавляет текущую дату в историю отметок.
-     * @param habit привычка для которой необходимо совершить отметку
-     * @param history история отметок для указанной привычки
-     * @throws InvalidFrequencyConversionException возникает при некорректном преобразовании {@link core.enumiration.Frequency
-     * Frequency в другой тип данных}
-     */
-    private void markHabit(Habit habit, List<LocalDateTime> history) throws InvalidFrequencyConversionException {
-        if (habit.isCompleted()) {
-            System.out.println("Ошибка, привычка уже выполнена, ожидайте её сброса!");
-            return;
-        }
-
-        habit.setCompleted(true);
-        new MarkDateShifter().shiftMarkDate(habit);
-        System.out.println("Привычка отмечена как выполненная");
-        history.add(LocalDateTime.now());
-        habitDao.edit(habit);
     }
 
     /**
