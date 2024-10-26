@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        logicalFilePath="db/changelog.xml">
+    <changeSet id="008-insert-start-values-in-habit-table" author="nikguscode">
+        <insert tableName="habit" schemaName="entity">
+            <column name="user_id" value="1"/>
+            <column name="title" value="Чтение книг"/>
+            <column name="description" value="Читать 20 страниц каждый день"/>
+            <column name="is_completed" value="false"/>
+            <column name="creation_date_and_time" value="2024-01-01 10:00:00"/>
+            <column name="last_mark_date_and_time" value="2024-01-02 10:00:00"/>
+            <column name="next_mark_date_and_time" value="2024-01-03 10:00:00"/>
+            <column name="frequency" value="EVERY_DAY"/>
+        </insert>
+
+        <insert tableName="habit" schemaName="entity">
+            <column name="user_id" value="1"/>
+            <column name="title" value="Бег по утрам"/>
+            <column name="description" value="Бегать каждое утро"/>
+            <column name="is_completed" value="false"/>
+            <column name="creation_date_and_time" value="2024-01-01 07:00:00"/>
+            <column name="last_mark_date_and_time" value="2024-01-02 07:00:00"/>
+            <column name="next_mark_date_and_time" value="2024-01-03 07:00:00"/>
+            <column name="frequency" value="EVERY_DAY"/>
+        </insert>
+
+        <insert tableName="habit" schemaName="entity">
+            <column name="user_id" value="1"/>
+            <column name="title" value="Тренировка в зале"/>
+            <column name="description" value="Ходить в тренажерный зал дважды в неделю"/>
+            <column name="is_completed" value="false"/>
+            <column name="creation_date_and_time" value="2024-01-01 18:00:00"/>
+            <column name="last_mark_date_and_time" value="2024-01-07 18:00:00"/>
+            <column name="next_mark_date_and_time" value="2024-01-14 18:00:00"/>
+            <column name="frequency" value="EVERY_WEEK"/>
+        </insert>
+
+        <insert tableName="habit" schemaName="entity">
+            <column name="user_id" value="1"/>
+            <column name="title" value="Медитация"/>
+            <column name="description" value="Медитировать 10 минут каждый день"/>
+            <column name="is_completed" value="false"/>
+            <column name="creation_date_and_time" value="2024-01-01 09:00:00"/>
+            <column name="last_mark_date_and_time" value="2024-01-02 09:00:00"/>
+            <column name="next_mark_date_and_time" value="2024-01-03 09:00:00"/>
+            <column name="frequency" value="EVERY_DAY"/>
+        </insert>
+
+        <insert tableName="habit" schemaName="entity">
+            <column name="user_id" value="1"/>
+            <column name="title" value="Пить воду"/>
+            <column name="description" value="Пить 8 стаканов воды в день"/>
+            <column name="is_completed" value="false"/>
+            <column name="creation_date_and_time" value="2024-01-01 12:00:00"/>
+            <column name="last_mark_date_and_time" value="2024-01-02 12:00:00"/>
+            <column name="next_mark_date_and_time" value="2024-01-03 12:00:00"/>
+            <column name="frequency" value="EVERY_DAY"/>
+        </insert>
+
+        <insert tableName="habit" schemaName="entity">
+            <column name="user_id" value="1"/>
+            <column name="title" value="Занятия йогой"/>
+            <column name="description" value="Заниматься йогой три раза в неделю"/>
+            <column name="is_completed" value="false"/>
+            <column name="creation_date_and_time" value="2024-01-01 08:00:00"/>
+            <column name="last_mark_date_and_time" value="2024-01-03 08:00:00"/>
+            <column name="next_mark_date_and_time" value="2024-01-06 08:00:00"/>
+            <column name="frequency" value="EVERY_WEEK"/>
+        </insert>
+
+        <insert tableName="habit" schemaName="entity">
+            <column name="user_id" value="1"/>
+            <column name="title" value="Чистка зубов"/>
+            <column name="description" value="Чистить зубы дважды в день"/>
+            <column name="is_completed" value="false"/>
+            <column name="creation_date_and_time" value="2024-01-01 06:30:00"/>
+            <column name="last_mark_date_and_time" value="2024-01-02 06:30:00"/>
+            <column name="next_mark_date_and_time" value="2024-01-03 06:30:00"/>
+            <column name="frequency" value="EVERY_DAY"/>
+        </insert>
+
+        <insert tableName="habit" schemaName="entity">
+            <column name="user_id" value="1"/>
+            <column name="title" value="Ведение дневника"/>
+            <column name="description" value="Записывать мысли в дневник перед сном"/>
+            <column name="is_completed" value="false"/>
+            <column name="creation_date_and_time" value="2024-01-01 22:00:00"/>
+            <column name="last_mark_date_and_time" value="2024-01-02 22:00:00"/>
+            <column name="next_mark_date_and_time" value="2024-01-03 22:00:00"/>
+            <column name="frequency" value="EVERY_DAY"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

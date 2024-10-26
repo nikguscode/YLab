@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        logicalFilePath="db/changelog.xml">
+    <changeSet id="009-insert-start-values-in-habit-mark-history-table" author="nikguscode">
+        <!-- Привычка с id = 1 (ежедневная) -->
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-01-01 08:00:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-01-02 09:00:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-01-03 08:45:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-01-04 07:30:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-01-05 08:15:00"/>
+        </insert>
+        <!-- Серия ежедневного выполнения -->
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-10-14 08:00:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-10-15 08:10:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-10-16 09:00:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-10-17 07:55:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="1"/>
+            <column name="mark_date" value="2024-10-18 08:20:00"/>
+        </insert>
+
+        <!-- Привычка с id = 3 (еженедельная) -->
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-01-01 18:00:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-01-08 18:05:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-01-15 18:10:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-01-22 17:55:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-01-29 18:30:00"/>
+        </insert>
+        <!-- Серия еженедельного выполнения -->
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-02-05 18:00:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-02-12 17:50:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-02-19 18:05:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-02-26 18:10:00"/>
+        </insert>
+        <insert tableName="habit_mark_history" schemaName="entity">
+            <column name="habit_id" value="3"/>
+            <column name="mark_date" value="2024-03-04 18:15:00"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -2,8 +2,10 @@ package infrastructure.dao.user;
 
 import core.entity.User;
 
+import java.util.Map;
+
 /**
- * Класс, для CRUD запросов к базе данных, связанных с сущностью {@link User}
+ * Интерфейс, для CRUD запросов к базе данных, связанных с сущностью {@link User}
  */
 public interface UserDao {
     /**
@@ -11,6 +13,12 @@ public interface UserDao {
      * @param user сущность пользователя, которого нужно добавить в базу данных
      */
     void add(User user);
+
+    /**
+     * Метод для получения всех сущностей пользователя из базы данных
+     * @return карту пользователей, где ключом является электронная почта пользователя
+     */
+    Map<String, User> getAll();
 
     /**
      * Метод для получения сущности пользователя из базы данных

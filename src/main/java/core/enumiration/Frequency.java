@@ -6,26 +6,36 @@ import core.exceptions.InvalidFrequencyConversionException;
  * Класс, содержащий частоты для привычки
  */
 public enum Frequency {
-    UNDEFINED("Неопределено"),
-    EVERY_DAY("Ежедневно"),
-    EVERY_WEEK("Еженедельно"),
-    EVERY_MONTH("Ежемесячно"),
-    EVERY_THREE_MONTH("Раз в три месяца"),
-    EVERY_SIX_MONTH("Раз в шесть месяцев"),
-    EVERY_YEAR("Ежегодно");
+    UNDEFINED("Неопределено", 0),
+    EVERY_DAY("Ежедневно", 1),
+    EVERY_WEEK("Еженедельно", 7),
+    EVERY_MONTH("Ежемесячно", 30),
+    EVERY_THREE_MONTH("Раз в три месяца", 90),
+    EVERY_SIX_MONTH("Раз в шесть месяцев", 180),
+    EVERY_YEAR("Ежегодно", 365);
 
-    private final String frequency;
+    private final String stringFrequency;
+    private final int integerFrequency;
 
-    Frequency(String frequency) {
-        this.frequency = frequency;
+    Frequency(String stringFrequency, int integerFrequency) {
+        this.stringFrequency = stringFrequency;
+        this.integerFrequency = integerFrequency;
     }
 
     /**
      * Используется для вывода пользователю привычки в виде строки
      * @return строкове представление привычки
      */
-    public String getValue() {
-        return this.frequency;
+    public String getStringValue() {
+        return this.stringFrequency;
+    }
+
+    /**
+     * Используется для вывода пользователю привычки в виде целого числа
+     * @return числое представление привычки
+     */
+    public int getIntegerValue() {
+        return this.integerFrequency;
     }
 
     /**
@@ -42,24 +52,6 @@ public enum Frequency {
             case "4", "4.", "Раз в три месяца", "4. Раз в три месяца" -> EVERY_THREE_MONTH;
             case "5", "5.", "Раз в полгода", "5. Раз в полгода" -> EVERY_SIX_MONTH;
             case "6", "6.", "Ежегодно", "6. Ежегодно" -> EVERY_YEAR;
-            default -> throw new InvalidFrequencyConversionException();
-        };
-    }
-
-    /**
-     * Метод, который используется для преобразования {@link Frequency} в эквивалент в виде целого числа
-     * @param frequency частота, которую необходимо преобразовать
-     * @return количество дней, эквивалентных частоте {@link Frequency}
-     * @throws InvalidFrequencyConversionException возникает в случае неудачного преобразования
-     */
-    public static int convertToInteger(Frequency frequency) throws InvalidFrequencyConversionException {
-        return switch (frequency) {
-            case EVERY_DAY -> 1;
-            case EVERY_WEEK -> 7;
-            case EVERY_MONTH -> 30;
-            case EVERY_THREE_MONTH -> 90;
-            case EVERY_SIX_MONTH -> 180;
-            case EVERY_YEAR -> 365;
             default -> throw new InvalidFrequencyConversionException();
         };
     }

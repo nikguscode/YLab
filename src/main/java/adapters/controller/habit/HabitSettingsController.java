@@ -1,15 +1,18 @@
 package adapters.controller.habit;
 
 import adapters.console.Constants;
-import core.HabitMarkService;
+import core.ExpiredHabitMarkService;
 import core.LocalDateTimeFormatter;
 import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidHabitIdException;
 import core.exceptions.InvalidHabitInformationException;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import infrastructure.dao.habit.HabitDao;
+import lombok.RequiredArgsConstructor;
+import usecase.habit.HabitMarkService;
 import usecase.habit.HabitStreakService;
-import usecase.habit.MarkDateShifter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,9 +24,13 @@ import java.util.Scanner;
 /**
  * Контроллер, отвечающий за взаимодействие с конкретной привычкой, выбранной из {@link HabitListController}
  */
+@RequiredArgsConstructor
 public class HabitSettingsController {
-    public void handle(Scanner scanner, User user, String input) throws InterruptedException, InvalidFrequencyConversionException, InvalidHabitIdException {
-        HabitMarkService.checkAllMarks(user);
+    private final HabitDao habitDao;
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
+
+    public void handle(Scanner scanner, User user, String input) throws InvalidFrequencyConversionException, InvalidHabitIdException {
+        ExpiredHabitMarkService.checkAllMarks(user);
         Habit habit = getSelectedHabit(input, user.getHabits());
 
         while (true) {
@@ -32,20 +39,24 @@ public class HabitSettingsController {
 
             switch (currentInput) {
                 case "1", "1.", "Отметить выполнение", "1. Отметить выполнение":
-                    markHabit(habit, history);
+                    new HabitMarkService(habitDao, habitMarkHistoryDao).mark(habit);
                     return;
                 case "2", "2.", "Редактировать", "2. Редактировать":
                     try {
-                        new HabitEditController().handle(scanner, user, habit);
+                        new HabitEditController(habitDao).handle(scanner, user, habit);
                     } catch (InvalidHabitInformationException e) {
                         throw new RuntimeException(e);
+                    }
+
+                    user.setHabits(habitDao.getAll(user));
+                    if (getSelectedHabit(input, user.getHabits()) == null) {
+                        return;
                     }
                     break;
                 case "3", "3.", "Посмотреть историю выполнения", "3. Посмотреть историю выполнения":
                     System.out.println("История выполнения привычки:");
                     history.forEach(e -> System.out.println(e.format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"))));
                     System.out.println("----------------------------");
-                    Thread.sleep(800);
                     break;
                 case "4", "4.", "Сгенерировать статистику", "4. Сгенерировать статистику":
                     new HabitStatisticsController().handle(scanner, habit);
@@ -97,41 +108,18 @@ public class HabitSettingsController {
     private String printHabitMenu(Scanner scanner, Habit habit) throws InvalidFrequencyConversionException {
         System.out.println(Constants.SELECTED_HABIT_SETTINGS);
 
-        new HabitStreakService().getCurrentStreak(habit);
+        new HabitStreakService(habitMarkHistoryDao).getCurrentStreak(habit);
         System.out.printf(
                 "Идентификатор: %s | Название: %s | Статус: %s | Частота: %s | Streak: %s\n",
                 habit.getId(),
                 habit.getTitle(),
                 habit.isCompleted() ? "Выполнена" : "Не выполнена",
-                habit.getFrequency().getValue(),
+                habit.getFrequency().getStringValue(),
                 habit.getStreak()
         );
 
         System.out.print(Constants.HABIT_SETTINGS_MENU);
         return scanner.nextLine();
-    }
-
-    /**
-     * Метод, отвечающий за отметку привычки. Перед отметкой, проверяет, чтобы привычка не была уже выполненной.
-     * В случае, если отметка совершена, сдвигает дату следующей отметки {@link MarkDateShifter#shiftMarkDate(Habit)
-     * shiftMarkDate()}, передаёт в главный сервис {@link HabitMarkService}, что на одну невыполненную привычку стало меньше,
-     * а затем добавляет текущую дату в историю отметок.
-     * @param habit привычка для которой необходимо совершить отметку
-     * @param history история отметок для указанной привычки
-     * @throws InvalidFrequencyConversionException возникает при некорректном преобразовании {@link core.enumiration.Frequency
-     * Frequency в другой тип данных}
-     */
-    private void markHabit(Habit habit, List<LocalDateTime> history) throws InvalidFrequencyConversionException {
-        if (habit.isCompleted()) {
-            System.out.println("Ошибка, привычка уже выполнена, ожидайте её сброса!");
-            return;
-        }
-
-        habit.setCompleted(true);
-        new MarkDateShifter().shiftMarkDate(habit);
-        HabitMarkService.unmarkedHabits--;
-        System.out.println("Привычка отмечена как выполненная");
-        history.add(LocalDateTime.now());
     }
 
     /**
@@ -151,8 +139,8 @@ public class HabitSettingsController {
                 Optional.ofNullable(habit.getLastMarkDateAndTime())
                         .map(LocalDateTimeFormatter::format)
                         .orElse("отметок ещё не было"));
-        System.out.println("# | Дата ближайшей отметки: " + LocalDateTimeFormatter.format(habit.getShiftedDateAndTime()));
-        System.out.println("# | Частота: " + habit.getFrequency().getValue());
+        System.out.println("# | Дата ближайшей отметки: " + LocalDateTimeFormatter.format(habit.getNextMarkDateAndTime()));
+        System.out.println("# | Частота: " + habit.getFrequency().getStringValue());
         System.out.println("0. Вернуться назад");
         System.out.println("-----------------------------------");
         System.out.print("Выберите опцию: ");

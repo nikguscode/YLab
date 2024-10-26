@@ -4,10 +4,12 @@ import adapters.controller.habit.HabitListController;
 import core.LocalDateTimeFormatter;
 import core.exceptions.InvalidFrequencyConversionException;
 import core.exceptions.InvalidUserInformationException;
-import infrastructure.UserDatabase;
 import core.entity.User;
 import core.enumiration.Role;
+import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.user.UserDao;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Scanner;
 
@@ -15,14 +17,13 @@ import java.util.Scanner;
  * <p>Контроллер, используемый администратором, для управления пользователями и их привычками</p>
  * <p>Вызывает следующие сервисы при своей работе: {@link UserDao}</p>
  */
+@RequiredArgsConstructor
 public class AdministratorMenuController {
     private final UserDao userDao;
+    private final HabitDao habitDao;
+    private final HabitMarkHistoryDao habitMarkHistoryDao;
 
-    public AdministratorMenuController(UserDao userDao) {
-        this.userDao = userDao;
-    }
-
-    public void handle(Scanner scanner) throws InterruptedException, InvalidUserInformationException, InvalidFrequencyConversionException {
+    public void handle(Scanner scanner) throws InvalidUserInformationException, InvalidFrequencyConversionException {
         while (true) {
             User user = chooseUserAccount(scanner);
             if (user == null) {
@@ -32,7 +33,7 @@ public class AdministratorMenuController {
 
             switch (input) {
                 case "1", "1.", "Управление привычками пользователя", "1. Управление привычками пользователя":
-                    new HabitListController().handle(scanner, user);
+                    new HabitListController(habitDao, habitMarkHistoryDao).handle(scanner, user);
                     break;
                 case "2", "2.", "Редактировать информацию пользователя", "2. Редактировать информацию пользователя":
                     new UserMenuController(userDao).handle(scanner, user);
@@ -43,6 +44,7 @@ public class AdministratorMenuController {
                     } else {
                         user.setRole(Role.ADMINISTRATOR);
                     }
+                    userDao.edit(user);
                     break;
                 case "4", "4.", "Удалить аккаунт", "4. Удалить аккаунт":
                     userDao.delete(user);
@@ -96,7 +98,7 @@ public class AdministratorMenuController {
      * Метод, который выводит все учётные записи
      */
     private void printListOfUsers() {
-        UserDatabase.database.values().forEach(e -> System.out.printf(
+        userDao.getAll().values().forEach(e -> System.out.printf(
                 "Почта: %s | Количество привычек: %s | Дата регистрации: %s | Дата последней авторизации: %s\n",
                 e.getEmail(),
                 e.getHabits().values().size(),
