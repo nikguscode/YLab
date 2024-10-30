@@ -2,6 +2,8 @@
 
 [Ссылка на Pull Request, ДЗ#2](https://github.com/nikguscode/YLab/pull/2)
 
+[Ссылка на Pull Request, ДЗ#3](https://github.com/nikguscode/YLab/pull/3)
+
 Запуск кода:
 1) docker-compose -f src/main/resources/db/docker-compose.yml up -d 
 2) mvn compile
