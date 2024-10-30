@@ -2,8 +2,8 @@ package core;
 
 import core.entity.Habit;
 import core.entity.User;
-import core.enumiration.Frequency;
-import core.exceptions.InvalidHabitInformationException;
+import common.enumiration.Frequency;
+import core.exceptions.usecase.InvalidHabitInformationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +25,7 @@ public class ExpiredHabitMarkServiceTest {
         Habit habit = Habit.builder()
                 .title("1")
                 .description("1")
-                .frequency(Frequency.EVERY_DAY)
+                .frequency(Frequency.DAILY)
                 .creationDateAndTime(LocalDateTime.now())
                 .isCompleted(true)
                 .nextMarkDateAndTime(LocalDateTime.of(

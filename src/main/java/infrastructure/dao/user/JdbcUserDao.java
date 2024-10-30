@@ -1,8 +1,8 @@
 package infrastructure.dao.user;
 
 import core.entity.User;
-import core.enumiration.Role;
-import core.exceptions.InvalidUserInformationException;
+import common.enumiration.Role;
+import core.exceptions.usecase.InvalidUserInformationException;
 import infrastructure.DatabaseUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -28,8 +28,8 @@ public class JdbcUserDao implements UserDao {
     @Override
     public void add(User user) {
         String sqlQuery = "INSERT INTO entity.user" +
-                "(email, username, password, role, is_authorized, registration_date, authorization_date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "(email, username, password, role, is_authorized, is_blocked, registration_date, authorization_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
@@ -38,8 +38,9 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setObject(4, user.getRole(), java.sql.Types.OTHER);
             preparedStatement.setBoolean(5, user.isAuthorized());
-            preparedStatement.setTimestamp(6, Timestamp.valueOf(user.getRegistrationDate()));
-            preparedStatement.setTimestamp(7, user.getAuthorizationDate() != null ? Timestamp.valueOf(user.getAuthorizationDate()) : null);
+            preparedStatement.setBoolean(6, user.isBlocked());
+            preparedStatement.setTimestamp(7, Timestamp.valueOf(user.getRegistrationDate()));
+            preparedStatement.setTimestamp(8, user.getAuthorizationDate() != null ? Timestamp.valueOf(user.getAuthorizationDate()) : null);
 
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
@@ -70,6 +71,7 @@ public class JdbcUserDao implements UserDao {
                                 .password((String) currentRow.get("password"))
                                 .role(Role.valueOf(((String) currentRow.get("role")).toUpperCase()))
                                 .isAuthorized((boolean) currentRow.get("is_authorized"))
+                                .isBlocked((boolean) currentRow.get("is_blocked"))
                                 .registrationDate(((Timestamp) currentRow.get("registration_date")).toLocalDateTime())
                                 .authorizationDate(((Timestamp) currentRow.get("authorization_date")).toLocalDateTime())
                                 .build()
@@ -106,6 +108,41 @@ public class JdbcUserDao implements UserDao {
                         .password(rs.getString("password"))
                         .role(Role.valueOf(rs.getString("role").toUpperCase()))
                         .isAuthorized(rs.getBoolean("is_authorized"))
+                        .isBlocked(rs.getBoolean("is_blocked"))
+                        .registrationDate(rs.getTimestamp("registration_date").toLocalDateTime())
+                        .authorizationDate(rs.getTimestamp("authorization_date").toLocalDateTime())
+                        .build();
+            }
+        } catch (SQLException | ClassNotFoundException | InvalidUserInformationException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Метод для получения сущности пользователя из базы данных
+     * @param id идентификатор при помощи которого будет выполнен поиск пользователя
+     * @return сущность пользователя
+     */
+    @Override
+    public User get(long id) {
+        String sqlQuery = "SELECT * FROM entity.user WHERE id=?";
+
+        try (Connection connection = databaseUtils.createConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setLong(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                return User.builder()
+                        .id(rs.getLong("id"))
+                        .email(rs.getString("email"))
+                        .username(rs.getString("username"))
+                        .password(rs.getString("password"))
+                        .role(Role.valueOf(rs.getString("role").toUpperCase()))
+                        .isAuthorized(rs.getBoolean("is_authorized"))
+                        .isBlocked(rs.getBoolean("is_blocked"))
                         .registrationDate(rs.getTimestamp("registration_date").toLocalDateTime())
                         .authorizationDate(rs.getTimestamp("authorization_date").toLocalDateTime())
                         .build();
@@ -129,6 +166,7 @@ public class JdbcUserDao implements UserDao {
                 "password=?, " +
                 "role=?, " +
                 "is_authorized=?, " +
+                "is_blocked=?, " +
                 "authorization_date=? " +
                 "WHERE id=?";
 
@@ -139,8 +177,27 @@ public class JdbcUserDao implements UserDao {
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setObject(4, user.getRole(), java.sql.Types.OTHER);
             preparedStatement.setBoolean(5, user.isAuthorized());
-            preparedStatement.setTimestamp(6, Timestamp.valueOf(user.getAuthorizationDate()));
-            preparedStatement.setLong(7, user.getId());
+            preparedStatement.setBoolean(6, user.isBlocked());
+            preparedStatement.setTimestamp(7, Timestamp.valueOf(user.getAuthorizationDate()));
+            preparedStatement.setLong(8, user.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Метод для удаления пользователя из базы данных
+     * @param userId идентификатор пользователя, по которому он удаляется
+     */
+    @Override
+    public void delete(long userId) {
+        String sqlQuery = "DELETE FROM entity.user WHERE id = ?";
+
+        try (Connection connection = databaseUtils.createConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setLong(1, userId);
 
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {

@@ -7,6 +7,7 @@
     <groupId>org.example</groupId>
     <artifactId>YLabProject</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,6 +23,12 @@
         <liqubase.core.version>4.29.2</liqubase.core.version>
         <postgresql.version>42.7.4</postgresql.version>
         <testcontainers.version>1.20.2</testcontainers.version>
+        <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
+        <aspectjweaver.version>1.9.22.1</aspectjweaver.version>
+        <jackson-databind.version>2.18.0</jackson-databind.version>
+        <mapstruct.version>1.6.2</mapstruct.version>
+        <jackson-datatype.version>2.18.0</jackson-datatype.version>
+        <mapstruct-processor.version>1.6.2</mapstruct-processor.version>
     </properties>
 
     <dependencies>
@@ -85,9 +92,42 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${jakarta.servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectjweaver.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct-processor.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <finalName>ylab-habit</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -119,5 +159,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

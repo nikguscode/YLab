@@ -2,10 +2,9 @@ package usecase.habit;
 
 import core.entity.Habit;
 import core.entity.User;
-import core.enumiration.Frequency;
-import core.exceptions.InvalidFrequencyConversionException;
-import core.exceptions.InvalidHabitInformationException;
-import infrastructure.dto.HabitDto;
+import core.exceptions.usecase.InvalidFrequencyConversionException;
+import core.exceptions.usecase.InvalidHabitInformationException;
+import common.dto.request.habit.HabitPostDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,26 +17,24 @@ import java.util.List;
 public class HabitCreator {
     /**
      * Используется для создания привычки. Конструирует привычку, используя {@link Habit.HabitBuilder},
-     * а также {@link HabitDto} для получения пользовательского ввода
+     * а также {@link HabitPostDto} для получения пользовательского ввода
      *
      * @param user сущность текушего пользователя
-     * @param habitDto dto, содержащий пользовательский ввод при создании привычки
+     * @param habitPostDto dto, содержащий пользовательский ввод при создании привычки
      * @return созданную пользователем привычку
-     * @throws InvalidFrequencyConversionException возникает в случае неудачной конвертации {@link Frequency#convertFromString(String)
-     *                                             convertFromString()}
      * @throws InvalidHabitInformationException    возникает в том случае, если пользователь ввёл некорректные данные при
      *                                             создании новой привычки или разработчик указал некорректные параметры
      *                                             при создании {@link Habit}
      */
-    public Habit create(User user, HabitDto habitDto) throws InvalidFrequencyConversionException, InvalidHabitInformationException {
+    public Habit create(User user, HabitPostDto habitPostDto) throws InvalidFrequencyConversionException, InvalidHabitInformationException {
         Habit.HabitBuilder habit = Habit.builder();
 
-        setHabitCreationDateAndTime(habitDto.getDateAndTime(), habit);
+        setHabitCreationDateAndTime(habitPostDto.getMarkDateAndTime(), habit);
         return habit
                 .userId(user.getId())
-                .title(habitDto.getTitle())
-                .description(habitDto.getDescription())
-                .frequency(Frequency.convertFromString(habitDto.getFrequency()))
+                .title(habitPostDto.getTitle())
+                .description(habitPostDto.getDescription())
+                .frequency(habitPostDto.getFrequency())
                 .build();
     }
 
@@ -45,25 +42,24 @@ public class HabitCreator {
      * Устанавливает дату и время привычки, при помощи {@link HabitCreator#setDefaultDateAndTime(Habit.HabitBuilder)
      * setDefaultDateAndTime()}, {@link HabitCreator#setCustomDateAndTime(Habit.HabitBuilder, LocalDateTime) setCustomDateAndTime},
      * {@link HabitCreator#isStartDateBeforeNow(LocalDateTime) isStartDateBeforeNow()}
-     * @param input дата, которую вводит пользователь
      * @param habitBuilder билдер привычки для создания {@link Habit}
      * @throws InvalidHabitInformationException возникает в том случае, если пользователь ввёл некорректные данные при
      * создании новой привычки или разработчик указал некорректные параметры при создании {@link Habit}
      */
-    private void setHabitCreationDateAndTime(String input, Habit.HabitBuilder habitBuilder) throws InvalidHabitInformationException {
-        if (input == null || input.isEmpty()) {
+    private void setHabitCreationDateAndTime(String dateAndTime, Habit.HabitBuilder habitBuilder) throws InvalidHabitInformationException {
+        if (dateAndTime == null || dateAndTime.isEmpty()) {
             setDefaultDateAndTime(habitBuilder);
             return;
         }
 
         String dateTimePattern = "\\d{2}:\\d{2} \\d{2}/\\d{2}/\\d{4}";
-        if (!input.matches(dateTimePattern)) {
+        if (!dateAndTime.matches(dateTimePattern)) {
             System.out.println("Некорректный формат даты и времени!");
             throw new InvalidHabitInformationException();
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
-        LocalDateTime parsedDateTime = LocalDateTime.parse(input, formatter);
+        LocalDateTime parsedDateTime = LocalDateTime.parse(dateAndTime, formatter);
 
         if (isStartDateBeforeNow(parsedDateTime)) {
             System.out.println("Дата старта привычки не может быть раньше, чем текущая дата!");

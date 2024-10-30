@@ -1,5 +1,6 @@
 package infrastructure;
 
+import core.ConfigLoaderService;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.*;
@@ -17,6 +18,14 @@ public class DatabaseUtils {
     private final String url;
     private final String username;
     private final String password;
+
+    public DatabaseUtils() {
+        ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
+        this.driver = configLoader.getProperties("datasource.driver");
+        this.url = configLoader.getProperties("datasource.url");
+        this.username = configLoader.getProperties("datasource.username");
+        this.password = configLoader.getProperties("datasource.password");
+    }
 
     /**
      * Открывает соединение с базой данных

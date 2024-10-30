@@ -1,7 +1,7 @@
 package core.entity;
 
-import core.enumiration.Role;
-import core.exceptions.InvalidUserInformationException;
+import common.enumiration.Role;
+import core.exceptions.usecase.InvalidUserInformationException;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,6 +20,7 @@ public class User {
     private String password;
     private Role role;
     private boolean isAuthorized;
+    private boolean isBlocked;
     private Map<Long, Habit> habits;
     private LocalDateTime registrationDate;
     private LocalDateTime authorizationDate;
@@ -88,7 +89,7 @@ public class User {
                 this.habits = new HashMap<>();
             }
 
-            return new User(id, email, username, password, role, isAuthorized, habits, registrationDate, authorizationDate);
+            return new User(id, email, username, password, role, isAuthorized, isBlocked, habits, registrationDate, authorizationDate);
         }
     }
 }

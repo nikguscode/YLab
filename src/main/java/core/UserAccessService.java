@@ -1,7 +1,7 @@
 package core;
 
 import core.entity.User;
-import core.enumiration.Role;
+import common.enumiration.Role;
 import infrastructure.dao.user.UserDao;
 
 /**

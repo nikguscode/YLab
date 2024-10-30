@@ -3,7 +3,7 @@ package core;
 import core.entity.Habit;
 import core.entity.User;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
+import infrastructure.dao.habitmarkhistory.JdbcHabitMarkHistoryDao;
 import infrastructure.dao.habit.JdbcHabitDao;
 
 import java.time.Duration;

@@ -1,17 +1,17 @@
 package usecase.authentication;
 
 import core.entity.User;
-import core.enumiration.Role;
-import core.exceptions.InvalidUserInformationException;
+import common.enumiration.Role;
+import core.exceptions.usecase.InvalidUserInformationException;
 import infrastructure.DatabaseUtils;
 import infrastructure.configuration.LiquibaseMigration;
 import infrastructure.dao.user.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
-import infrastructure.dto.LoginDto;
+import common.dto.request.authentication.LoginDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
-import usecase.authentication.login.JdbcLogin;
+import usecase.authentication.login.impl.JdbcLogin;
 import usecase.authentication.login.Login;
 
 import java.time.LocalDateTime;
@@ -78,7 +78,7 @@ public class LoginTest {
                         .password("root")
                         .build()
         );
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertThat(result).isNotEqualTo(0);
     }
 
     @Test

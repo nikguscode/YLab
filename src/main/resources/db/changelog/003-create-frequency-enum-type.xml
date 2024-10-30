@@ -8,8 +8,8 @@
     <changeSet id="003-create-frequency-enum-type" author="nikguscode">
         <sql>
             CREATE TYPE entity.habit_frequency AS ENUM(
-                'UNDEFINED', 'EVERY_DAY', 'EVERY_WEEK', 'EVERY_MONTH',
-                'EVERY_THREE_MONTH', 'EVERY_SIX_MONTH', 'EVERY_YEAR'
+                'UNDEFINED', 'DAILY', 'WEEKLY', 'MONTHLY',
+                'HALF_YEARLY', 'YEARLY'
             );
         </sql>
     </changeSet>

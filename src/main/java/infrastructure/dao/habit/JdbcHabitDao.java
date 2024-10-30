@@ -2,10 +2,10 @@ package infrastructure.dao.habit;
 
 import core.entity.Habit;
 import core.entity.User;
-import core.enumiration.Frequency;
-import core.exceptions.InvalidHabitInformationException;
+import common.enumiration.Frequency;
+import core.exceptions.usecase.InvalidHabitInformationException;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import infrastructure.dao.habitmarkhistory.HabitMarkHistoryDao;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.*;
@@ -128,9 +128,15 @@ public class JdbcHabitDao implements HabitDao {
                         .title(rs.getString("title"))
                         .description(rs.getString("description"))
                         .isCompleted(rs.getBoolean("is_completed"))
-                        .creationDateAndTime(rs.getTimestamp("creation_date_and_time").toLocalDateTime())
-                        .lastMarkDateAndTime(rs.getTimestamp("last_mark_date_and_time").toLocalDateTime())
-                        .nextMarkDateAndTime(rs.getTimestamp("next_mark_date_and_time").toLocalDateTime())
+                        .creationDateAndTime(rs.getTimestamp("creation_date_and_time") != null
+                                ? rs.getTimestamp("creation_date_and_time").toLocalDateTime()
+                                : null)
+                        .lastMarkDateAndTime(rs.getTimestamp("last_mark_date_and_time") != null
+                                ? rs.getTimestamp("last_mark_date_and_time").toLocalDateTime()
+                                : null)
+                        .nextMarkDateAndTime(rs.getTimestamp("next_mark_date_and_time") != null
+                                ? rs.getTimestamp("next_mark_date_and_time").toLocalDateTime()
+                                : null)
                         .history(habitMarkHistoryDao.getAll(habitId))
                         .frequency(Frequency.valueOf(rs.getString("frequency").toUpperCase()))
                         .build();
@@ -188,6 +194,24 @@ public class JdbcHabitDao implements HabitDao {
         try (Connection connection = databaseUtils.createConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
             preparedStatement.setLong(1, habit.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Метод для удаления привычки из базы данных
+     * @param habitId идентификатор привычки, которую необходимо удалить
+     */
+    @Override
+    public void delete(long habitId) {
+        String sqlQuery = "DELETE FROM entity.habit WHERE id = ?";
+
+        try (Connection connection = databaseUtils.createConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setLong(1, habitId);
 
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {

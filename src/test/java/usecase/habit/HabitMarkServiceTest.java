@@ -2,13 +2,13 @@ package usecase.habit;
 
 import core.entity.Habit;
 import core.entity.User;
-import core.enumiration.Frequency;
-import core.exceptions.InvalidFrequencyConversionException;
-import core.exceptions.InvalidHabitInformationException;
+import common.enumiration.Frequency;
+import core.exceptions.usecase.InvalidFrequencyConversionException;
+import core.exceptions.usecase.InvalidHabitInformationException;
 import infrastructure.DatabaseUtils;
 import infrastructure.configuration.LiquibaseMigration;
-import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
-import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
+import infrastructure.dao.habitmarkhistory.HabitMarkHistoryDao;
+import infrastructure.dao.habitmarkhistory.JdbcHabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.habit.JdbcHabitDao;
 import infrastructure.dao.user.UserDao;
@@ -68,7 +68,7 @@ public class HabitMarkServiceTest {
                 .description("test")
                 .isCompleted(false)
                 .creationDateAndTime(LocalDateTime.now())
-                .frequency(Frequency.EVERY_DAY)
+                .frequency(Frequency.DAILY)
                 .build();
         new HabitMarkService(habitDao, habitMarkHistoryDao).mark(habit);
         Assertions.assertThat(habit.isCompleted()).isTrue();
@@ -90,7 +90,7 @@ public class HabitMarkServiceTest {
                 .description("test")
                 .isCompleted(true)
                 .creationDateAndTime(LocalDateTime.now())
-                .frequency(Frequency.EVERY_DAY)
+                .frequency(Frequency.DAILY)
                 .build();
         new HabitMarkService(habitDao, habitMarkHistoryDao).mark(habit);
         Assertions.assertThat(habit.isCompleted()).isTrue();
@@ -111,7 +111,7 @@ public class HabitMarkServiceTest {
                         LocalDate.of(2099, 1, 1),
                         LocalTime.now()
                 ))
-                .frequency(Frequency.EVERY_DAY)
+                .frequency(Frequency.DAILY)
                 .build();
         new HabitMarkService(habitDao, habitMarkHistoryDao).mark(habit);
         Assertions.assertThat(habit.isCompleted()).isTrue();
