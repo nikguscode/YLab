@@ -11,8 +11,6 @@ import common.dto.request.habit.HabitDeleteDto;
 import common.dto.request.habit.HabitEditDto;
 import common.dto.request.habit.HabitPostDto;
 import common.dto.response.ResponseDto;
-import common.enumiration.Role;
-import core.LocalDateTimeFormatter;
 import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.adapters.BadRequestException;
@@ -136,11 +134,26 @@ public class HabitController extends HttpServlet {
         HabitEditDto habitEditDto = objectMapper.readValue(request.getReader(), HabitEditDto.class);
 
         try {
+            habitEditDto.setSessionId(sessionUserId);
             validators.get("habitEditValidator").validate(habitEditDto);
+            habitDao.edit(getModifiedHabit(habitEditDto));
 
+            String jsonResponse = objectMapper.writeValueAsString(new ResponseDto<>(
+                    DataDto.builder()
+                            .message(Constants.USER_DATA_CHANGED)
+                            .build()
+            ));
 
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(200);
+            out.write(jsonResponse);
+            out.flush();
         } catch (ForbiddenException | BadRequestException e) {
             throw new ServletException(e);
+        } catch (InvalidHabitInformationException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -171,13 +184,33 @@ public class HabitController extends HttpServlet {
         }
     }
 
-//    private Habit getModifiedHabit(HabitEditDto dtoClass) {
-//
-//
-//        if (dtoClass.getTitle() != null && !dtoClass.getTitle().isEmpty()) {
-//
-//        }
-//    }
+    private Habit getModifiedHabit(HabitEditDto dtoClass) throws ForbiddenException, InvalidHabitInformationException {
+        Habit requiredHabit;
+
+        if (dtoClass.getHabitId() != null && dtoClass.getHabitId() != 0) {
+            requiredHabit = habitDao.get(dtoClass.getHabitId());
+        } else {
+            throw new ForbiddenException();
+        }
+
+        if (requiredHabit != null && dtoClass.getTitle() != null && !dtoClass.getTitle().isEmpty()) {
+            requiredHabit.setTitle(dtoClass.getTitle());
+        }
+
+        if (requiredHabit != null && dtoClass.getDescription() != null && !dtoClass.getDescription().isEmpty()) {
+            requiredHabit.setDescription(dtoClass.getDescription());
+        }
+
+        if (requiredHabit != null && dtoClass.getIsCompleted() != null) {
+            requiredHabit.setCompleted(dtoClass.getIsCompleted());
+        }
+
+        if (requiredHabit != null && dtoClass.getFrequency() != null) {
+            requiredHabit.setFrequency(dtoClass.getFrequency());
+        }
+
+        return requiredHabit;
+    }
 
 //
 //    private String generateJsonResponseWithHabitInfoByHabitId(Habit habit) throws JsonProcessingException {

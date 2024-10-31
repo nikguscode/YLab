@@ -12,4 +12,6 @@ public class HabitEditDto {
     private String description;
     private Boolean isCompleted;
     private Frequency frequency;
+
+    private Long sessionId;
 }

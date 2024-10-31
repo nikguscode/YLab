@@ -23,11 +23,12 @@ public class Constants {
     public static final String USER_AUTHENTICATION_DATA_INCORRECT = "Проверьте введённую почту и пароль";
     public static final String USER_ALREADY_AUTHENTICATED = "Пользователь уже аутентифицирован для текущего сеанса";
     public static final String ALL_HABITS = "Список привычек пользователя";
-    public static final String USER_NOT_AUTHORIZED = "Недостаточно прав";
     public static final String API_UNEXPECTED_ERROR = "API столкнулся с неожиданной ошибкой, обратитесь к разработчику";
+    public static final String HABIT_DATA_CHANGED = "Данные привычки изменены";
     public static final String HABIT_CREATED = "Привычка создана";
     public static final String HABIT_DELETED = "Привычка удалена";
     public static final String USER_DATA_CHANGED = "Данные учётной записи изменены";
+    public static final String USER_NOT_AUTHORIZED = "Недостаточно прав";
     public static final String USER_LIST = "Список пользователей";
     public static final String USER_BLOCKED = "Пользователь заблокирован";
     public static final String USER_UNBLOCKED = "Пользователь разблокирован";

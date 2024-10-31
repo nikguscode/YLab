@@ -2,8 +2,11 @@ package adapters.controller.habit.validator;
 
 import adapters.controller.Validator;
 import common.dto.request.habit.HabitEditDto;
+import common.enumiration.Role;
+import core.entity.Habit;
 import core.entity.User;
 import core.exceptions.adapters.BadRequestException;
+import core.exceptions.adapters.ForbiddenException;
 import infrastructure.DatabaseUtils;
 import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.habit.JdbcHabitDao;
@@ -25,13 +28,16 @@ public class HabitEditValidator implements Validator<HabitEditDto> {
     }
 
     @Override
-    public void validate(HabitEditDto dtoClass) throws BadRequestException {
+    public void validate(HabitEditDto dtoClass) throws BadRequestException, ForbiddenException {
         if (dtoClass.getHabitId() == null && dtoClass.getTitle() == null && dtoClass.getDescription() == null &&
                 dtoClass.getIsCompleted() == null && dtoClass.getFrequency() == null) {
             throw new BadRequestException();
         }
-//
-//        User sessisonUserId = userDao.get(dtoClass.get)
-//        if (dtoClass.getHabitId() != )
+
+        User sessionUser = userDao.get(dtoClass.getSessionId());
+        Habit requiredHabit = habitDao.get(dtoClass.getHabitId());
+        if (requiredHabit.getUserId() != sessionUser.getId() && !sessionUser.getRole().equals(Role.ADMINISTRATOR)) {
+            throw new ForbiddenException();
+        }
     }
 }
