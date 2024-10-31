@@ -3,6 +3,7 @@ package core;
 import core.entity.Habit;
 import core.entity.User;
 import infrastructure.DatabaseUtils;
+import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.habitmarkhistory.impl.JdbcHabitMarkHistoryDao;
 import infrastructure.dao.habit.impl.JdbcHabitDao;
 
@@ -14,6 +15,11 @@ import java.time.LocalDateTime;
  * выводит уведомление
  */
 public class ExpiredHabitMarkService {
+    private final static HabitDao habitDao = new JdbcHabitDao(
+            new DatabaseUtils(),
+            new JdbcHabitMarkHistoryDao(new DatabaseUtils())
+    );
+
     /**
      * Проверяет состояние привычки. Если интервал между датой, когда должна быть сделана отметка и текущей датой превысит
      * сутки, статус привычки будет изменён на не выполнена
@@ -27,7 +33,7 @@ public class ExpiredHabitMarkService {
             Duration difference = Duration.between(habit.getNextMarkDateAndTime(), LocalDateTime.now());
             if (difference.toMinutes() >= 1440L) {
                 habit.setCompleted(false);
-                editUser(habit);
+                habitDao.edit(habit);
                 unmarkedHabits++;
             }
         }
@@ -36,26 +42,12 @@ public class ExpiredHabitMarkService {
 
     /**
      * Выводит информации о неотмеченных привычках
+     * При использовании Spring Boot будет изменана реализация для отправки уведомления пользователю API
      */
+    @Deprecated
     private static void notifyUser(int unmarkedHabits) {
         if (unmarkedHabits > 0) {
             System.out.printf("[!!!] Количество неотмеченных привычек: %s\n", unmarkedHabits);
         }
-    }
-
-    /**
-     * Изменяет состояние привычки на невыполненную
-     * @param habit привычка для которой необходимо изменить состояние
-     */
-    private static void editUser(Habit habit) {
-        ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
-        DatabaseUtils databaseUtils = new DatabaseUtils(
-                configLoader.getProperties("datasource.driver"),
-                configLoader.getProperties("datasource.url"),
-                configLoader.getProperties("datasource.username"),
-                configLoader.getProperties("datasource.password")
-        );
-
-        new JdbcHabitDao(databaseUtils, new JdbcHabitMarkHistoryDao(databaseUtils)).edit(habit);
     }
 }
