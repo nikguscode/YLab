@@ -1,10 +1,11 @@
-package infrastructure.dao.habit;
+package infrastructure.dao.habit.impl;
 
 import core.entity.Habit;
 import core.entity.User;
 import common.enumiration.Frequency;
 import core.exceptions.usecase.InvalidHabitInformationException;
 import infrastructure.DatabaseUtils;
+import infrastructure.dao.habit.HabitDao;
 import infrastructure.dao.habitmarkhistory.HabitMarkHistoryDao;
 import lombok.RequiredArgsConstructor;
 

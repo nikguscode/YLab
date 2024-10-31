@@ -1,4 +1,4 @@
-package adapters.controller.user.validator;
+package adapters.controller.user.validatorimpl;
 
 import adapters.controller.Validator;
 import common.dto.request.user.UserEditDto;
@@ -7,7 +7,7 @@ import core.entity.User;
 import core.exceptions.adapters.BadRequestException;
 import core.exceptions.adapters.ForbiddenException;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.user.JdbcUserDao;
+import infrastructure.dao.user.impl.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 
 /**

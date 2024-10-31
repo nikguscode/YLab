@@ -1,9 +1,10 @@
-package infrastructure.dao.user;
+package infrastructure.dao.user.impl;
 
 import core.entity.User;
 import common.enumiration.Role;
 import core.exceptions.usecase.InvalidUserInformationException;
 import infrastructure.DatabaseUtils;
+import infrastructure.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.*;

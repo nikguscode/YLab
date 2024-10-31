@@ -8,14 +8,13 @@ import common.dto.iternal.DataDto;
 import common.dto.request.authentication.LoginDto;
 import common.dto.response.ResponseDto;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.user.JdbcUserDao;
+import infrastructure.dao.user.impl.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import usecase.authentication.login.Login;
-import usecase.authentication.login.impl.JdbcLogin;
+import usecase.authentication.login.impl.Login;
 import usecase.session.SessionCreator;
 
 import java.io.IOException;
@@ -23,14 +22,14 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginController extends HttpServlet {
-    private Login login;
+    private usecase.authentication.login.Login login;
     private UserDao userDao;
     private ObjectMapper objectMapper;
     private Validator<LoginDto> validator;
 
     @Override
     public void init() {
-        this.login = new JdbcLogin(new JdbcUserDao(new DatabaseUtils()));
+        this.login = new Login(new JdbcUserDao(new DatabaseUtils()));
         this.userDao = new JdbcUserDao(new DatabaseUtils());
         this.objectMapper = new ObjectMapper();
         this.validator = new LoginRequestValidator();

@@ -9,15 +9,14 @@ import core.exceptions.adapters.BadRequestException;
 import core.exceptions.adapters.ForbiddenException;
 import core.exceptions.usecase.InvalidUserInformationException;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.user.JdbcUserDao;
+import infrastructure.dao.user.impl.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import usecase.authentication.registration.Registration;
-import usecase.authentication.registration.impl.JdbcRegistration;
+import usecase.authentication.registration.impl.Registration;
 import usecase.session.SessionCreator;
 
 import java.io.IOException;
@@ -25,14 +24,14 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "RegistrationServlet", urlPatterns = "/registration")
 public class RegistrationController extends HttpServlet {
-    private Registration registration;
+    private usecase.authentication.registration.Registration registration;
     private UserDao userDao;
     private ObjectMapper objectMapper;
     private Validator<RegistrationDto> validator;
 
     @Override
     public void init() {
-        this.registration = new JdbcRegistration(new JdbcUserDao(new DatabaseUtils()));
+        this.registration = new Registration(new JdbcUserDao(new DatabaseUtils()));
         this.userDao = new JdbcUserDao(new DatabaseUtils());
         this.objectMapper = new ObjectMapper();
         this.validator = new RegistrationRequestValidator();

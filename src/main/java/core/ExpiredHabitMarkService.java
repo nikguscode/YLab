@@ -3,8 +3,8 @@ package core;
 import core.entity.Habit;
 import core.entity.User;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.habitmarkhistory.JdbcHabitMarkHistoryDao;
-import infrastructure.dao.habit.JdbcHabitDao;
+import infrastructure.dao.habitmarkhistory.impl.JdbcHabitMarkHistoryDao;
+import infrastructure.dao.habit.impl.JdbcHabitDao;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

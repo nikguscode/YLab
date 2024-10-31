@@ -6,7 +6,6 @@ import common.enumiration.Role;
 import core.exceptions.usecase.InvalidUserInformationException;
 import infrastructure.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
-import usecase.authentication.registration.Registration;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -17,7 +16,7 @@ import static usecase.authentication.Constants.REGISTRATION_EMAIL_ALREADY_EXISTS
  * Класс, реализующий локальную регистрацию пользователя, без использования базы данных
  */
 @RequiredArgsConstructor
-public class JdbcRegistration implements Registration {
+public class Registration implements usecase.authentication.registration.Registration {
     private final UserDao userDao;
 
     /**

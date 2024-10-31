@@ -5,20 +5,19 @@ import common.enumiration.Role;
 import core.exceptions.usecase.InvalidUserInformationException;
 import infrastructure.DatabaseUtils;
 import infrastructure.configuration.LiquibaseMigration;
-import infrastructure.dao.user.JdbcUserDao;
+import infrastructure.dao.user.impl.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 import common.dto.request.authentication.LoginDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
-import usecase.authentication.login.impl.JdbcLogin;
-import usecase.authentication.login.Login;
+import usecase.authentication.login.impl.Login;
 
 import java.time.LocalDateTime;
 
 public class LoginTest {
     public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
-    private Login login;
+    private usecase.authentication.login.Login login;
     private UserDao userDao;
     private User user;
 
@@ -47,7 +46,7 @@ public class LoginTest {
                 postgres.getPassword()
         );
 
-        this.login = new JdbcLogin(new JdbcUserDao(databaseUtils));
+        this.login = new Login(new JdbcUserDao(databaseUtils));
         this.userDao = new JdbcUserDao(databaseUtils);
         this.user = User.builder()
                 .email("test@gmail.com")

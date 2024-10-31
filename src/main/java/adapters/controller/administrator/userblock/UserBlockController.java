@@ -9,7 +9,7 @@ import common.enumiration.Role;
 import core.entity.User;
 import core.exceptions.adapters.ForbiddenException;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.user.JdbcUserDao;
+import infrastructure.dao.user.impl.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

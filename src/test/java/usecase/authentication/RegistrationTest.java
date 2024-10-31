@@ -6,7 +6,7 @@
 //import core.exceptions.usecase.InvalidUserInformationException;
 //import infrastructure.DatabaseUtils;
 //import infrastructure.configuration.LiquibaseMigration;
-//import infrastructure.dao.user.JdbcUserDao;
+//import infrastructure.dao.user.impl.JdbcUserDao;
 //import infrastructure.dao.user.UserDao;
 //import org.assertj.core.api.Assertions;
 //import org.junit.jupiter.api.*;

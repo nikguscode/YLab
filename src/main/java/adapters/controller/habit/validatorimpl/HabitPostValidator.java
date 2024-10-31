@@ -1,4 +1,4 @@
-package adapters.controller.habit.validator;
+package adapters.controller.habit.validatorimpl;
 
 import adapters.controller.Validator;
 import common.dto.request.habit.HabitPostDto;

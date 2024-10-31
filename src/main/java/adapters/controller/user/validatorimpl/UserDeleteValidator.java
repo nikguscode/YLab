@@ -1,10 +1,10 @@
-package adapters.controller.user.validator;
+package adapters.controller.user.validatorimpl;
 
 import adapters.controller.Validator;
 import common.dto.request.user.UserDeleteDto;
 import core.exceptions.adapters.BadRequestException;
 import infrastructure.DatabaseUtils;
-import infrastructure.dao.user.JdbcUserDao;
+import infrastructure.dao.user.impl.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 
 public class UserDeleteValidator implements Validator<UserDeleteDto> {

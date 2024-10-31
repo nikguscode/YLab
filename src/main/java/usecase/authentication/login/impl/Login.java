@@ -7,7 +7,6 @@ import core.entity.User;
 import common.enumiration.Role;
 import infrastructure.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
-import usecase.authentication.login.Login;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
  * Класс, реализующий локальный вход пользователя, без использования базы данных
  */
 @RequiredArgsConstructor
-public class JdbcLogin implements Login {
+public class Login implements usecase.authentication.login.Login {
     private final UserDao userDao;
 
     /**

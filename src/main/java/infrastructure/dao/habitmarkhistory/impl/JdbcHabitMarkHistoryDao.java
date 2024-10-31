@@ -1,7 +1,8 @@
-package infrastructure.dao.habitmarkhistory;
+package infrastructure.dao.habitmarkhistory.impl;
 
 import core.entity.Habit;
 import infrastructure.DatabaseUtils;
+import infrastructure.dao.habitmarkhistory.HabitMarkHistoryDao;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
