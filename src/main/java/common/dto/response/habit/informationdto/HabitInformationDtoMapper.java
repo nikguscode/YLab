@@ -1,4 +1,4 @@
-package common.dto.response.habit;
+package common.dto.response.habit.informationdto;
 
 import core.entity.Habit;
 import org.mapstruct.Mapper;

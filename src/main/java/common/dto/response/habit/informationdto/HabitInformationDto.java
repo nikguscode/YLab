@@ -1,6 +1,5 @@
-package common.dto.response.habit;
+package common.dto.response.habit.informationdto;
 
-import common.enumiration.Frequency;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class HabitInformationDto {
     long id;
-    long userId;
     String title;
     String description;
     boolean isCompleted;
@@ -16,4 +14,5 @@ public class HabitInformationDto {
     String lastMarkDateAndTime;
     String nextMarkDateAndTime;
     String frequency;
+    int streak;
 }

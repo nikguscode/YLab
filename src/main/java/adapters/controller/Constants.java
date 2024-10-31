@@ -32,4 +32,5 @@ public class Constants {
     public static final String USER_LIST = "Список пользователей";
     public static final String USER_BLOCKED = "Пользователь заблокирован";
     public static final String USER_UNBLOCKED = "Пользователь разблокирован";
+    public static final String LIST_OF_ALL_USER_HABITS = "Список всех привычек пользователя";
 }
