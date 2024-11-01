@@ -39,4 +39,10 @@ public interface HabitDao {
      * @param habit сущность привычки, которую необходимо удалить
      */
     void delete(Habit habit);
+
+    /**
+     * Метод для удаления привычки из базы данных
+     * @param habitId идентификатор привычки, которую необходимо удалить
+     */
+    void delete(long habitId);
 }

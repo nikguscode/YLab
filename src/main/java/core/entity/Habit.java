@@ -1,7 +1,7 @@
 package core.entity;
 
-import core.enumiration.Frequency;
-import core.exceptions.InvalidHabitInformationException;
+import common.enumiration.Frequency;
+import core.exceptions.usecase.InvalidHabitInformationException;
 import lombok.*;
 
 import java.time.LocalDateTime;

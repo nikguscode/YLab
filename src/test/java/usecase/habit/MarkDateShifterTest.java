@@ -2,15 +2,15 @@ package usecase.habit;
 
 import core.entity.Habit;
 import core.entity.User;
-import core.enumiration.Frequency;
-import core.exceptions.InvalidFrequencyConversionException;
-import core.exceptions.InvalidHabitInformationException;
+import common.enumiration.Frequency;
+import core.exceptions.usecase.InvalidFrequencyConversionException;
+import core.exceptions.usecase.InvalidHabitInformationException;
 import infrastructure.DatabaseUtils;
 import infrastructure.configuration.LiquibaseMigration;
-import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
-import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
+import infrastructure.dao.habitmarkhistory.HabitMarkHistoryDao;
+import infrastructure.dao.habitmarkhistory.impl.JdbcHabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
-import infrastructure.dao.habit.JdbcHabitDao;
+import infrastructure.dao.habit.impl.JdbcHabitDao;
 import infrastructure.dao.user.UserDao;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -67,7 +67,7 @@ public class MarkDateShifterTest {
                 .description("test")
                 .isCompleted(false)
                 .creationDateAndTime(LocalDateTime.now())
-                .frequency(Frequency.EVERY_DAY)
+                .frequency(Frequency.DAILY)
                 .build();
 
         habitDao.add(habit);
@@ -84,7 +84,7 @@ public class MarkDateShifterTest {
                 .description("test")
                 .isCompleted(false)
                 .creationDateAndTime(LocalDateTime.now())
-                .frequency(Frequency.EVERY_MONTH)
+                .frequency(Frequency.MONTHLY)
                 .build();
 
         habitDao.add(habit);
@@ -106,7 +106,7 @@ public class MarkDateShifterTest {
                         LocalDate.of(2024, 1, 1),
                         LocalTime.now()
                 ))
-                .frequency(Frequency.EVERY_DAY)
+                .frequency(Frequency.DAILY)
                 .build();
 
         habitDao.add(habit);

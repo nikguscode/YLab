@@ -1,8 +1,9 @@
 package usecase.habit;
 
+import common.enumiration.Frequency;
 import core.entity.Habit;
-import core.exceptions.InvalidFrequencyConversionException;
-import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import core.exceptions.usecase.InvalidFrequencyConversionException;
+import infrastructure.dao.habitmarkhistory.HabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +20,7 @@ public class HabitMarkService {
     /**
      * Выполняет отметку, указанной привычки
      * @param habit привычка для которой выполняется отметка
-     * @throws InvalidFrequencyConversionException некорректное преобразование из {@link String} в {@link core.enumiration.Frequency
+     * @throws InvalidFrequencyConversionException некорректное преобразование из {@link String} в {@link Frequency
      * Frequency}
      */
     public void mark(Habit habit) throws InvalidFrequencyConversionException {
@@ -42,7 +43,7 @@ public class HabitMarkService {
     /**
      * Обновляет статус, дату последней отметки и дату следующей отметки для привычки
      * @param habit привычка, которую необходимо обновить
-     * @throws InvalidFrequencyConversionException некорректное преобразование из {@link String} в {@link core.enumiration.Frequency
+     * @throws InvalidFrequencyConversionException некорректное преобразование из {@link String} в {@link Frequency
      * Frequency}
      */
     private void editHabit(Habit habit) throws InvalidFrequencyConversionException {

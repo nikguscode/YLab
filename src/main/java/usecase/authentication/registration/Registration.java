@@ -1,7 +1,7 @@
 package usecase.authentication.registration;
 
-import infrastructure.dto.RegistrationDto;
-import core.exceptions.InvalidUserInformationException;
+import common.dto.request.authentication.RegistrationDto;
+import core.exceptions.usecase.InvalidUserInformationException;
 
 /**
  * Интерфейс для регистрации пользователем новой учётной записи

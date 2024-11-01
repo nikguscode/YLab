@@ -2,7 +2,7 @@
 package usecase.habit;
 
 import core.entity.Habit;
-import core.exceptions.InvalidFrequencyConversionException;
+import core.exceptions.usecase.InvalidFrequencyConversionException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,9 +1,9 @@
 package usecase.habit;
 
 import core.entity.Habit;
-import core.enumiration.Frequency;
-import core.exceptions.InvalidFrequencyConversionException;
-import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
+import common.enumiration.Frequency;
+import core.exceptions.usecase.InvalidFrequencyConversionException;
+import infrastructure.dao.habitmarkhistory.HabitMarkHistoryDao;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;

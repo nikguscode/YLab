@@ -2,18 +2,18 @@ package usecase.habit;
 
 import core.entity.Habit;
 import core.entity.User;
-import core.enumiration.Frequency;
-import core.enumiration.Role;
-import core.exceptions.InvalidFrequencyConversionException;
-import core.exceptions.InvalidHabitInformationException;
-import core.exceptions.InvalidUserInformationException;
+import common.enumiration.Frequency;
+import common.enumiration.Role;
+import core.exceptions.usecase.InvalidFrequencyConversionException;
+import core.exceptions.usecase.InvalidHabitInformationException;
+import core.exceptions.usecase.InvalidUserInformationException;
 import infrastructure.DatabaseUtils;
 import infrastructure.configuration.LiquibaseMigration;
-import infrastructure.dao.HabitMarkHistory.HabitMarkHistoryDao;
-import infrastructure.dao.HabitMarkHistory.JdbcHabitMarkHistoryDao;
+import infrastructure.dao.habitmarkhistory.HabitMarkHistoryDao;
+import infrastructure.dao.habitmarkhistory.impl.JdbcHabitMarkHistoryDao;
 import infrastructure.dao.habit.HabitDao;
-import infrastructure.dao.habit.JdbcHabitDao;
-import infrastructure.dao.user.JdbcUserDao;
+import infrastructure.dao.habit.impl.JdbcHabitDao;
+import infrastructure.dao.user.impl.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -78,7 +78,7 @@ public class HabitStreakServiceTest {
                 .id(0)
                 .title("test")
                 .description("test")
-                .frequency(Frequency.EVERY_DAY)
+                .frequency(Frequency.DAILY)
                 .creationDateAndTime(LocalDateTime.of(LocalDate.of(2023, 1, 1), LocalTime.now()))
                 .build();
         habitDao.add(habit);

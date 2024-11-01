@@ -23,6 +23,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="is_authorized" type="BOOLEAN"/>
+            <column name="is_blocked" type="BOOLEAN"/>
             <column name="registration_date" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
