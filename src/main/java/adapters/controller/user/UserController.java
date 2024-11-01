@@ -12,6 +12,7 @@ import common.dto.response.ResponseDto;
 import common.dto.response.user.UserInformationDto;
 import common.dto.response.user.UserInformationDtoMapper;
 import common.enumiration.Role;
+import core.annotations.Loggable;
 import core.entity.User;
 import core.exceptions.adapters.BadRequestException;
 import core.exceptions.adapters.ForbiddenException;
@@ -31,6 +32,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Loggable
 @WebServlet(name = "UserServlet", urlPatterns = "/users")
 public class UserController extends HttpServlet {
     private UserDao userDao;

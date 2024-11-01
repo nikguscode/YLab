@@ -162,7 +162,6 @@
                     <forceAjcCompile>true</forceAjcCompile>
                     <source/>
 
-
                 </configuration>
                 <executions>
                     <execution>
@@ -170,6 +169,7 @@
                         <phase>process-sources</phase>
                         <goals>
                             <goal>compile</goal>
+                            <goal>test-compile</goal>
                         </goals>
                         <configuration>
                             <weaveDirectories>
@@ -215,20 +215,6 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven.shade.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

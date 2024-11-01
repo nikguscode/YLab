@@ -22,7 +22,6 @@ public class AuthenticationFilter implements Filter {
                 throw new ServletException(e);
             }
         }
-
         filterChain.doFilter(request, response);
     }
 }

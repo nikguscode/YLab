@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import common.dto.iternal.DataDto;
 import common.dto.request.authentication.LoginDto;
 import common.dto.response.ResponseDto;
+import core.annotations.Loggable;
 import infrastructure.DatabaseUtils;
 import infrastructure.dao.user.impl.JdbcUserDao;
 import infrastructure.dao.user.UserDao;
@@ -20,6 +21,7 @@ import usecase.session.SessionCreator;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@Loggable
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginController extends HttpServlet {
     private usecase.authentication.login.Login login;
