@@ -18,6 +18,11 @@ import java.sql.Statement;
  */
 public class LiquibaseMigration {
     /**
+     * JDBC драйвер для работы с базой данных
+     */
+    private final String JDBC_DRIVER;
+
+    /**
      * Ссылка на базу данных
      */
     private final String URL;
@@ -37,6 +42,7 @@ public class LiquibaseMigration {
      */
     public LiquibaseMigration() {
         ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
+        this.JDBC_DRIVER = configLoader.getProperties("datasource.driver");
         this.URL = configLoader.getProperties("datasource.url");
         this.USERNAME = configLoader.getProperties("datasource.username");
         this.PASSWORD = configLoader.getProperties("datasource.password");
@@ -49,6 +55,8 @@ public class LiquibaseMigration {
      * @param password пароль
      */
     public LiquibaseMigration(String url, String username, String password) {
+        ConfigLoaderService configLoader = ConfigLoaderService.getInstance();
+        this.JDBC_DRIVER = configLoader.getProperties("datasource.driver");
         this.URL = url;
         this.USERNAME = username;
         this.PASSWORD = password;
@@ -59,6 +67,7 @@ public class LiquibaseMigration {
      */
     public void migrateDatabase(){
         try {
+            Class.forName(JDBC_DRIVER);
             Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             createSchemaIfNotExists(connection);
 
@@ -68,7 +77,7 @@ public class LiquibaseMigration {
                     new Liquibase("db/changelog/changelog.xml", new ClassLoaderResourceAccessor(), database);
             liquibase.update();
             System.out.println("Migration is completed successfully");
-        } catch (SQLException | LiquibaseException e) {
+        } catch (SQLException | LiquibaseException | ClassNotFoundException e) {
             System.out.println("SQL Exception in migration " + e.getMessage());
         }
     }
